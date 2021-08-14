@@ -9,12 +9,12 @@ const Desktop: React.FC = () => {
 
   // Lifecycle
   useEffect(() => {
+    const onReceive = (objects: AppObjectType[]) => {
+      setApps(objects);
+    };
     Socket.emit("systemGetsObjects", "apps", {}, (response: ResponseType) => {
-      if (response.success) {
-        setApps(response.objects);
-      } else {
-        console.log(response);
-      }
+      onReceive(response.objects);
+      Socket.on(`receive ${response.key}`, onReceive);
     });
   }, []);
 

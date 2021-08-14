@@ -1,6 +1,7 @@
 export interface ResponseType {
   success: boolean;
   reason?: string;
+  key?: string;
   [key: string]: any;
 }
 
