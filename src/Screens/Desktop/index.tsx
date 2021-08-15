@@ -1,11 +1,16 @@
-import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import Socket from "../../Utils/Socket";
 import { AppObjectType, ResponseType } from "../../Utils/Types";
-import AppsIcon from "@material-ui/icons/Apps";
+import Loading from "../../Components/Loading";
+import NavBar from "./LayoutComponents/NavBar";
+import Popover from "@material-ui/core/Popover";
+import AppMenu from "./LayoutComponents/AppMenu";
+
 const Desktop: React.FC = () => {
   // Vars
   const [apps, setApps] = useState<AppObjectType[]>([]);
+  const [appMenuElement, setAppMenuElement] = useState<Element | null>();
+  const [userMenuElement, setUserMenuElement] = useState<Element | null>();
 
   // Lifecycle
   useEffect(() => {
@@ -19,19 +24,50 @@ const Desktop: React.FC = () => {
   }, []);
 
   // UI
+  if (!apps) return <Loading />;
   return (
     <>
-      Desktop layout
-      <List>
-        {apps.map((app) => (
-          <ListItem button>
-            <ListItemIcon>
-              <AppsIcon color="primary" />
-            </ListItemIcon>
-            <ListItemText>{app.name}</ListItemText>
-          </ListItem>
-        ))}
-      </List>
+      <NavBar
+        onOpenAppMenu={(event: React.MouseEvent<Element>) => {
+          setAppMenuElement(event.currentTarget);
+        }}
+        onOpenUserMenu={(event: React.MouseEvent<Element>) => {
+          setUserMenuElement(event.currentTarget);
+        }}
+      />
+      <Popover
+        id="app-menu"
+        open={Boolean(appMenuElement)}
+        anchorEl={appMenuElement}
+        onClose={() => setAppMenuElement(undefined)}
+        anchorOrigin={{
+          vertical: "center",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "center",
+          horizontal: "left",
+        }}
+        PaperProps={{ elevation: 0, style: { backgroundColor: "transparent" } }}
+      >
+        <AppMenu apps={apps} />
+      </Popover>
+      <Popover
+        id="user-menu"
+        open={Boolean(userMenuElement)}
+        anchorEl={userMenuElement}
+        onClose={() => setUserMenuElement(undefined)}
+        anchorOrigin={{
+          vertical: "center",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "center",
+          horizontal: "left",
+        }}
+      >
+        User menu
+      </Popover>
     </>
   );
 };
