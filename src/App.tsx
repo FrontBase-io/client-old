@@ -14,7 +14,7 @@ const Mobile = asyncComponent(() => import("./Screens/Mobile"));
 
 function App() {
   // Vars
-  const [user, setUser] = useGlobal<any>("user");
+  const [, setUser] = useGlobal<any>("user");
   const [mode, setMode] = useState<"onboard" | "logIn" | "loading" | "normal">(
     "loading"
   );

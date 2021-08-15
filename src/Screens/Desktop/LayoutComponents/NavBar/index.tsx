@@ -1,14 +1,21 @@
 import React from "react";
 import styles from "./styles.module.scss";
-import logo from "./fb.png";
+import logo from "./logo.png";
 import Tooltip from "@material-ui/core/Tooltip";
 import Avatar from "@material-ui/core/Avatar";
+import { useHistory } from "react-router";
+import { useGlobal } from "reactn";
+
 const NavBar: React.FC<{
   onOpenAppMenu: (event: React.MouseEvent) => void;
   onOpenUserMenu: (event: React.MouseEvent) => void;
 }> = ({ onOpenAppMenu, onOpenUserMenu }) => {
   // Vars
+  const history = useHistory();
+  const [, setUser] = useGlobal<any>("user");
+
   //Lifecycle
+
   // UI
   return (
     <div className={styles.navbar}>
@@ -23,6 +30,10 @@ const NavBar: React.FC<{
         <div
           style={{ height: 40, marginBottom: 10 }}
           onClick={(event) => onOpenAppMenu(event)}
+          onContextMenu={(e) => {
+            history.push("/");
+            e.preventDefault();
+          }}
         >
           <Tooltip title="View apps" placement="right">
             <img

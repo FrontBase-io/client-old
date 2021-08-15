@@ -5,6 +5,7 @@ import Loading from "../../Components/Loading";
 import NavBar from "./LayoutComponents/NavBar";
 import Popover from "@material-ui/core/Popover";
 import AppMenu from "./LayoutComponents/AppMenu";
+import AppCanvas from "./LayoutComponents/AppCanvas";
 
 const Desktop: React.FC = () => {
   // Vars
@@ -27,14 +28,19 @@ const Desktop: React.FC = () => {
   if (!apps) return <Loading />;
   return (
     <>
-      <NavBar
-        onOpenAppMenu={(event: React.MouseEvent<Element>) => {
-          setAppMenuElement(event.currentTarget);
-        }}
-        onOpenUserMenu={(event: React.MouseEvent<Element>) => {
-          setUserMenuElement(event.currentTarget);
-        }}
-      />
+      <div style={{ display: "flex" }}>
+        <NavBar
+          onOpenAppMenu={(event: React.MouseEvent<Element>) => {
+            setAppMenuElement(event.currentTarget);
+          }}
+          onOpenUserMenu={(event: React.MouseEvent<Element>) => {
+            setUserMenuElement(event.currentTarget);
+          }}
+        />
+        <div style={{ flex: 1 }}>
+          <AppCanvas />
+        </div>
+      </div>
       <Popover
         id="app-menu"
         open={Boolean(appMenuElement)}
@@ -50,7 +56,7 @@ const Desktop: React.FC = () => {
         }}
         PaperProps={{ elevation: 0, style: { backgroundColor: "transparent" } }}
       >
-        <AppMenu apps={apps} />
+        <AppMenu apps={apps} closeMenu={() => setAppMenuElement(undefined)} />
       </Popover>
       <Popover
         id="user-menu"
