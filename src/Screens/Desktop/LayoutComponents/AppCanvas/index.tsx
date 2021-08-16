@@ -10,7 +10,10 @@ const AppCanvas: React.FC = () => {
   // UI
   return (
     <Switch>
-      <Route path="/:appKey" render={() => <AppLayout />} />
+      <Route
+        path="/:appKey"
+        render={(args) => <AppLayout appKey={args.match.params.appKey} />}
+      />
       <Route path="/" component={MainDesktop} />
     </Switch>
   );

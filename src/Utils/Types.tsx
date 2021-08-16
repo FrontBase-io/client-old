@@ -1,4 +1,4 @@
-// Genera
+// General
 export interface ColorType {
   r: number;
   g: number;
@@ -17,8 +17,18 @@ export interface ObjectType {
   meta: {};
 }
 
+// Apps
 export interface AppObjectType extends ObjectType {
   name: string;
   key: string;
   color: ColorType;
+}
+export interface AppPageType {
+  label: string;
+  key: string;
+  icon: string;
+}
+export interface AppCodeType {
+  settings?: { desktop?: {}; mobile?: { pages: "bottom" } };
+  getPages: () => Promise<AppPageType[]>;
 }
