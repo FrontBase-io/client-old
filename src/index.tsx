@@ -26,7 +26,6 @@ ReactDOM.render(
         },
       })}
     >
-      {" "}
       <Router>
         <App />
       </Router>
