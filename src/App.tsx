@@ -18,8 +18,11 @@ function App() {
   const [mode, setMode] = useState<"onboard" | "logIn" | "loading" | "normal">(
     "loading"
   );
+  const [, setColors] = useGlobal<any>("colors");
+
   // Lifecycle
   useEffect(() => {
+    // Basic interactions
     console.log(`Connecting to ${serverUrl}`);
     socket.emit("alive?", (response: ResponseType) => {
       if (response.success) {
@@ -49,6 +52,9 @@ function App() {
     socket.on("mode set to onboard", () => {
       setMode("onboard");
     });
+
+    // Colors
+    setColors({ primary: { hex: "#0283ff" } });
   }, []);
 
   // UI

@@ -29,13 +29,25 @@ const NavBar: React.FC<{
       >
         <div
           style={{ height: 40, marginBottom: 10 }}
-          onClick={(event) => onOpenAppMenu(event)}
+          onClick={(event) => {
+            window.location.pathname === "/" || window.location.pathname === ""
+              ? onOpenAppMenu(event)
+              : history.push("/");
+          }}
           onContextMenu={(e) => {
             history.push("/");
             e.preventDefault();
           }}
         >
-          <Tooltip title="View apps" placement="right">
+          <Tooltip
+            title={
+              window.location.pathname === "/" ||
+              window.location.pathname === ""
+                ? "View apps"
+                : "Go home"
+            }
+            placement="right"
+          >
             <img
               alt="Frontbase Logo"
               src={logo}

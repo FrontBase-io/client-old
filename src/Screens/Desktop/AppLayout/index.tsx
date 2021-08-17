@@ -1,14 +1,48 @@
-import { Grid } from "@material-ui/core";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import Loading from "../../../Components/Loading";
 import Socket from "../../../Utils/Socket";
-import { AppObjectType, AppPageType, ResponseType } from "../../../Utils/Types";
-import Typography from "@material-ui/core/Typography";
+import {
+  AppObjectType,
+  AppPageType,
+  PageType,
+  ResponseType,
+} from "../../../Utils/Types";
+import { motion } from "framer-motion";
+import styles from "./styles.module.scss";
+import { ListItem, Typography } from "@material-ui/core";
+import { List } from "@material-ui/core";
+import { Link, useHistory } from "react-router-dom";
+import { useGlobal } from "reactn";
+
+const container = {
+  hidden: { opacity: 0, left: -50 },
+  visible: {
+    opacity: 1,
+    left: 64,
+
+    transition: {
+      delayChildren: 0.3,
+      staggerChildren: 0.1,
+      duration: 0.2,
+    },
+  },
+};
+
+const item = {
+  hidden: { x: -20, opacity: 0 },
+  visible: {
+    x: 0,
+    opacity: 1,
+  },
+};
+
 const AppLayout: React.FC<{ appKey: string }> = ({ appKey }) => {
   // Vars
   const [app, setApp] = useState<AppObjectType>();
+  const [colors] = useGlobal<any>("colors");
   const [pageMenu, setPageMenu] = useState<AppPageType[]>();
+  const history = useHistory();
 
   // Lifecycle
   useEffect(() => {
@@ -34,26 +68,41 @@ const AppLayout: React.FC<{ appKey: string }> = ({ appKey }) => {
   // UI
   if (!app || !pageMenu) return <Loading />;
   return (
-    <Grid container>
+    <div className={styles.root}>
       {pageMenu.length > 0 && (
-        <Grid item xs={2}>
-          <Typography
-            variant="h5"
-            style={{
-              textAlign: "center",
-              borderRight: "1px solid gray",
-              height: "100vh",
-              backgroundColor: "#9a9a9a",
-            }}
-          >
-            {app.name}
-          </Typography>
-        </Grid>
+        <motion.div
+          className={styles.menu}
+          variants={container}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.li variants={item}>
+            <Link to={`/${app.key}`}>
+              <Typography
+                variant="h6"
+                className={styles.appName}
+                style={{ color: `${colors.primary.hex}` }}
+              >
+                {app.name}
+              </Typography>
+            </Link>
+          </motion.li>
+          <List>
+            {pageMenu.map((page: PageType) => (
+              <motion.li key={page.key} variants={item}>
+                <ListItem
+                  button
+                  onClick={() => history.push(`/${app.key}/${page.key}`)}
+                >
+                  {page.label}
+                </ListItem>
+              </motion.li>
+            ))}
+          </List>
+        </motion.div>
       )}
-      <Grid item xs={pageMenu.length > 0 ? 10 : 12}>
-        {app.name}
-      </Grid>
-    </Grid>
+      <div className={styles.appCanvas}>{app.name}</div>
+    </div>
   );
 };
 

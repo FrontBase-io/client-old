@@ -23,6 +23,11 @@ export interface AppObjectType extends ObjectType {
   key: string;
   color: ColorType;
 }
+export interface PageType {
+  label: string;
+  key: string;
+  icon: string;
+}
 export interface AppPageType {
   label: string;
   key: string;

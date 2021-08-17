@@ -1,0 +1,32 @@
+.root {
+  display: flex;
+  height: 100vh;
+  background-color: red;
+}
+.menu {
+  background-color: #f4f5f7;
+  width: 15vw;
+  min-width: 250px;
+  position: absolute;
+  margin: 0;
+  height: 100vh;
+}
+
+.appName {
+  text-align: center;
+  margin-top: 5px;
+  cursor: default;
+}
+
+.appCanvas {
+  background-color: blue;
+  height: 100%;
+  flex: 1;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .menu {
+    background-color: #323232;
+  }
+}
