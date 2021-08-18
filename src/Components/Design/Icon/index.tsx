@@ -1,12 +1,13 @@
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 import React from "react";
 
-const Icon: React.FC<{ icon: string; style?: CSSProperties }> = ({
-  icon,
-  style,
-}) => {
+const Icon: React.FC<{
+  icon: string;
+  style?: CSSProperties;
+  className?: string;
+}> = ({ icon, style, className }) => {
   return (
-    <span className="material-icons-round" style={style}>
+    <span style={style} className={`material-icons-round ${className}`}>
       {icon}
     </span>
   );

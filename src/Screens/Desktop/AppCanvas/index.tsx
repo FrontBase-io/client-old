@@ -120,9 +120,11 @@ const AppLayout: React.FC<{ appKey: string }> = ({ appKey }) => {
                   onClick={() => history.push(`/${app.key}/${page.key}`)}
                 >
                   <ListItemIcon style={{ minWidth: 40 }}>
-                    <Icon icon={page.icon} />
+                    <Icon icon={page.icon} className={styles.pageMenuIcon} />
                   </ListItemIcon>
-                  <ListItemText>{page.label}</ListItemText>
+                  <ListItemText className={styles.pageMenuText}>
+                    {page.label}
+                  </ListItemText>
                 </ListItem>
               </motion.li>
             ))}
@@ -133,7 +135,12 @@ const AppLayout: React.FC<{ appKey: string }> = ({ appKey }) => {
         <AppBar position="static" style={{ height: "30vh", zIndex: 10 }}>
           <Toolbar>
             {upLink !== undefined && (
-              <IconButton edge="start" color="inherit" aria-label="open drawer">
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="open drawer"
+                onClick={() => history.push(upLink.url)}
+              >
                 <Icon icon="chevron_left" />
               </IconButton>
             )}

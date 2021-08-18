@@ -51,5 +51,12 @@
 @media (prefers-color-scheme: dark) {
   .menu {
     background-color: #323232;
+    border-right: 1px solid #111111;
+  }
+  .pageMenuText {
+    color: white;
+  }
+  .pageMenuIcon {
+    color: white;
   }
 }

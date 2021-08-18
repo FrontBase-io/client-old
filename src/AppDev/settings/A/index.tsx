@@ -13,7 +13,11 @@ const A: React.FC<{ context: AppContext }> = ({ context }) => {
   }, []);
 
   // UI
-  return <>AAAAAAAAAAA</>;
+  return (
+    <context.UI.Design.Animation.Animate>
+      <context.UI.Design.Card title="AAAAAAAA">AAAAAAAA</context.UI.Design.Card>
+    </context.UI.Design.Animation.Animate>
+  );
 };
 
 export default A;

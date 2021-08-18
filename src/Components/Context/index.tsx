@@ -1,4 +1,5 @@
 import { AppObjectType } from "../../Utils/Types";
+import Design from "../Design";
 
 interface uplinkType {
   title: string;
@@ -22,6 +23,7 @@ export class AppContext {
     name: { set: () => {}, get: "FrontBase" },
     up: { set: () => {}, get: undefined },
   };
+  UI = { Design: Design };
 
   constructor(appData: AppObjectType, canvas: CanvasType) {
     this.appData = appData;

@@ -6,7 +6,7 @@ const B: React.FC<{ context: AppContext }> = ({ context }) => {
 
   // Lifecycle
   useEffect(() => {
-    context.canvas.up.set({ title: "up", url: "/test" });
+    context.canvas.up.set({ title: "up", url: "/settings" });
     context.canvas.name.set("Page B");
     return () => {
       context.canvas.up.set(undefined);
@@ -15,7 +15,13 @@ const B: React.FC<{ context: AppContext }> = ({ context }) => {
   }, []);
 
   // UI
-  return <>BBBBBBBBBBBB</>;
+  return (
+    <context.UI.Design.Animation.Animate>
+      <context.UI.Design.Card title="BBBBBBBBBBB">
+        BBBBBBBBBBB
+      </context.UI.Design.Card>
+    </context.UI.Design.Animation.Animate>
+  );
 };
 
 export default B;
