@@ -1,8 +1,8 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
 import { useHistory } from "react-router-dom";
-import Card from "../../../../Components/Design/Card";
-import { AppObjectType } from "../../../../Utils/Types";
+import Card from "../../../Components/Design/Card";
+import { AppObjectType } from "../../../Utils/Types";
 import AppIcon from "../AppIcon";
 
 const AppMenu: React.FC<{ apps: AppObjectType[]; closeMenu: () => void }> = ({
@@ -17,12 +17,13 @@ const AppMenu: React.FC<{ apps: AppObjectType[]; closeMenu: () => void }> = ({
   // UI
   return (
     <Card
-      style={{ width: "40vw", height: "30vh" }}
+      style={{ width: "40vw", height: "30vh", position: "relative" }}
       title="Apps"
       onTitleClick={() => {
         history.push("/");
         closeMenu();
       }}
+      withShadow
     >
       <Grid container>
         {apps.map((app) => (

@@ -7,9 +7,35 @@ const Card: React.FC<{
   title?: string;
   style?: CSSProperties;
   onTitleClick?: () => void;
-}> = ({ children, style, title, onTitleClick }) => {
+  withShadow?: true;
+  shadow?: "default" | "sharp" | "diffuse" | "dreamy" | "short" | "long";
+  hoverable?: true | boolean;
+  className?: string;
+  overflow?: "none" | "auto" | "visible";
+}> = ({
+  children,
+  style,
+  title,
+  onTitleClick,
+  withShadow,
+  shadow,
+  hoverable,
+  className,
+  overflow,
+}) => {
   return (
-    <div className={styles.root} style={style}>
+    <div
+      className={`Card ${styles.card} ${
+        hoverable && styles.hoverable
+      } ${className} ${
+        shadow !== undefined && shadow !== "default" && styles[shadow]
+      }`}
+      style={{
+        ...style,
+        margin: 15,
+        overflow,
+      }}
+    >
       {title && (
         <Typography
           variant="h5"

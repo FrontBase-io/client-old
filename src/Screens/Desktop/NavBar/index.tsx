@@ -5,11 +5,14 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Avatar from "@material-ui/core/Avatar";
 import { useHistory } from "react-router";
 import { useGlobal } from "reactn";
+import { AppObjectType } from "../../../Utils/Types";
+import NavBarAppIcon from "../AppIcon/AppIconNavBar";
 
 const NavBar: React.FC<{
   onOpenAppMenu: (event: React.MouseEvent) => void;
   onOpenUserMenu: (event: React.MouseEvent) => void;
-}> = ({ onOpenAppMenu, onOpenUserMenu }) => {
+  selectedApp?: AppObjectType;
+}> = ({ onOpenAppMenu, onOpenUserMenu, selectedApp }) => {
   // Vars
   const history = useHistory();
   const [, setUser] = useGlobal<any>("user");
@@ -56,7 +59,9 @@ const NavBar: React.FC<{
             />
           </Tooltip>
         </div>
-        <div style={{ flex: 1, padding: "10px 0" }}></div>
+        <div style={{ flex: 1, padding: "10px 0", width: "100%" }}>
+          {selectedApp && <NavBarAppIcon app={selectedApp} selected />}
+        </div>
         <div style={{ height: 40, marginBottom: 10, verticalAlign: "middle" }}>
           <Tooltip
             title={`Hi, Vic!`}

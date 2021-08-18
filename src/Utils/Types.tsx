@@ -1,3 +1,5 @@
+import { AppContext } from "../Components/Context";
+
 // General
 export interface ColorType {
   r: number;
@@ -23,15 +25,11 @@ export interface AppObjectType extends ObjectType {
   key: string;
   color: ColorType;
 }
-export interface PageType {
-  label: string;
-  key: string;
-  icon: string;
-}
 export interface AppPageType {
   label: string;
   key: string;
   icon: string;
+  component: React.FC<{ context: AppContext }>;
 }
 export interface AppCodeType {
   settings?: { desktop?: {}; mobile?: { pages: "bottom" } };

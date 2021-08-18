@@ -1,3 +1,6 @@
+import A from "./A";
+import B from "./B";
+
 export default class App {
   constructor() {}
   // Settings
@@ -6,6 +9,9 @@ export default class App {
   // Pages
   getPages = () =>
     new Promise((resolve, reject) =>
-      resolve([{ label: "Option a", key: "a", icon: "setings" }])
+      resolve([
+        { label: "Page A", key: "a", icon: "fingerprint", component: A },
+        { label: "Page B", key: "b", icon: "self_improvement", component: B },
+      ])
     );
 }

@@ -2,16 +2,20 @@ import React, { useEffect, useState } from "react";
 import Socket from "../../Utils/Socket";
 import { AppObjectType, ResponseType } from "../../Utils/Types";
 import Loading from "../../Components/Loading";
-import NavBar from "./LayoutComponents/NavBar";
+import NavBar from "./NavBar";
 import Popover from "@material-ui/core/Popover";
-import AppMenu from "./LayoutComponents/AppMenu";
-import AppCanvas from "./LayoutComponents/AppCanvas";
+import AppMenu from "./AppMenu";
+import AppCanvas from "./AppCanvas";
+import { Route, Switch } from "react-router-dom";
+import HomeScreen from "../Home";
+import find from "lodash/find";
 
 const Desktop: React.FC = () => {
   // Vars
   const [apps, setApps] = useState<AppObjectType[]>([]);
   const [appMenuElement, setAppMenuElement] = useState<Element | null>();
   const [userMenuElement, setUserMenuElement] = useState<Element | null>();
+  const [selectedApp, setSelectedApp] = useState<AppObjectType>();
 
   // Lifecycle
   useEffect(() => {
@@ -36,9 +40,27 @@ const Desktop: React.FC = () => {
           onOpenUserMenu={(event: React.MouseEvent<Element>) => {
             setUserMenuElement(event.currentTarget);
           }}
+          selectedApp={selectedApp}
         />
         <div style={{ flex: 1 }}>
-          <AppCanvas />
+          <Switch>
+            <Route
+              path="/:appKey"
+              render={(args) => {
+                setSelectedApp(
+                  find(apps, (o) => o.key === args.match.params.appKey)
+                );
+                return <AppCanvas appKey={args.match.params.appKey} />;
+              }}
+            />
+            <Route
+              path="/"
+              render={() => {
+                setSelectedApp(undefined);
+                return <HomeScreen />;
+              }}
+            />
+          </Switch>
         </div>
       </div>
       <Popover
