@@ -57,6 +57,8 @@ const ListDetailLayout: React.FC<{
                   context={context}
                   component={detailComponent}
                   selectedKey={args.match.params.selectedItem}
+                  baseUrl={baseUrl}
+                  title={title}
                 />
               )}
             />
@@ -71,7 +73,22 @@ const DetailComponentWrapper: React.FC<{
   context: AppContext;
   component: React.FC<{ context: AppContext; selectedKey: string }>;
   selectedKey: string;
-}> = ({ context, component, selectedKey }) => {
+  baseUrl: string;
+  title?: string;
+}> = ({ context, component, selectedKey, baseUrl, title }) => {
+  // Vars
+  // Lifecycle
+  useEffect(() => {
+    // Up
+    context.canvas.up.set({ url: baseUrl });
+    context.canvas.name.set(selectedKey);
+    return () => {
+      context.canvas.up.set(undefined);
+      context.canvas.name.set();
+      context.canvas.name.set(title);
+    };
+  }, [selectedKey]);
+  // UI
   const Component = component;
   return <Component context={context} selectedKey={selectedKey} />;
 };
