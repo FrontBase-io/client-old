@@ -1,5 +1,5 @@
-import A from "./A";
 import B from "./B";
+import PageModels from "./models";
 
 export default class App {
   constructor() {}
@@ -10,8 +10,20 @@ export default class App {
   getPages = () =>
     new Promise((resolve, reject) =>
       resolve([
-        { label: "Page A", key: "a", icon: "fingerprint", component: A },
-        { label: "Page B", key: "b", icon: "self_improvement", component: B },
+        {
+          label: "Models",
+          key: "models",
+          icon: "account_tree",
+          component: PageModels,
+          group: "Apps",
+        },
+        {
+          label: "Page B",
+          key: "b",
+          icon: "self_improvement",
+          component: B,
+          group: "B",
+        },
       ])
     );
 }

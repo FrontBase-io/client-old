@@ -44,7 +44,9 @@
 
 .appContent {
   z-index: 15;
-  margin-top: calc(-25vh + 25px);
+  margin-top: calc(-25vh + 20px);
+  height: calc(100% - 75px);
+  box-sizing: border-box;
 }
 
 /* Dark mode */

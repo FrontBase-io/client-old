@@ -19,6 +19,27 @@ export interface ObjectType {
   meta: {};
 }
 
+/* Models */
+export interface ModelType {
+  _id: string;
+  key: string;
+  key_plural: string;
+  label: string;
+  label_plural: string;
+  app: string;
+  primary: string;
+  locked?: boolean;
+  permissions: {
+    create: string[];
+    read: string[];
+    read_own: string[];
+    update: string[];
+    update_own: string[];
+    delete: string[];
+    delete_own: string[];
+  };
+}
+
 // Apps
 export interface AppObjectType extends ObjectType {
   name: string;
@@ -29,9 +50,17 @@ export interface AppPageType {
   label: string;
   key: string;
   icon: string;
+  group?: string;
   component: React.FC<{ context: AppContext }>;
 }
 export interface AppCodeType {
   settings?: { desktop?: {}; mobile?: { pages: "bottom" } };
   getPages: () => Promise<AppPageType[]>;
+}
+
+/* Interface */
+export interface ListItemType {
+  label: string;
+  key: string;
+  icon?: string;
 }

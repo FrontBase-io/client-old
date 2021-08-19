@@ -1,8 +1,11 @@
 import { AppObjectType } from "../../Utils/Types";
 import Design from "../Design";
+import Loading from "../Loading";
+import Data from "./Data";
+import Layouts from "./UI/Layouts";
+import Utils from "./Utils";
 
 interface uplinkType {
-  title: string;
   url: string;
 }
 interface CanvasType {
@@ -23,7 +26,9 @@ export class AppContext {
     name: { set: () => {}, get: "FrontBase" },
     up: { set: () => {}, get: undefined },
   };
-  UI = { Design: Design };
+  UI = { Design: Design, Layouts, Loading };
+  data = Data;
+  utils = Utils;
 
   constructor(appData: AppObjectType, canvas: CanvasType) {
     this.appData = appData;

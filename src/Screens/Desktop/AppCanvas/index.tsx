@@ -11,6 +11,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  ListSubheader,
   Toolbar,
   Typography,
 } from "@material-ui/core";
@@ -19,6 +20,7 @@ import { Link, Route, Switch, useHistory } from "react-router-dom";
 import { useGlobal } from "reactn";
 import Icon from "../../../Components/Design/Icon";
 import { AppContext } from "../../../Components/Context";
+import { groupBy, map } from "lodash";
 
 const container = {
   hidden: { opacity: 0, marginLeft: -64 },
@@ -45,11 +47,10 @@ const AppLayout: React.FC<{ appKey: string }> = ({ appKey }) => {
   // Vars
   const [app, setApp] = useState<AppObjectType>();
   const [colors] = useGlobal<any>("colors");
-  const [pageMenu, setPageMenu] = useState<AppPageType[]>();
+  const [pageMenu, setPageMenu] = useState<{}>();
+  const [flatPageMenu, setFlatPageMenu] = useState<AppPageType[]>();
   const history = useHistory();
-  const [upLink, setUpLink] = useState<
-    { title: string; url: string } | undefined
-  >();
+  const [upLink, setUpLink] = useState<{ url: string } | undefined>();
   const [context, setContext] = useState<AppContext>();
   const [pageName, setPageName] = useState<string>("FrontBase");
 
@@ -71,7 +72,11 @@ const AppLayout: React.FC<{ appKey: string }> = ({ appKey }) => {
     const AppCode = require(`../../../AppDev/settings/index.tsx`).default;
     const appCode = new AppCode();
 
-    appCode.getPages().then((result: AppPageType[]) => setPageMenu(result));
+    // Get app pages (and sort them in groups)
+    appCode.getPages().then((result: AppPageType[]) => {
+      setPageMenu(groupBy(result, (o) => o.group));
+      setFlatPageMenu(result);
+    });
 
     Socket.emit(
       "systemGetsObject",
@@ -88,7 +93,7 @@ const AppLayout: React.FC<{ appKey: string }> = ({ appKey }) => {
   if (!app || !pageMenu) return <Loading />;
   return (
     <div className={styles.root}>
-      {pageMenu.length > 0 && (
+      {Object.keys(pageMenu).length > 0 && (
         <motion.div
           className={styles.menu}
           variants={container}
@@ -113,20 +118,32 @@ const AppLayout: React.FC<{ appKey: string }> = ({ appKey }) => {
             </Link>
           </motion.li>
           <List>
-            {pageMenu.map((page: AppPageType) => (
-              <motion.li key={page.key} variants={item}>
-                <ListItem
-                  button
-                  onClick={() => history.push(`/${app.key}/${page.key}`)}
-                >
-                  <ListItemIcon style={{ minWidth: 40 }}>
-                    <Icon icon={page.icon} className={styles.pageMenuIcon} />
-                  </ListItemIcon>
-                  <ListItemText className={styles.pageMenuText}>
-                    {page.label}
-                  </ListItemText>
-                </ListItem>
-              </motion.li>
+            {map(pageMenu, (pages: AppPageType[], groupKey: string) => (
+              <>
+                <motion.li key={`group-${groupKey}`} variants={item}>
+                  <ListSubheader>{groupKey}</ListSubheader>
+                </motion.li>
+                {pages.map((page: AppPageType) => {
+                  return (
+                    <motion.li key={page.key} variants={item}>
+                      <ListItem
+                        button
+                        onClick={() => history.push(`/${app.key}/${page.key}`)}
+                      >
+                        <ListItemIcon style={{ minWidth: 40 }}>
+                          <Icon
+                            icon={page.icon}
+                            className={styles.pageMenuIcon}
+                          />
+                        </ListItemIcon>
+                        <ListItemText className={styles.pageMenuText}>
+                          {page.label}
+                        </ListItemText>
+                      </ListItem>
+                    </motion.li>
+                  );
+                })}
+              </>
             ))}
           </List>
         </motion.div>
@@ -156,7 +173,7 @@ const AppLayout: React.FC<{ appKey: string }> = ({ appKey }) => {
 
         <div className={styles.appContent}>
           <Switch>
-            {pageMenu.map((page: AppPageType) => (
+            {map(flatPageMenu, (page: AppPageType) => (
               <Route
                 path={`/${appKey}/${page.key}`}
                 render={(args) => {

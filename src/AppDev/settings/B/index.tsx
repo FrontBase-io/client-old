@@ -6,7 +6,7 @@ const B: React.FC<{ context: AppContext }> = ({ context }) => {
 
   // Lifecycle
   useEffect(() => {
-    context.canvas.up.set({ title: "up", url: "/settings" });
+    context.canvas.up.set({ url: "/settings" });
     context.canvas.name.set("Page B");
     return () => {
       context.canvas.up.set(undefined);
