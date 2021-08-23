@@ -8,17 +8,19 @@ import styles from "./styles.module.scss";
 const NavBarAppIcon: React.FC<{
   app: AppObjectType;
   onClick?: () => void;
-  selected?: true;
+  selected?: true | boolean;
 }> = ({ app, onClick, selected }) => (
   <Link
     to={`/${app.key}`}
     onClick={onClick}
     className="no-link"
     style={{
-      width: "100%",
-      backgroundColor: "#f4f5f7",
+      width: "110%",
+      backgroundColor: selected ? "#f4f5f7" : "transparent",
       display: "block",
       padding: "10px",
+      boxSizing: "border-box",
+      zIndex: 15,
     }}
   >
     <Tooltip title={app.name} placement="right">
@@ -29,7 +31,7 @@ const NavBarAppIcon: React.FC<{
         }}
       >
         <div style={{ flex: 1, verticalAlign: "middle" }}>
-          <Icon icon="settings" style={{ lineHeight: "100%" }} />
+          <Icon icon={app.icon} size={24} />
         </div>
       </div>
     </Tooltip>

@@ -12,6 +12,7 @@ const listify = (
       label: item[label],
       key: item[key],
       icon: icon ? item[icon] : undefined,
+      object: item,
     })
   );
   return newArray;

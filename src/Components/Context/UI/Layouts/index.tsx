@@ -1,3 +1,4 @@
 import ListDetailLayout from "./ListDetailLayout";
+import ObjectOverview from "./ObjectOverview";
 
-export default { ListDetailLayout };
+export default { ListDetailLayout, ObjectOverview };

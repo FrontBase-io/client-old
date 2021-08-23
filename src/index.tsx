@@ -2,34 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { createTheme, ThemeProvider } from "@material-ui/core";
 import { BrowserRouter as Router } from "react-router-dom";
-import "material-icons/iconfont/round.css";
 import "./Style.scss";
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider
-      theme={createTheme({
-        palette: {
-          primary: { main: "#0283ff" },
-          type:
-            window.matchMedia &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches
-              ? "dark"
-              : "light",
-        },
-        props: {
-          MuiTooltip: {
-            arrow: true,
-          },
-        },
-      })}
-    >
-      <Router>
-        <App />
-      </Router>
-    </ThemeProvider>
+    <Router>
+      <App />
+    </Router>
   </React.StrictMode>,
   document.getElementById("root")
 );

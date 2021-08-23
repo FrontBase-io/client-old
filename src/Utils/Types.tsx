@@ -28,6 +28,7 @@ export interface ModelType {
   label_plural: string;
   app: string;
   primary: string;
+  icon: string;
   locked?: boolean;
   permissions: {
     create: string[];
@@ -42,6 +43,7 @@ export interface ModelType {
 
 // Apps
 export interface AppObjectType extends ObjectType {
+  icon: string;
   name: string;
   key: string;
   color: ColorType;
@@ -51,7 +53,7 @@ export interface AppPageType {
   key: string;
   icon: string;
   group?: string;
-  component: React.FC<{ context: AppContext }>;
+  component: React.FC<{ context: AppContext; page: AppPageType }>;
 }
 export interface AppCodeType {
   settings?: { desktop?: {}; mobile?: { pages: "bottom" } };
@@ -63,4 +65,5 @@ export interface ListItemType {
   label: string;
   key: string;
   icon?: string;
+  object?: any;
 }

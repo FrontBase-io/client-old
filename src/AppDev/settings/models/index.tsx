@@ -26,7 +26,12 @@ const PageModels: React.FC<{ context: AppContext }> = ({ context }) => {
     <context.UI.Layouts.ListDetailLayout
       context={context}
       title="Models"
-      menu={context.utils.listify(models, "label_plural", "key_plural", "icon")}
+      items={context.utils.listify(
+        models,
+        "label_plural",
+        "key_plural",
+        "icon"
+      )}
       baseUrl="/settings/models"
       detailComponent={ModelDetail}
     />

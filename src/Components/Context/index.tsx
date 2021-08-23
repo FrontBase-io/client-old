@@ -26,7 +26,7 @@ export class AppContext {
     name: { set: () => {}, get: "FrontBase" },
     up: { set: () => {}, get: undefined },
   };
-  UI = { Design: Design, Layouts, Loading };
+  UI = { Design, Layouts, Loading };
   data = Data;
   utils = Utils;
 

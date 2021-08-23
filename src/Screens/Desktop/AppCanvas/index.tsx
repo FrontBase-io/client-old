@@ -21,6 +21,7 @@ import { useGlobal } from "reactn";
 import Icon from "../../../Components/Design/Icon";
 import { AppContext } from "../../../Components/Context";
 import { groupBy, map } from "lodash";
+import { AppUtilsType } from "../../../App";
 
 const container = {
   hidden: { opacity: 0, marginLeft: -64 },
@@ -43,7 +44,10 @@ const item = {
   },
 };
 
-const AppLayout: React.FC<{ appKey: string }> = ({ appKey }) => {
+const AppLayout: React.FC<{ appKey: string; utils: AppUtilsType }> = ({
+  appKey,
+  utils,
+}) => {
   // Vars
   const [app, setApp] = useState<AppObjectType>();
   const [colors] = useGlobal<any>("colors");
@@ -53,30 +57,35 @@ const AppLayout: React.FC<{ appKey: string }> = ({ appKey }) => {
   const [upLink, setUpLink] = useState<{ url: string } | undefined>();
   const [context, setContext] = useState<AppContext>();
   const [pageName, setPageName] = useState<string>("FrontBase");
+  const [selectedPage, setSelectedPage] = useState<string>();
 
   // Lifecycle
   useEffect(() => {
     const onReceive = (object: AppObjectType) => {
       setApp(object);
       setPageName(object.name);
-      setContext(
-        new AppContext(object, {
-          name: {
-            get: pageName,
-            set: (pageName?: string) => setPageName(pageName || object.name),
-          },
-          up: { set: setUpLink, get: upLink },
-        })
+      utils.setPrimaryColor(
+        `rgb(${object.color.r},${object.color.g},${object.color.b})`
       );
-    };
-    const AppCode = require(`../../../AppDev/settings/index.tsx`).default;
-    const appCode = new AppCode();
+      const context = new AppContext(object, {
+        name: {
+          get: pageName,
+          set: (pageName?: string) => setPageName(pageName || object.name),
+        },
+        up: { set: setUpLink, get: upLink },
+      });
+      setContext(context);
 
-    // Get app pages (and sort them in groups)
-    appCode.getPages().then((result: AppPageType[]) => {
-      setPageMenu(groupBy(result, (o) => o.group));
-      setFlatPageMenu(result);
-    });
+      const AppCode =
+        require(`../../../AppDev/${object.key}/index.tsx`).default;
+      const appCode = new AppCode();
+
+      // Get app pages (and sort them in groups)
+      appCode.getPages(context).then((result: AppPageType[]) => {
+        setPageMenu(groupBy(result, (o) => o.group));
+        setFlatPageMenu(result);
+      });
+    };
 
     Socket.emit(
       "systemGetsObject",
@@ -87,7 +96,11 @@ const AppLayout: React.FC<{ appKey: string }> = ({ appKey }) => {
         Socket.on(`receive ${response.key}`, onReceive);
       }
     );
-  }, []);
+
+    return () => {
+      utils.setPrimaryColor();
+    };
+  }, [appKey]);
 
   // UI
   if (!app || !pageMenu) return <Loading />;
@@ -102,7 +115,7 @@ const AppLayout: React.FC<{ appKey: string }> = ({ appKey }) => {
           exit={{ opacity: 0, left: -200 }}
           key="PageMenu"
         >
-          <motion.li variants={item}>
+          <motion.div variants={item}>
             <Link
               to={`/${app.key}`}
               className="no-link"
@@ -116,7 +129,7 @@ const AppLayout: React.FC<{ appKey: string }> = ({ appKey }) => {
                 {app.name}
               </Typography>
             </Link>
-          </motion.li>
+          </motion.div>
           <List>
             {map(pageMenu, (pages: AppPageType[], groupKey: string) => (
               <>
@@ -129,11 +142,13 @@ const AppLayout: React.FC<{ appKey: string }> = ({ appKey }) => {
                       <ListItem
                         button
                         onClick={() => history.push(`/${app.key}/${page.key}`)}
+                        selected={page.key === selectedPage}
                       >
                         <ListItemIcon style={{ minWidth: 40 }}>
                           <Icon
                             icon={page.icon}
                             className={styles.pageMenuIcon}
+                            primary={page.key === selectedPage}
                           />
                         </ListItemIcon>
                         <ListItemText className={styles.pageMenuText}>
@@ -149,7 +164,10 @@ const AppLayout: React.FC<{ appKey: string }> = ({ appKey }) => {
         </motion.div>
       )}
       <div className={styles.appCanvas}>
-        <AppBar position="static" style={{ height: "30vh", zIndex: 10 }}>
+        <AppBar
+          position="static"
+          style={{ height: "30vh", zIndex: 10, color: "white" }}
+        >
           <Toolbar>
             {upLink !== undefined && (
               <IconButton
@@ -158,16 +176,13 @@ const AppLayout: React.FC<{ appKey: string }> = ({ appKey }) => {
                 aria-label="open drawer"
                 onClick={() => history.push(upLink.url)}
               >
-                <Icon icon="chevron_left" />
+                <Icon icon="chevron-left" />
               </IconButton>
             )}
             <Typography variant="h6" noWrap>
               {pageName}
             </Typography>
             <div style={{ flex: 1 }} />
-            <IconButton aria-label="show more" color="inherit">
-              <Icon icon="more" />
-            </IconButton>
           </Toolbar>
         </AppBar>
 
@@ -177,9 +192,10 @@ const AppLayout: React.FC<{ appKey: string }> = ({ appKey }) => {
               <Route
                 path={`/${appKey}/${page.key}`}
                 render={(args) => {
+                  setSelectedPage(page.key);
                   const Component = page.component;
                   return context ? (
-                    <Component context={context} />
+                    <Component context={context} page={page} />
                   ) : (
                     <Loading />
                   );

@@ -5,21 +5,27 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@material-ui/core";
-import React, { useEffect } from "react";
+import find from "lodash/find";
+import React, { useEffect, useState } from "react";
 import { Switch, useHistory, Route } from "react-router-dom";
 import { AppContext } from "../../..";
-import { ListItemType } from "../../../../../Utils/Types";
+import { ListItemType, ObjectType } from "../../../../../Utils/Types";
 import Icon from "../../../../Design/Icon";
 
 const ListDetailLayout: React.FC<{
   context: AppContext;
   title?: string;
-  menu: ListItemType[];
+  items: ListItemType[];
   baseUrl: string;
-  detailComponent: React.FC<{ context: AppContext; selectedKey: string }>;
-}> = ({ context, title, menu, baseUrl, detailComponent }) => {
+  detailComponent: React.FC<{
+    context: AppContext;
+    selectedKey: string;
+    item: ListItemType;
+  }>;
+}> = ({ context, title, items, baseUrl, detailComponent }) => {
   // Vars
   const history = useHistory();
+  const [selectedItem, setSelectedItem] = useState<string>();
 
   // Lifecycle
   // UI
@@ -28,13 +34,14 @@ const ListDetailLayout: React.FC<{
       <Grid container>
         <Grid item xs={2}>
           <context.UI.Design.Animation.AnimateItem key="menu">
-            <context.UI.Design.Card title={title}>
+            <context.UI.Design.Card title={title} withoutPadding>
               <List>
-                {menu.map((menuItem) => (
+                {items.map((menuItem) => (
                   <ListItem
                     key={menuItem.key}
                     button
                     onClick={() => history.push(`${baseUrl}/${menuItem.key}`)}
+                    selected={menuItem.key === selectedItem}
                   >
                     {menuItem.icon && (
                       <ListItemIcon>
@@ -48,7 +55,7 @@ const ListDetailLayout: React.FC<{
             </context.UI.Design.Card>
           </context.UI.Design.Animation.AnimateItem>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={10}>
           <Switch>
             <Route
               path={`${baseUrl}/:selectedItem`}
@@ -59,6 +66,8 @@ const ListDetailLayout: React.FC<{
                   selectedKey={args.match.params.selectedItem}
                   baseUrl={baseUrl}
                   title={title}
+                  items={items}
+                  setSelectedItem={setSelectedItem}
                 />
               )}
             />
@@ -71,26 +80,43 @@ const ListDetailLayout: React.FC<{
 
 const DetailComponentWrapper: React.FC<{
   context: AppContext;
-  component: React.FC<{ context: AppContext; selectedKey: string }>;
+  component: React.FC<{
+    context: AppContext;
+    selectedKey: string;
+    item: ListItemType;
+  }>;
   selectedKey: string;
   baseUrl: string;
   title?: string;
-}> = ({ context, component, selectedKey, baseUrl, title }) => {
+  items: ListItemType[];
+  setSelectedItem: (key?: string) => void;
+}> = ({
+  context,
+  component,
+  selectedKey,
+  baseUrl,
+  title,
+  items,
+  setSelectedItem,
+}) => {
   // Vars
   // Lifecycle
   useEffect(() => {
     // Up
     context.canvas.up.set({ url: baseUrl });
-    context.canvas.name.set(selectedKey);
+    context.canvas.name.set(item.label);
+    setSelectedItem(item.key);
     return () => {
       context.canvas.up.set(undefined);
       context.canvas.name.set();
       context.canvas.name.set(title);
+      setSelectedItem();
     };
   }, [selectedKey]);
   // UI
   const Component = component;
-  return <Component context={context} selectedKey={selectedKey} />;
+  const item = find(items, (o) => o.key === selectedKey) as ListItemType;
+  return <Component context={context} selectedKey={selectedKey} item={item} />;
 };
 
 export default ListDetailLayout;

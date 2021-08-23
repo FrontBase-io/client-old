@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./styles.module.scss";
 import logo from "./logo.png";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -7,21 +7,34 @@ import { useHistory } from "react-router";
 import { useGlobal } from "reactn";
 import { AppObjectType } from "../../../Utils/Types";
 import NavBarAppIcon from "../AppIcon/AppIconNavBar";
+import { useEffect } from "react";
+import Socket from "../../../Utils/Socket";
+import { ResponseType } from "../../../Utils/Types";
+import find from "lodash/find";
 
 const NavBar: React.FC<{
   onOpenAppMenu: (event: React.MouseEvent) => void;
   onOpenUserMenu: (event: React.MouseEvent) => void;
   selectedApp?: AppObjectType;
-}> = ({ onOpenAppMenu, onOpenUserMenu, selectedApp }) => {
+  apps: AppObjectType[];
+}> = ({ onOpenAppMenu, onOpenUserMenu, selectedApp, apps }) => {
   // Vars
   const history = useHistory();
-  const [, setUser] = useGlobal<any>("user");
+  const [colors] = useGlobal<any>("colors");
+  const [favoriteList, setFavoriteList] = useState<string[]>([]);
 
   //Lifecycle
-
+  useEffect(() => {
+    Socket.emit("getUserSetting", "favoriteApps", (response: ResponseType) =>
+      setFavoriteList(response.value)
+    );
+  }, []);
   // UI
   return (
-    <div className={styles.navbar}>
+    <div
+      className={styles.navbar}
+      style={{ backgroundColor: colors.primary.hex }}
+    >
       <div
         style={{
           display: "flex",
@@ -60,7 +73,15 @@ const NavBar: React.FC<{
           </Tooltip>
         </div>
         <div style={{ flex: 1, padding: "10px 0", width: "100%" }}>
-          {selectedApp && <NavBarAppIcon app={selectedApp} selected />}
+          {selectedApp && !favoriteList.includes(selectedApp.key) && (
+            <NavBarAppIcon app={selectedApp} selected />
+          )}
+          {favoriteList.map((appKey) => (
+            <NavBarAppIcon
+              app={find(apps, (o) => o.key === appKey) as AppObjectType}
+              selected={selectedApp?.key === appKey}
+            />
+          ))}
         </div>
         <div style={{ height: 40, marginBottom: 10, verticalAlign: "middle" }}>
           <Tooltip

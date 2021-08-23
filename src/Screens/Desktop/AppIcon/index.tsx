@@ -9,33 +9,33 @@ const AppIcon: React.FC<{ app: AppObjectType; onClick?: () => void }> = ({
   onClick,
 }) => {
   return (
-    <Link
-      to={`/${app.key}`}
-      onClick={onClick}
-      className="no-link"
-      style={{ textDecoration: "none" }}
-    >
-      <div
-        className={styles.root}
-        style={{
-          backgroundColor: `rgb(${app.color.r}, ${app.color.g},${app.color.b})`,
-        }}
+    <div style={{ width: "100%", textAlign: "center", fontSize: 18 }}>
+      <Link
+        to={`/${app.key}`}
+        onClick={onClick}
+        className="no-link"
+        style={{ textDecoration: "none" }}
       >
-        <div style={{ flex: 1, verticalAlign: "bottom", lineHeight: "60px" }}>
-          <Icon icon="settings" style={{ lineHeight: "100%" }} />
-        </div>
         <div
+          className={styles.root}
           style={{
-            flex: 1,
-            verticalAlign: "top",
-            textDecoration: "none",
-            marginTop: -20,
+            backgroundColor: `rgb(${app.color.r}, ${app.color.g},${app.color.b})`,
           }}
         >
-          {app.name}
+          <Icon
+            icon={app.icon}
+            size={32}
+            style={{
+              display: "flex",
+              margin: "auto",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          />
         </div>
-      </div>
-    </Link>
+        {app.name}
+      </Link>
+    </div>
   );
 };
 

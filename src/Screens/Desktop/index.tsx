@@ -9,10 +9,11 @@ import AppCanvas from "./AppCanvas";
 import { Route, Switch } from "react-router-dom";
 import HomeScreen from "../Home";
 import find from "lodash/find";
+import { AppUtilsType } from "../../App";
 
-const Desktop: React.FC = () => {
+const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
   // Vars
-  const [apps, setApps] = useState<AppObjectType[]>([]);
+  const [apps, setApps] = useState<AppObjectType[]>();
   const [appMenuElement, setAppMenuElement] = useState<Element | null>();
   const [userMenuElement, setUserMenuElement] = useState<Element | null>();
   const [selectedApp, setSelectedApp] = useState<AppObjectType>();
@@ -41,6 +42,7 @@ const Desktop: React.FC = () => {
             setUserMenuElement(event.currentTarget);
           }}
           selectedApp={selectedApp}
+          apps={apps}
         />
         <div style={{ flex: 1 }}>
           <Switch>
@@ -50,7 +52,9 @@ const Desktop: React.FC = () => {
                 setSelectedApp(
                   find(apps, (o) => o.key === args.match.params.appKey)
                 );
-                return <AppCanvas appKey={args.match.params.appKey} />;
+                return (
+                  <AppCanvas appKey={args.match.params.appKey} utils={utils} />
+                );
               }}
             />
             <Route

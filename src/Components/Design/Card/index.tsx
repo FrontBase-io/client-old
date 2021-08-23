@@ -8,6 +8,7 @@ const Card: React.FC<{
   style?: CSSProperties;
   onTitleClick?: () => void;
   withShadow?: true;
+  withoutPadding?: true;
   shadow?: "default" | "sharp" | "diffuse" | "dreamy" | "short" | "long";
   hoverable?: true | boolean;
   className?: string;
@@ -17,6 +18,7 @@ const Card: React.FC<{
   style,
   title,
   onTitleClick,
+  withoutPadding,
   withShadow,
   shadow,
   hoverable,
@@ -33,6 +35,7 @@ const Card: React.FC<{
       style={{
         ...style,
         margin: 15,
+        padding: withoutPadding ? 0 : "5px 10px",
         overflow,
       }}
     >
@@ -42,7 +45,10 @@ const Card: React.FC<{
           gutterBottom
           onClick={onTitleClick}
           color="primary"
-          style={{ cursor: onTitleClick ? "pointer" : "default" }}
+          style={{
+            cursor: onTitleClick ? "pointer" : "default",
+            padding: withoutPadding && "10px 10px 0 10px",
+          }}
         >
           {title}
         </Typography>

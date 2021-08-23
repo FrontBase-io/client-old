@@ -4,7 +4,10 @@ import PageModels from "./models";
 export default class App {
   constructor() {}
   // Settings
-  settings = { mobile: { pages: "bottom" } };
+  settings = {
+    pages: { searchable: true, groups: { enabled: true, collapsible: true } },
+    mobile: { pages: "bottom" },
+  };
 
   // Pages
   getPages = () =>
@@ -13,16 +16,30 @@ export default class App {
         {
           label: "Models",
           key: "models",
-          icon: "account_tree",
+          icon: "sitemap",
           component: PageModels,
           group: "Apps",
         },
         {
-          label: "Page B",
-          key: "b",
-          icon: "self_improvement",
+          label: "Routines",
+          key: "routines",
+          icon: "code-branch",
           component: B,
-          group: "B",
+          group: "Apps",
+        },
+        {
+          label: "Settings",
+          key: "settings",
+          icon: "cogs",
+          component: B,
+          group: "System",
+        },
+        {
+          label: "Update",
+          key: "update",
+          icon: "cloud-download-alt",
+          component: B,
+          group: "System",
         },
       ])
     );
