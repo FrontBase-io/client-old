@@ -9,6 +9,7 @@ const Card: React.FC<{
   onTitleClick?: () => void;
   withShadow?: true;
   withoutPadding?: true;
+  withoutMargin?: true;
   shadow?: "default" | "sharp" | "diffuse" | "dreamy" | "short" | "long";
   hoverable?: true | boolean;
   className?: string;
@@ -19,6 +20,7 @@ const Card: React.FC<{
   title,
   onTitleClick,
   withoutPadding,
+  withoutMargin,
   withShadow,
   shadow,
   hoverable,
@@ -34,7 +36,7 @@ const Card: React.FC<{
       }`}
       style={{
         ...style,
-        margin: 15,
+        margin: withoutMargin ? 0 : 15,
         padding: withoutPadding ? 0 : "5px 10px",
         overflow,
       }}

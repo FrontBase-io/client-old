@@ -22,6 +22,7 @@ import Icon from "../../../Components/Design/Icon";
 import { AppContext } from "../../../Components/Context";
 import { groupBy, map } from "lodash";
 import { AppUtilsType } from "../../../App";
+import { useSnackbar, VariantType } from "notistack";
 
 const container = {
   hidden: { opacity: 0, marginLeft: -64 },
@@ -58,6 +59,7 @@ const AppLayout: React.FC<{ appKey: string; utils: AppUtilsType }> = ({
   const [context, setContext] = useState<AppContext>();
   const [pageName, setPageName] = useState<string>("FrontBase");
   const [selectedPage, setSelectedPage] = useState<string>();
+  const { enqueueSnackbar } = useSnackbar();
 
   // Lifecycle
   useEffect(() => {
@@ -65,7 +67,7 @@ const AppLayout: React.FC<{ appKey: string; utils: AppUtilsType }> = ({
       setApp(object);
       setPageName(object.name);
       utils.setPrimaryColor(
-        `rgb(${object.color.r},${object.color.g},${object.color.b})`
+        `rgb(${object?.color?.r},${object?.color?.g},${object?.color?.b})`
       );
       const context = new AppContext(object, {
         name: {
@@ -73,6 +75,10 @@ const AppLayout: React.FC<{ appKey: string; utils: AppUtilsType }> = ({
           set: (pageName?: string) => setPageName(pageName || object.name),
         },
         up: { set: setUpLink, get: upLink },
+        interact: {
+          snackbar: (msg: string, variant?: VariantType) =>
+            enqueueSnackbar(msg, { variant }),
+        },
       });
       setContext(context);
 

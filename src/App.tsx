@@ -8,6 +8,8 @@ import { ResponseType } from "./Utils/Types";
 import Socket from "./Utils/Socket";
 import Hidden from "@material-ui/core/Hidden";
 import { createTheme, ThemeProvider } from "@material-ui/core";
+import { SnackbarProvider } from "notistack";
+
 const Onboard = asyncComponent(() => import("./Screens/Onboard"));
 const Login = asyncComponent(() => import("./Screens/LogIn"));
 const Desktop = asyncComponent(() => import("./Screens/Desktop"));
@@ -95,12 +97,14 @@ function App() {
         <Login />
       ) : (
         <ThemeProvider theme={createTheme(theme)}>
-          <Hidden xsDown>
-            <Desktop utils={{ setPrimaryColor }} />
-          </Hidden>
-          <Hidden smUp>
-            <Mobile />
-          </Hidden>
+          <SnackbarProvider maxSnack={3}>
+            <Hidden xsDown>
+              <Desktop utils={{ setPrimaryColor }} />
+            </Hidden>
+            <Hidden smUp>
+              <Mobile />
+            </Hidden>
+          </SnackbarProvider>
         </ThemeProvider>
       )}
     </>

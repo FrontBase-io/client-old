@@ -35,17 +35,18 @@ const ListDetailLayout: React.FC<{
         <Grid item xs={2}>
           <context.UI.Design.Animation.AnimateItem key="menu">
             <context.UI.Design.Card title={title} withoutPadding>
-              <List>
+              <List disablePadding>
                 {items.map((menuItem) => (
                   <ListItem
                     key={menuItem.key}
                     button
                     onClick={() => history.push(`${baseUrl}/${menuItem.key}`)}
                     selected={menuItem.key === selectedItem}
+                    style={{ paddingLeft: 0 }}
                   >
                     {menuItem.icon && (
-                      <ListItemIcon>
-                        <Icon icon={menuItem.icon} />
+                      <ListItemIcon style={{ minWidth: 48 }}>
+                        <Icon icon={menuItem.icon} size={18} />
                       </ListItemIcon>
                     )}
                     <ListItemText>{menuItem.label}</ListItemText>

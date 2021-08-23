@@ -1,9 +1,11 @@
 import { AppObjectType } from "../../Utils/Types";
 import Design from "../Design";
+import Inputs from "../Inputs";
 import Loading from "../Loading";
 import Data from "./Data";
 import Layouts from "./UI/Layouts";
 import Utils from "./Utils";
+import { VariantType } from "notistack";
 
 interface uplinkType {
   url: string;
@@ -14,6 +16,7 @@ interface CanvasType {
     set: (link: uplinkType | undefined) => void;
     get: uplinkType | undefined;
   };
+  interact: { snackbar: (msg: string, variant: VariantType) => void };
 }
 
 export class AppContext {
@@ -25,8 +28,9 @@ export class AppContext {
   canvas: CanvasType = {
     name: { set: () => {}, get: "FrontBase" },
     up: { set: () => {}, get: undefined },
+    interact: { snackbar: () => {} },
   };
-  UI = { Design, Layouts, Loading };
+  UI = { Design, Layouts, Loading, Inputs };
   data = Data;
   utils = Utils;
 
