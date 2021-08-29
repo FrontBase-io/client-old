@@ -33,7 +33,7 @@ const Animate: React.FC = ({ children }) => {
   );
 };
 
-const AnimateContainer: React.FC = ({ children }) => (
+const Container: React.FC = ({ children }) => (
   <motion.div
     className="container"
     variants={container}
@@ -44,10 +44,10 @@ const AnimateContainer: React.FC = ({ children }) => (
   </motion.div>
 );
 
-const AnimateItem: React.FC<{ key: string }> = ({ key, children }) => (
+const Item: React.FC<{ key: string }> = ({ key, children }) => (
   <motion.div key={key} className="item" variants={item}>
     {children}
   </motion.div>
 );
 
-export default { Animate, AnimateContainer, AnimateItem };
+export default { Animate, Container, Item };

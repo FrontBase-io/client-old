@@ -8,7 +8,8 @@ const TextInput: React.FC<{
   onChange?: (newValue: string) => void;
   password?: true;
   disabled?: true | boolean;
-}> = ({ label, value, onChange, disabled }) => {
+  keyMode?: true | boolean;
+}> = ({ label, value, onChange, disabled, keyMode }) => {
   // Vars
 
   // Lifecycle
@@ -20,7 +21,12 @@ const TextInput: React.FC<{
         className={styles.input}
         value={value}
         onChange={(e) => {
-          onChange && onChange(e.currentTarget.value);
+          onChange &&
+            onChange(
+              keyMode
+                ? e.currentTarget.value.replace(/\W/g, "").toLowerCase()
+                : e.currentTarget.value
+            );
         }}
         disabled={disabled}
       />

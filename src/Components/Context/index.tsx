@@ -1,4 +1,4 @@
-import { AppObjectType } from "../../Utils/Types";
+import { AppObjectType, DialogType } from "../../Utils/Types";
 import Design from "../Design";
 import Inputs from "../Inputs";
 import Loading from "../Loading";
@@ -13,7 +13,10 @@ interface CanvasType {
     set: (link: string | undefined) => void;
     get: string | undefined;
   };
-  interact: { snackbar: (msg: string, variant: VariantType) => void };
+  interact: {
+    snackbar: (msg: string, variant: VariantType) => void;
+    dialog: (dialog: DialogType) => void;
+  };
 }
 
 export class AppContext {
@@ -25,7 +28,7 @@ export class AppContext {
   canvas: CanvasType = {
     name: { set: () => {}, get: "FrontBase" },
     up: { set: () => {}, get: undefined },
-    interact: { snackbar: () => {} },
+    interact: { snackbar: () => {}, dialog: () => {} },
   };
   UI = { Design, Layouts, Loading, Inputs };
   data = Data;

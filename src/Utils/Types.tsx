@@ -30,6 +30,7 @@ export interface ModelType {
   primary: string;
   icon: string;
   locked?: boolean;
+  fields: { [key: string]: ModelFieldType };
   permissions: {
     create: string[];
     read: string[];
@@ -39,6 +40,10 @@ export interface ModelType {
     delete: string[];
     delete_own: string[];
   };
+}
+
+export interface ModelFieldType {
+  label: string;
 }
 
 // Apps
@@ -66,4 +71,37 @@ export interface ListItemType {
   key: string;
   icon?: string;
   object?: any;
+}
+
+export interface DialogType {
+  display?: boolean;
+  title?: string;
+  text?: string;
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
+  fields?: {
+    [key: string]: {
+      type?: "text" | "key";
+      label: string;
+      width?:
+        | false
+        | "auto"
+        | true
+        | 1
+        | 2
+        | 3
+        | 4
+        | 5
+        | 6
+        | 7
+        | 8
+        | 9
+        | 10
+        | 11
+        | 12;
+    };
+  };
+  actions?: {
+    label: string;
+    onClick?: (form: { [key: string]: any }, close: () => void) => void;
+  }[];
 }

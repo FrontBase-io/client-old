@@ -15,12 +15,12 @@ const NavBarAppIcon: React.FC<{
     onClick={onClick}
     className="no-link"
     style={{
-      width: "104%",
+      width: "calc(100% + 1px)",
       backgroundColor: selected ? "#f4f5f7" : "transparent",
       display: "block",
       padding: "10px",
-      boxSizing: "border-box",
       zIndex: 15,
+      boxSizing: "border-box",
     }}
   >
     <Tooltip title={app.name} placement="right">

@@ -69,7 +69,7 @@ const NavBar: React.FC<{
               alt="Frontbase Logo"
               src={logo}
               className={styles.logo}
-              style={{ width: 54 }}
+              style={{ width: 46 }}
             />
           </Tooltip>
         </div>

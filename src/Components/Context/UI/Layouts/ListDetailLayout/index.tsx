@@ -22,39 +22,53 @@ const ListDetailLayout: React.FC<{
     selectedKey: string;
     item: ListItemType;
   }>;
-}> = ({ context, title, items, baseUrl, detailComponent }) => {
+  create?: { onClick?: () => void; label?: string };
+}> = ({ context, title, items, baseUrl, detailComponent, create }) => {
   // Vars
   const history = useHistory();
   const [selectedItem, setSelectedItem] = useState<string>();
 
   // Lifecycle
+
   // UI
   return (
-    <context.UI.Design.Animation.AnimateContainer>
+    <context.UI.Design.Animation.Container>
       <Grid container>
         <Grid item xs={2}>
-          <context.UI.Design.Animation.AnimateItem key="menu">
+          <context.UI.Design.Animation.Item key="menu">
             <context.UI.Design.Card title={title} withoutPadding>
               <List disablePadding>
-                {items.map((menuItem) => (
-                  <ListItem
-                    key={menuItem.key}
-                    button
-                    onClick={() => history.push(`${baseUrl}/${menuItem.key}`)}
-                    selected={menuItem.key === selectedItem}
-                    style={{ paddingLeft: 0 }}
-                  >
-                    {menuItem.icon && (
-                      <ListItemIcon style={{ minWidth: 48 }}>
-                        <Icon icon={menuItem.icon} size={18} />
-                      </ListItemIcon>
-                    )}
-                    <ListItemText>{menuItem.label}</ListItemText>
-                  </ListItem>
-                ))}
+                <context.UI.Design.Animation.Container>
+                  {(items || []).map((menuItem) => (
+                    <context.UI.Design.Animation.Item key={menuItem.key}>
+                      <ListItem
+                        button
+                        onClick={() =>
+                          history.push(`${baseUrl}/${menuItem.key}`)
+                        }
+                        selected={menuItem.key === selectedItem}
+                        style={{ paddingLeft: 0 }}
+                      >
+                        {menuItem.icon && (
+                          <ListItemIcon style={{ minWidth: 48 }}>
+                            <Icon icon={menuItem.icon} size={18} />
+                          </ListItemIcon>
+                        )}
+                        <ListItemText>{menuItem.label}</ListItemText>
+                      </ListItem>
+                    </context.UI.Design.Animation.Item>
+                  ))}
+                  {create && (
+                    <context.UI.Design.Animation.Item key="create">
+                      <ListItem button onClick={create.onClick}>
+                        <ListItemText>{create.label || "Create"}</ListItemText>
+                      </ListItem>
+                    </context.UI.Design.Animation.Item>
+                  )}
+                </context.UI.Design.Animation.Container>
               </List>
             </context.UI.Design.Card>
-          </context.UI.Design.Animation.AnimateItem>
+          </context.UI.Design.Animation.Item>
         </Grid>
         <Grid item xs={10}>
           <Switch>
@@ -75,7 +89,7 @@ const ListDetailLayout: React.FC<{
           </Switch>
         </Grid>
       </Grid>
-    </context.UI.Design.Animation.AnimateContainer>
+    </context.UI.Design.Animation.Container>
   );
 };
 
@@ -105,8 +119,8 @@ const DetailComponentWrapper: React.FC<{
   useEffect(() => {
     // Up
     context.canvas.up.set(baseUrl);
-    context.canvas.name.set(item.label);
-    setSelectedItem(item.key);
+    if (item) context.canvas.name.set(item.label);
+    if (item) setSelectedItem(item.key);
     return () => {
       context.canvas.up.set(undefined);
       context.canvas.name.set();
