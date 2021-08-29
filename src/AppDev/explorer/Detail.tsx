@@ -11,7 +11,7 @@ const Model: React.FC<{ context: AppContext; page: AppPageType }> = ({
 
   // Lifecycle
   useEffect(() => {
-    context.canvas.up.set({ url: "/settings" });
+    context.canvas.up.set("/settings");
     context.canvas.name.set(page.label);
     return () => {
       context.canvas.up.set(undefined);

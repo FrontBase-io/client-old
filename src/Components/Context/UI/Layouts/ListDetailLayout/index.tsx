@@ -104,7 +104,7 @@ const DetailComponentWrapper: React.FC<{
   // Lifecycle
   useEffect(() => {
     // Up
-    context.canvas.up.set({ url: baseUrl });
+    context.canvas.up.set(baseUrl);
     context.canvas.name.set(item.label);
     setSelectedItem(item.key);
     return () => {

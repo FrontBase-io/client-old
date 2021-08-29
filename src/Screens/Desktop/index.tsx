@@ -6,10 +6,16 @@ import NavBar from "./NavBar";
 import Popover from "@material-ui/core/Popover";
 import AppMenu from "./AppMenu";
 import AppCanvas from "./AppCanvas";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, useHistory } from "react-router-dom";
 import HomeScreen from "../Home";
 import find from "lodash/find";
 import { AppUtilsType } from "../../App";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import Icon from "../../Components/Design/Icon";
+import Typography from "@material-ui/core/Typography";
+import styles from "./styles.module.scss";
 
 const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
   // Vars
@@ -17,6 +23,10 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
   const [appMenuElement, setAppMenuElement] = useState<Element | null>();
   const [userMenuElement, setUserMenuElement] = useState<Element | null>();
   const [selectedApp, setSelectedApp] = useState<AppObjectType>();
+  const history = useHistory();
+  const [upLink, setUpLink] = useState<string | undefined>();
+  const [pageName, setPageName] = useState<string>("FrontBase");
+  const [headerIsIndented, setHeaderIsIndented] = useState<Boolean>(false);
 
   // Lifecycle
   useEffect(() => {
@@ -44,27 +54,63 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
           selectedApp={selectedApp}
           apps={apps}
         />
-        <div style={{ flex: 1 }}>
-          <Switch>
-            <Route
-              path="/:appKey"
-              render={(args) => {
-                setSelectedApp(
-                  find(apps, (o) => o.key === args.match.params.appKey)
-                );
-                return (
-                  <AppCanvas appKey={args.match.params.appKey} utils={utils} />
-                );
-              }}
-            />
-            <Route
-              path="/"
-              render={() => {
-                setSelectedApp(undefined);
-                return <HomeScreen />;
-              }}
-            />
-          </Switch>
+        <div style={{ flex: 1, zIndex: 1 }}>
+          <AppBar
+            position="static"
+            style={{
+              height: "30vh",
+              zIndex: 10,
+              color: "white",
+              marginLeft: headerIsIndented ? 240 : 0,
+            }}
+          >
+            <Toolbar>
+              {upLink !== undefined && (
+                <IconButton
+                  edge="start"
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={() => history.push(upLink)}
+                >
+                  <Icon icon="chevron-left" />
+                </IconButton>
+              )}
+              <Typography variant="h6" noWrap>
+                {pageName}
+              </Typography>
+              <div style={{ flex: 1 }} />
+            </Toolbar>
+          </AppBar>
+          <div className={styles.canvasContent}>
+            <Switch>
+              <Route
+                path="/:appKey"
+                render={(args) => {
+                  setSelectedApp(
+                    find(apps, (o) => o.key === args.match.params.appKey)
+                  );
+                  return (
+                    <AppCanvas
+                      appKey={args.match.params.appKey}
+                      utils={utils}
+                      setUpLink={setUpLink}
+                      upLink={upLink}
+                      pageName={pageName}
+                      setPageName={setPageName}
+                      setHeaderIsIndented={setHeaderIsIndented}
+                    />
+                  );
+                }}
+              />
+              <Route
+                path="/"
+                render={() => {
+                  setSelectedApp(undefined);
+                  return <HomeScreen />;
+                }}
+              />
+            </Switch>
+          </div>
         </div>
       </div>
       <Popover

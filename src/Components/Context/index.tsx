@@ -7,14 +7,11 @@ import Layouts from "./UI/Layouts";
 import Utils from "./Utils";
 import { VariantType } from "notistack";
 
-interface uplinkType {
-  url: string;
-}
 interface CanvasType {
   name: { set: (name?: string) => void; get: string };
   up: {
-    set: (link: uplinkType | undefined) => void;
-    get: uplinkType | undefined;
+    set: (link: string | undefined) => void;
+    get: string | undefined;
   };
   interact: { snackbar: (msg: string, variant: VariantType) => void };
 }

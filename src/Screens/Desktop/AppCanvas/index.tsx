@@ -45,9 +45,22 @@ const item = {
   },
 };
 
-const AppLayout: React.FC<{ appKey: string; utils: AppUtilsType }> = ({
+const AppLayout: React.FC<{
+  appKey: string;
+  utils: AppUtilsType;
+  setPageName: (title: string) => void;
+  pageName: string;
+  setUpLink: (title?: string) => void;
+  upLink?: string;
+  setHeaderIsIndented?: (isIndented: boolean) => void;
+}> = ({
   appKey,
   utils,
+  setPageName,
+  pageName,
+  setUpLink,
+  upLink,
+  setHeaderIsIndented,
 }) => {
   // Vars
   const [app, setApp] = useState<AppObjectType>();
@@ -55,9 +68,7 @@ const AppLayout: React.FC<{ appKey: string; utils: AppUtilsType }> = ({
   const [pageMenu, setPageMenu] = useState<{}>();
   const [flatPageMenu, setFlatPageMenu] = useState<AppPageType[]>();
   const history = useHistory();
-  const [upLink, setUpLink] = useState<{ url: string } | undefined>();
   const [context, setContext] = useState<AppContext>();
-  const [pageName, setPageName] = useState<string>("FrontBase");
   const [selectedPage, setSelectedPage] = useState<string>();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -107,6 +118,17 @@ const AppLayout: React.FC<{ appKey: string; utils: AppUtilsType }> = ({
       utils.setPrimaryColor();
     };
   }, [appKey]);
+  useEffect(() => {
+    if (setHeaderIsIndented)
+      flatPageMenu
+        ? setHeaderIsIndented(flatPageMenu.length > 0)
+        : setHeaderIsIndented(false);
+
+    return () => {
+      setPageName("FrontBase");
+      if (setHeaderIsIndented) setHeaderIsIndented(false);
+    };
+  }, [flatPageMenu]);
 
   // UI
   if (!app || !pageMenu) return <Loading />;
@@ -170,46 +192,22 @@ const AppLayout: React.FC<{ appKey: string; utils: AppUtilsType }> = ({
         </motion.div>
       )}
       <div className={styles.appCanvas}>
-        <AppBar
-          position="static"
-          style={{ height: "30vh", zIndex: 10, color: "white" }}
-        >
-          <Toolbar>
-            {upLink !== undefined && (
-              <IconButton
-                edge="start"
-                color="inherit"
-                aria-label="open drawer"
-                onClick={() => history.push(upLink.url)}
-              >
-                <Icon icon="chevron-left" />
-              </IconButton>
-            )}
-            <Typography variant="h6" noWrap>
-              {pageName}
-            </Typography>
-            <div style={{ flex: 1 }} />
-          </Toolbar>
-        </AppBar>
-
-        <div className={styles.appContent}>
-          <Switch>
-            {map(flatPageMenu, (page: AppPageType) => (
-              <Route
-                path={`/${appKey}/${page.key}`}
-                render={(args) => {
-                  setSelectedPage(page.key);
-                  const Component = page.component;
-                  return context ? (
-                    <Component context={context} page={page} />
-                  ) : (
-                    <Loading />
-                  );
-                }}
-              />
-            ))}
-          </Switch>
-        </div>
+        <Switch>
+          {map(flatPageMenu, (page: AppPageType) => (
+            <Route
+              path={`/${appKey}/${page.key}`}
+              render={(args) => {
+                setSelectedPage(page.key);
+                const Component = page.component;
+                return context ? (
+                  <Component context={context} page={page} />
+                ) : (
+                  <Loading />
+                );
+              }}
+            />
+          ))}
+        </Switch>
       </div>
     </div>
   );

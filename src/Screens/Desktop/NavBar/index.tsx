@@ -41,6 +41,7 @@ const NavBar: React.FC<{
           flexDirection: "column",
           alignItems: "center",
           height: "100%",
+          overflowX: "visible",
         }}
       >
         <div
@@ -72,7 +73,14 @@ const NavBar: React.FC<{
             />
           </Tooltip>
         </div>
-        <div style={{ flex: 1, padding: "10px 0", width: "100%" }}>
+        <div
+          style={{
+            flex: 1,
+            padding: "10px 0",
+            width: "100%",
+            overflowX: "visible",
+          }}
+        >
           {selectedApp && !favoriteList.includes(selectedApp.key) && (
             <NavBarAppIcon app={selectedApp} selected />
           )}

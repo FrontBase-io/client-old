@@ -15,7 +15,7 @@ const NavBarAppIcon: React.FC<{
     onClick={onClick}
     className="no-link"
     style={{
-      width: "110%",
+      width: "104%",
       backgroundColor: selected ? "#f4f5f7" : "transparent",
       display: "block",
       padding: "10px",
