@@ -36,4 +36,19 @@ const listifyObject = (
   return newArray;
 };
 
-export default { listify, listifyObject };
+const listifyForSelect = (
+  list: { [key: string]: any }[],
+  label: string,
+  key: string
+) => {
+  const newArray: { label: string; value: string }[] = [];
+  list.map((item) =>
+    newArray.push({
+      label: item[label],
+      value: item[key],
+    })
+  );
+  return newArray;
+};
+
+export default { listify, listifyObject, listifyForSelect };

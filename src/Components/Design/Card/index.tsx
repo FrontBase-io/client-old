@@ -46,6 +46,7 @@ const Card: React.FC<{
           variant="h5"
           gutterBottom
           onClick={onTitleClick}
+          className={styles.title}
           color="primary"
           style={{
             cursor: onTitleClick ? "pointer" : "default",

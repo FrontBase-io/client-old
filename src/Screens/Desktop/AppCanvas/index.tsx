@@ -168,7 +168,7 @@ const AppLayout: React.FC<{
                 <Typography
                   variant="h6"
                   className={styles.appName}
-                  style={{ color: `${colors.primary.hex}` }}
+                  style={{ color: `${colors.primary.hex()}` }}
                 >
                   {app.name}
                 </Typography>

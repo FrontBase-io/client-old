@@ -33,7 +33,7 @@ const NavBar: React.FC<{
   return (
     <div
       className={styles.navbar}
-      style={{ backgroundColor: colors.primary.hex }}
+      style={{ backgroundColor: colors.primary.hex() }}
     >
       <div
         style={{

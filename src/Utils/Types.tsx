@@ -44,6 +44,11 @@ export interface ModelType {
 
 export interface ModelFieldType {
   label: string;
+  type?: "text" | "number" | "relationship" | "formula";
+  required?: boolean;
+  unique?: boolean;
+  // Relationship
+  relationshipTo?: string;
 }
 
 // Apps

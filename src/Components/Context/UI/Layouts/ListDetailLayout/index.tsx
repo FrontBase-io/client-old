@@ -23,7 +23,20 @@ const ListDetailLayout: React.FC<{
     item: ListItemType;
   }>;
   create?: { onClick?: () => void; label?: string };
-}> = ({ context, title, items, baseUrl, detailComponent, create }) => {
+  transformIcon?: (val: string) => string;
+  detailComponentProps?: { [key: string]: any };
+  navWidth?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+}> = ({
+  context,
+  title,
+  items,
+  baseUrl,
+  detailComponent,
+  create,
+  transformIcon,
+  detailComponentProps,
+  navWidth,
+}) => {
   // Vars
   const history = useHistory();
   const [selectedItem, setSelectedItem] = useState<string>();
@@ -34,7 +47,7 @@ const ListDetailLayout: React.FC<{
   return (
     <context.UI.Design.Animation.Container>
       <Grid container>
-        <Grid item xs={2}>
+        <Grid item xs={navWidth || 2}>
           <context.UI.Design.Animation.Item key="menu">
             <context.UI.Design.Card title={title} withoutPadding>
               <List disablePadding>
@@ -51,7 +64,14 @@ const ListDetailLayout: React.FC<{
                       >
                         {menuItem.icon && (
                           <ListItemIcon style={{ minWidth: 48 }}>
-                            <Icon icon={menuItem.icon} size={18} />
+                            <Icon
+                              icon={
+                                transformIcon
+                                  ? transformIcon(menuItem.icon)
+                                  : menuItem.icon
+                              }
+                              size={18}
+                            />
                           </ListItemIcon>
                         )}
                         <ListItemText>{menuItem.label}</ListItemText>
@@ -70,7 +90,11 @@ const ListDetailLayout: React.FC<{
             </context.UI.Design.Card>
           </context.UI.Design.Animation.Item>
         </Grid>
-        <Grid item xs={10}>
+        <Grid
+          item
+          //@ts-ignore
+          xs={navWidth ? 12 - navWidth : 10}
+        >
           <Switch>
             <Route
               path={`${baseUrl}/:selectedItem`}
@@ -83,6 +107,7 @@ const ListDetailLayout: React.FC<{
                   title={title}
                   items={items}
                   setSelectedItem={setSelectedItem}
+                  detailComponentProps={detailComponentProps}
                 />
               )}
             />
@@ -105,6 +130,7 @@ const DetailComponentWrapper: React.FC<{
   title?: string;
   items: ListItemType[];
   setSelectedItem: (key?: string) => void;
+  detailComponentProps?: { [key: string]: any };
 }> = ({
   context,
   component,
@@ -113,6 +139,7 @@ const DetailComponentWrapper: React.FC<{
   title,
   items,
   setSelectedItem,
+  detailComponentProps,
 }) => {
   // Vars
   // Lifecycle
@@ -131,7 +158,14 @@ const DetailComponentWrapper: React.FC<{
   // UI
   const Component = component;
   const item = find(items, (o) => o.key === selectedKey) as ListItemType;
-  return <Component context={context} selectedKey={selectedKey} item={item} />;
+  return (
+    <Component
+      context={context}
+      selectedKey={selectedKey}
+      item={item}
+      {...detailComponentProps}
+    />
+  );
 };
 
 export default ListDetailLayout;

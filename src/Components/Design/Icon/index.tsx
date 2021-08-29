@@ -21,7 +21,7 @@ const Icon: React.FC<{
       style={{
         ...style,
         fontSize: size || 24,
-        ...(primary ? { color: colors.primary.hex } : {}),
+        ...(primary ? { color: colors.primary.hex() } : {}),
       }}
     ></i>
   );

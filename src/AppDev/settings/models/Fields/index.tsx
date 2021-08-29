@@ -12,9 +12,21 @@ const ModelFields: React.FC<{ context: AppContext; model: ModelType }> = ({
       <context.UI.Layouts.ListDetailLayout
         context={context}
         title="Models"
-        items={context.utils.listifyObject(model.fields, "label")}
+        items={context.utils.listifyObject(model.fields, "label", "type")}
+        transformIcon={(icon: string) => {
+          const map: { [key: string]: string } = {
+            text: "font",
+            number: "sort-numeric-down",
+            relationship: "bezier-curve",
+            formula: "flask",
+          };
+          return map[icon];
+        }}
         baseUrl={`/settings/models/${model.key_plural}/fields`}
+        navWidth={3}
+        //@ts-ignore
         detailComponent={ModelFieldDetail}
+        detailComponentProps={{ model }}
         create={{
           onClick: () =>
             context.canvas.interact.dialog({
@@ -33,7 +45,7 @@ const ModelFields: React.FC<{ context: AppContext; model: ModelType }> = ({
                       ...model,
                       fields: {
                         ...model.fields,
-                        [form.key]: { label: form.label },
+                        [form.key]: { label: form.label, type: "text" },
                       },
                     });
                     close();

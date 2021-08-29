@@ -9,6 +9,7 @@ import Socket from "./Utils/Socket";
 import Hidden from "@material-ui/core/Hidden";
 import { createTheme, ThemeProvider } from "@material-ui/core";
 import { SnackbarProvider } from "notistack";
+import chroma from "chroma-js";
 
 const Onboard = asyncComponent(() => import("./Screens/Onboard"));
 const Login = asyncComponent(() => import("./Screens/LogIn"));
@@ -23,16 +24,17 @@ function App() {
   );
   const [colors, setColors] = useGlobal<any>("colors");
   const [theme, setTheme] = useGlobal<any>("theme");
-  const setPrimaryColor = (color?: string) => {
-    if (!color) color = "#0283ff";
+  const setPrimaryColor = (colorString?: string) => {
+    if (!colorString) colorString = "#0283ff";
+    const color = chroma(colorString);
     setTheme({
       ...theme,
       palette: {
         ...theme.palette,
-        primary: { ...theme.palette.primary, main: color },
+        primary: { ...theme.palette.primary, main: color.hex() },
       },
     });
-    setColors({ ...colors, primary: { ...colors.primary, hex: color } });
+    setColors({ ...colors, primary: color });
   };
 
   // Lifecycle
@@ -69,7 +71,7 @@ function App() {
     });
 
     // Colors
-    setColors({ primary: { hex: "#0283ff" } });
+    setColors({ primary: chroma("#0283ff") });
     setTheme({
       palette: {
         primary: { main: "#0283ff" },
