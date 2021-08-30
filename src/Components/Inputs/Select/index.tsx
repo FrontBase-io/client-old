@@ -3,6 +3,7 @@ import Select from "react-select";
 import find from "lodash/find";
 import { useGlobal } from "reactn";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
+import chroma from "chroma-js";
 
 interface OptionType {
   label: string;
@@ -66,6 +67,46 @@ const SelectInput: React.FC<{
           }
         }}
         menuPortalTarget={document.body}
+        styles={{
+          control: (styles) => ({
+            ...styles,
+            backgroundColor: "white",
+            zIndex: 9999,
+          }),
+          menuPortal: (styles) => ({ ...styles, zIndex: 9999 }),
+          option: (styles, { isDisabled, isFocused, isSelected }) => {
+            const color = colors.primary;
+            return {
+              ...styles,
+              backgroundColor: isDisabled
+                ? null
+                : isSelected
+                ? color.hex()
+                : isFocused
+                ? color.alpha(0.1).css()
+                : null,
+              color: isDisabled
+                ? "#ccc"
+                : isSelected
+                ? chroma.contrast(color, "white") > 2
+                  ? "white"
+                  : "black"
+                : color.hex(),
+              cursor: isDisabled ? "not-allowed" : "default",
+
+              ":active": {
+                ...styles[":active"],
+                backgroundColor:
+                  !isDisabled &&
+                  (isSelected ? color.hex() : color.alpha(0.3).css()),
+              },
+            };
+          },
+
+          singleValue: (styles, { data }) => ({
+            ...styles,
+          }),
+        }}
       />
     </label>
   );

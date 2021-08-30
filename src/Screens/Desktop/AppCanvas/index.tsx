@@ -243,6 +243,7 @@ const AppLayout: React.FC<{
               {dialog.text}
             </DialogContentText>
           )}
+          {dialog.content && dialog.content}
           {dialog.fields && (
             <Grid container>
               {map(dialog.fields, (field, key) => (
@@ -252,7 +253,7 @@ const AppLayout: React.FC<{
                     field.type === "key") && (
                     <TextInput
                       label={field.label}
-                      value={dialogFieldValues[key]}
+                      value={dialogFieldValues[key] || field.value || ""}
                       keyMode={field.type === "key"}
                       onChange={(value) =>
                         setDialogFieldValues({
@@ -260,6 +261,20 @@ const AppLayout: React.FC<{
                           [key]: value,
                         })
                       }
+                    />
+                  )}
+                  {field.type === "custom" && (
+                    //@ts-ignore
+                    <field.component
+                      context={context}
+                      value={dialogFieldValues[key] || field.value || ""}
+                      onChange={(value: any) =>
+                        setDialogFieldValues({
+                          ...dialogFieldValues,
+                          [key]: value,
+                        })
+                      }
+                      {...field.componentProps}
                     />
                   )}
                 </Grid>
@@ -272,6 +287,11 @@ const AppLayout: React.FC<{
             {dialog.actions.map((action) => (
               <Button
                 onClick={() => {
+                  map(dialog.fields, (field, key) => {
+                    if (!dialogFieldValues[key] && field.value) {
+                      dialogFieldValues[key] = field.value;
+                    }
+                  });
                   action.onClick &&
                     action.onClick(dialogFieldValues, () =>
                       setDialog({ ...dialog, display: false })

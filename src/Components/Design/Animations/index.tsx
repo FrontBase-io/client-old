@@ -50,4 +50,5 @@ const Item: React.FC<{ key: string }> = ({ key, children }) => (
   </motion.div>
 );
 
+export { Animate, Container, Item };
 export default { Animate, Container, Item };

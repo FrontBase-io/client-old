@@ -1,13 +1,14 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, ListItem, ListItemText, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
+import List from "@material-ui/core/List";
 import React, { useState, useEffect } from "react";
 import { AppContext } from "../../../../Components/Context";
 import TextInput from "../../../../Components/Inputs/Text";
+import FormulaDesigner from "../../../../Components/System/FormulaDesigner";
 import {
   ListItemType,
   ModelFieldType,
   ModelType,
-  ResponseType,
 } from "../../../../Utils/Types";
 
 const ModelFieldDetail: React.FC<{
@@ -69,7 +70,9 @@ const ModelFieldDetail: React.FC<{
                     options={[
                       { label: "Text", value: "text" },
                       { label: "Number", value: "number" },
+                      { label: "Options", value: "options" },
                       { label: "Relationship", value: "relationship" },
+                      { label: "Formula", value: "formula" },
                     ]}
                   />
                 </Grid>
@@ -99,6 +102,125 @@ const ModelFieldDetail: React.FC<{
                     </Grid>
                   </>
                 )}
+                {field.type === "formula" && (
+                  <Grid item xs={12}>
+                    <FormulaDesigner
+                      context={context}
+                      startModel={model.key}
+                      value={field.formula || ""}
+                      onChange={(formula) => setField({ ...field, formula })}
+                    />
+                  </Grid>
+                )}
+                {field.type === "options" && (
+                  <>
+                    <Grid item xs={6}>
+                      <Typography variant="h6">Input options</Typography>
+                      <context.UI.Inputs.Select
+                        label="Display as"
+                        value={field.optionsDisplayAs as string}
+                        onChange={(optionsDisplayAs) =>
+                          setField({
+                            ...field,
+                            optionsDisplayAs: optionsDisplayAs as string,
+                          })
+                        }
+                        options={[
+                          { label: "Dropdown", value: "dropdown" },
+                          { label: "List", value: "list" },
+                        ]}
+                      />
+                      <context.UI.Inputs.Boolean
+                        label="Select multiple"
+                        value={field.selectMultiple}
+                        onChange={(selectMultiple) =>
+                          setField({ ...field, selectMultiple })
+                        }
+                        fullWidth
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="h6">Options</Typography>
+                      <List>
+                        {(field.options || []).map((option, optionIndex) => (
+                          <ListItem
+                            key={option.value}
+                            button
+                            onClick={() =>
+                              context.canvas.interact.dialog({
+                                display: true,
+                                title: "Add option",
+                                fields: {
+                                  label: {
+                                    label: "Label",
+                                    value: option.label,
+                                  },
+                                  value: {
+                                    label: "Value",
+                                    type: "key",
+                                    value: option.value,
+                                  },
+                                },
+                                actions: [
+                                  {
+                                    label: "Add",
+                                    onClick: (form, close) => {
+                                      let newOptions = field.options || [];
+                                      newOptions[optionIndex] = {
+                                        value: form.value,
+                                        label: form.label,
+                                      };
+                                      setField({
+                                        ...field,
+                                        options: newOptions,
+                                      });
+                                      close();
+                                    },
+                                  },
+                                ],
+                              })
+                            }
+                          >
+                            <ListItemText>{option.label}</ListItemText>
+                          </ListItem>
+                        ))}
+                        <ListItem
+                          button
+                          onClick={() =>
+                            context.canvas.interact.dialog({
+                              display: true,
+                              title: "Add option",
+                              fields: {
+                                label: { label: "Label" },
+                                value: { label: "Value", type: "key" },
+                              },
+                              actions: [
+                                {
+                                  label: "Add",
+                                  onClick: (form, close) => {
+                                    setField({
+                                      ...field,
+                                      options: [
+                                        ...(field.options || []),
+                                        {
+                                          label: form.label,
+                                          value: form.value,
+                                        },
+                                      ],
+                                    });
+                                    close();
+                                  },
+                                },
+                              ],
+                            })
+                          }
+                        >
+                          Add
+                        </ListItem>
+                      </List>
+                    </Grid>
+                  </>
+                )}
               </Grid>
             </context.UI.Design.Card>
           </context.UI.Design.Animation.Item>
@@ -111,12 +233,14 @@ const ModelFieldDetail: React.FC<{
                 value={field?.required}
                 fullWidth
                 onChange={(required) => setField({ ...field, required })}
+                disabled={field.type === "formula"}
               />
               <context.UI.Inputs.Boolean
                 label="Unique"
                 value={field?.unique}
                 fullWidth
                 onChange={(unique) => setField({ ...field, unique })}
+                disabled={field.type === "formula"}
               />
             </context.UI.Design.Card>
           </context.UI.Design.Animation.Item>

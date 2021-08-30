@@ -1,5 +1,5 @@
 import { map } from "lodash";
-import { ListItemType } from "../../../Utils/Types";
+import { ListItemType, ModelType } from "../../../Utils/Types";
 
 const listify = (
   list: { [key: string]: any }[],
@@ -51,4 +51,29 @@ const listifyForSelect = (
   return newArray;
 };
 
-export default { listify, listifyObject, listifyForSelect };
+const listifyObjectForSelect = (
+  list: { [key: string]: any },
+  label: string
+) => {
+  const newArray: { label: string; value: string }[] = [];
+  map(list || {}, (item, key: string) =>
+    newArray.push({
+      label: item[label],
+      value: key,
+    })
+  );
+  return newArray;
+};
+
+const modelListToModelObject = (list: ModelType[]) => {
+  const newObject: { [key: string]: ModelType } = {};
+  list.map((model) => (newObject[model.key] = model));
+  return newObject;
+};
+export default {
+  listify,
+  listifyObject,
+  listifyForSelect,
+  listifyObjectForSelect,
+  modelListToModelObject,
+};

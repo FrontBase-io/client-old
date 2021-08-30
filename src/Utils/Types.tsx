@@ -1,3 +1,4 @@
+import { ReactElement } from "react";
 import { AppContext } from "../Components/Context";
 
 // General
@@ -44,11 +45,17 @@ export interface ModelType {
 
 export interface ModelFieldType {
   label: string;
-  type?: "text" | "number" | "relationship" | "formula";
+  type?: "text" | "number" | "relationship" | "formula" | "options";
   required?: boolean;
   unique?: boolean;
+  // Options
+  selectMultiple?: boolean;
+  optionsDisplayAs?: "dropdown" | "list" | string;
+  options?: { label: string; value: string }[];
   // Relationship
   relationshipTo?: string;
+  // Formula
+  formula?: string;
 }
 
 // Apps
@@ -82,11 +89,13 @@ export interface DialogType {
   display?: boolean;
   title?: string;
   text?: string;
+  content?: ReactElement<any, any>;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   fields?: {
     [key: string]: {
-      type?: "text" | "key";
+      type?: "text" | "key" | "custom";
       label: string;
+      value?: string;
       width?:
         | false
         | "auto"
@@ -103,10 +112,17 @@ export interface DialogType {
         | 10
         | 11
         | 12;
+      component?: React.FC<any>;
+      componentProps?: {};
     };
   };
   actions?: {
     label: string;
     onClick?: (form: { [key: string]: any }, close: () => void) => void;
   }[];
+}
+
+export interface SelectOptionType {
+  label: string;
+  value: string;
 }

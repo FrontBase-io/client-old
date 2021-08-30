@@ -19,6 +19,7 @@ const ModelFields: React.FC<{ context: AppContext; model: ModelType }> = ({
             number: "sort-numeric-down",
             relationship: "bezier-curve",
             formula: "flask",
+            options: "list",
           };
           return map[icon];
         }}

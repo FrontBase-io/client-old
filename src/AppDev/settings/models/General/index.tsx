@@ -56,6 +56,19 @@ const ModelGeneral: React.FC<{
               </Grid>
             </Grid>
           </Grid>
+          <Grid item xs={6}>
+            <context.UI.Inputs.Select
+              label="Primary field"
+              value={newModel.primary}
+              onChange={(primary) =>
+                setNewModel({ ...newModel, primary: primary as string })
+              }
+              options={context.utils.listifyObjectForSelect(
+                model.fields,
+                "label"
+              )}
+            />
+          </Grid>
           <Grid item xs={12}>
             <Button
               color="primary"
