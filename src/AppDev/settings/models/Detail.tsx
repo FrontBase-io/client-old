@@ -3,6 +3,7 @@ import { AppContext } from "../../../Components/Context";
 import { ListItemType } from "../../../Utils/Types";
 import ModelFields from "./Fields";
 import ModelGeneral from "./General";
+import ModelLayouts from "./Layouts";
 
 const ModelDetail: React.FC<{
   context: AppContext;
@@ -38,6 +39,11 @@ const ModelDetail: React.FC<{
             label: "Fields",
             key: "fields",
             component: <ModelFields context={context} model={item.object} />,
+          },
+          {
+            label: "Layouts",
+            key: "layouts",
+            component: <ModelLayouts context={context} model={item.object} />,
           },
         ]}
         urlTrackable

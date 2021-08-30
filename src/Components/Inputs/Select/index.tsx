@@ -70,7 +70,8 @@ const SelectInput: React.FC<{
         styles={{
           control: (styles) => ({
             ...styles,
-            backgroundColor: "white",
+            backgroundColor:
+              theme.palette.type === "dark" ? "#323232" : "white",
             zIndex: 9999,
           }),
           menuPortal: (styles) => ({ ...styles, zIndex: 9999 }),
@@ -105,6 +106,7 @@ const SelectInput: React.FC<{
 
           singleValue: (styles, { data }) => ({
             ...styles,
+            color: theme.palette.type === "dark" ? "white" : "#323232",
           }),
         }}
       />

@@ -32,6 +32,7 @@ export interface ModelType {
   icon: string;
   locked?: boolean;
   fields: { [key: string]: ModelFieldType };
+  layouts: { [key: string]: ModelLayoutType };
   permissions: {
     create: string[];
     read: string[];
@@ -43,6 +44,7 @@ export interface ModelType {
   };
 }
 
+// Field
 export interface ModelFieldType {
   label: string;
   type?: "text" | "number" | "relationship" | "formula" | "options";
@@ -56,6 +58,12 @@ export interface ModelFieldType {
   relationshipTo?: string;
   // Formula
   formula?: string;
+}
+
+// Layout
+export interface ModelLayoutType {
+  label: string;
+  layout: LayoutItemType[];
 }
 
 // Apps
@@ -75,6 +83,12 @@ export interface AppPageType {
 export interface AppCodeType {
   settings?: { desktop?: {}; mobile?: { pages: "bottom" } };
   getPages: () => Promise<AppPageType[]>;
+}
+export interface LayoutItemType {
+  key?: string;
+  label: string;
+  type: "Field" | "GridContainer" | "GridItem";
+  items?: LayoutItemType[];
 }
 
 /* Interface */

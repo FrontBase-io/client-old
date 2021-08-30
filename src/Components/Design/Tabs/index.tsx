@@ -55,7 +55,10 @@ const Tabs: React.FC<{
               }
             : {}
         }
+        color="primary"
+        indicatorColor="primary"
         aria-label="Tabs"
+        style={{ width: "100%" }}
       >
         {tabs.map((tab) => (
           <Tab label={tab.label} key={tab.key} value={tab.key} />
@@ -84,7 +87,7 @@ const Tabs: React.FC<{
           />
         </Switch>
       ) : (
-        "non-trackable"
+        tabs.map((tab) => tab.key === selectedTab && tab.component)
       )}
     </>
   );

@@ -70,10 +70,29 @@ const modelListToModelObject = (list: ModelType[]) => {
   list.map((model) => (newObject[model.key] = model));
   return newObject;
 };
+
+export const updateByKey = (
+  array: { key: string; [key: string]: any }[],
+  newItem: { key: string; [key: string]: any }
+) => {
+  (array || []).forEach(update(newItem.id, newItem));
+};
+
+let update =
+  (key: string, newItem: { key: string; [key: string]: any }) =>
+  (obj: { key: string; [key: string]: any }) => {
+    if (obj.id === key) {
+      obj = newItem;
+      return true;
+    } else if (obj.items) return obj.items.some(update(key, newItem));
+  };
+
 export default {
   listify,
   listifyObject,
   listifyForSelect,
   listifyObjectForSelect,
   modelListToModelObject,
+  update,
+  updateByKey,
 };
