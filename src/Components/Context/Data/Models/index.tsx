@@ -1,6 +1,14 @@
 import Socket from "../../../../Utils/Socket";
 import { ModelType, ResponseType } from "../../../../Utils/Types";
 
+const get = (key: string, respond: (model: ModelType) => void) => {
+  const onReceive = (model: ModelType) => respond(model);
+  Socket.emit("getModel", key, (response: ResponseType) => {
+    onReceive(response.model);
+    Socket.on(`receive ${response.key}`, onReceive);
+  });
+};
+
 const getAll = (respond: (models: ModelType[]) => void) => {
   const onReceive = (models: ModelType[]) => respond(models);
   Socket.emit("getModels", {}, (response: ResponseType) => {
@@ -20,4 +28,4 @@ const update = (model: {}) =>
     });
   });
 
-export default { getAll, update };
+export default { getAll, update, get };

@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { AppContext } from "../../Components/Context";
-import Icon from "../../Components/Design/Icon";
-import { AppPageType } from "../../Utils/Types";
+import { AppPageType, ModelType, ObjectType } from "../../Utils/Types";
 
-const Model: React.FC<{ context: AppContext; page: AppPageType }> = ({
+const ModelDetail: React.FC<{ context: AppContext; page: AppPageType }> = ({
   context,
   page,
 }) => {
@@ -11,22 +10,16 @@ const Model: React.FC<{ context: AppContext; page: AppPageType }> = ({
 
   // Lifecycle
   useEffect(() => {
-    context.canvas.up.set("/explorer");
     context.canvas.name.set(page.label);
     return () => {
-      context.canvas.up.set(undefined);
       context.canvas.name.set();
     };
   }, [page]);
 
   // UI
   return (
-    <context.UI.Design.Animation.Animate>
-      <context.UI.Design.Card title={page.label}>
-        <context.UI.Layouts.ObjectOverview />
-      </context.UI.Design.Card>
-    </context.UI.Design.Animation.Animate>
+    <context.UI.Layouts.ObjectList modelKey={page.key} context={context} />
   );
 };
 
-export default Model;
+export default ModelDetail;
