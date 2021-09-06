@@ -1,4 +1,10 @@
-import { Grid, ListItem, ListItemText, Typography } from "@material-ui/core";
+import {
+  Button,
+  Grid,
+  ListItem,
+  ListItemText,
+  Typography,
+} from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import { AppContext } from "../../../../Components/Context";
 import {
@@ -85,6 +91,31 @@ const ModelLayoutDetail: React.FC<{
             </Animation.Item>
           </Grid>
           <Grid item xs={4}>
+            {JSON.stringify(layout) !==
+              JSON.stringify(model.layouts[selectedKey].layout || []) && (
+              <Animation.Item key="savebutton">
+                <Button
+                  color="primary"
+                  variant="outlined"
+                  fullWidth
+                  style={{ margin: "0px 15px", color: "white" }}
+                  onClick={() => {
+                    const newModel = {
+                      ...model,
+                      layouts: {
+                        [selectedKey]: {
+                          ...model.layouts[selectedKey],
+                          layout,
+                        },
+                      },
+                    };
+                    context.data.models.update(newModel);
+                  }}
+                >
+                  Save
+                </Button>
+              </Animation.Item>
+            )}
             <Animation.Item key="components">
               <Card withoutPadding>
                 <Tabs

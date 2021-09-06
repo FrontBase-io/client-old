@@ -6,7 +6,6 @@ import { DragSource, DragSourceConnector } from "react-dnd";
 import Icon from "../../../../Components/Design/Icon";
 import { LayoutItemType } from "../../../../Utils/Types";
 import styles from "./styles.module.scss";
-import uniqid from "uniqid";
 
 export interface BoxProps {
   layoutItem: LayoutItemType;

@@ -1,24 +1,10 @@
 import { FC, useState } from "react";
-import { ConnectDropTarget, DropTargetMonitor } from "react-dnd";
+import { DropTargetMonitor } from "react-dnd";
 import { DropTarget, DropTargetConnector } from "react-dnd";
 import { LayoutItemType } from "../../../../Utils/Types";
 import styles from "./styles.module.scss";
 import { useDrop } from "react-dnd";
-import { useEffect } from "react";
-import { updateByKey } from "../../../../Components/Context/Utils";
 import uniqid from "uniqid";
-
-function getObject(array: any, value: any) {
-  var o;
-  array.some(function iter(a: any) {
-    if (a["key"] === value) {
-      o = a;
-      return true;
-    }
-    return Array.isArray(a.children) && a.children.some(iter);
-  });
-  return o;
-}
 
 const Dustbin: FC<{
   id: string;
@@ -48,13 +34,7 @@ const Dustbin: FC<{
           setHasDropped(false);
         } else {
           //@ts-ignore
-          let newObject: LayoutItemType = getObject(layout, id);
-          newObject.items = newObject.items || [];
-          newObject.items.push(newLayoutItem);
-          const newLayout = layout!;
-          //@ts-ignore
-          updateByKey(newLayout, newObject);
-          setLayout([...newLayout]);
+          setLayout([...addItemRecursive(layout, id, newLayoutItem)]);
         }
         setHasDropped(true);
         setHasDroppedOnChild(didDrop);
@@ -71,8 +51,7 @@ const Dustbin: FC<{
     <div
       ref={drop}
       role={id}
-      className={styles.dropTarget}
-      style={{ backgroundColor: isOverCurrent ? "#111" : "#232323" }}
+      className={`${styles.dropTarget} ${isOverCurrent && styles.hovered}`}
     >
       {children}
       <div style={{ textAlign: "center" }}>
@@ -93,3 +72,21 @@ export default DropTarget(
     canDrop: monitor.canDrop(),
   })
 )(Dustbin);
+
+const addItemRecursive = (
+  array: { [key: string]: any }[],
+  key: string,
+  newItem: {}
+) => {
+  (array || []).map((item) => {
+    if (item.key === key) {
+      const newItems = item.items || [];
+      newItems.push(newItem);
+      item.items = newItems;
+    } else {
+      addItemRecursive(item.items, key, newItem);
+    }
+  });
+
+  return array;
+};

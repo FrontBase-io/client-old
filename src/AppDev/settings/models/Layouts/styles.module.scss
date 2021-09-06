@@ -4,17 +4,37 @@
 
 .dropTarget {
   width: 100%;
-  border: 1px solid #3a3a3a;
+  border: 1px solid #a0a0a0;
+  background-color: #eaeaea;
   min-height: 2rem;
   transition: all 0.3s;
   border-radius: 8px;
   padding: 5px;
   box-sizing: border-box;
-}
 
+  &.hovered {
+    border: 1px solid #a0a0a0;
+    background-color: #efefef;
+    opacity: 0.8;
+  }
+}
 .layoutItem {
-  background-color: #323232;
+  background-color: #dadada;
   padding: 5px;
   border-radius: 8px;
   margin-bottom: 15px;
+}
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  .dropTarget {
+    border: 1px solid #3a3a3a;
+    background-color: #9a9a9a;
+    color: white;
+  }
+
+  .dropTargetHovered {
+    border: 1px solid #3a3a3a;
+    background-color: #333;
+    opacity: 0.8;
+  }
 }

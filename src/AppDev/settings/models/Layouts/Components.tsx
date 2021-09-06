@@ -2,7 +2,7 @@ import { ListSubheader } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import React from "react";
 import { AppContext } from "../../../../Components/Context";
-import { LayoutItemType, ModelType } from "../../../../Utils/Types";
+import { ModelType } from "../../../../Utils/Types";
 import DragItem from "./DragItem";
 
 const ModelLayoutComponents: React.FC<{
@@ -19,6 +19,33 @@ const ModelLayoutComponents: React.FC<{
   return (
     <List>
       <Animation.Container>
+        <Animation.Item key="component-seperator-animation">
+          <ListSubheader>Animation</ListSubheader>
+        </Animation.Item>
+        <Animation.Item key="component-animationcontainer">
+          <DragItem
+            layoutItem={{ label: "Animation", type: "Animation" }}
+            icon="angle-up"
+            label="Animate"
+          />
+        </Animation.Item>
+        <Animation.Item key="component-GridItem">
+          <DragItem
+            layoutItem={{
+              label: "Animation Container",
+              type: "AnimationContainer",
+            }}
+            icon="angle-double-up"
+            label="Animation Component"
+          />
+        </Animation.Item>
+        <Animation.Item key="component-GridItem">
+          <DragItem
+            layoutItem={{ label: "Animation Item", type: "AnimationItem" }}
+            icon="angle-up"
+            label="Animation Item"
+          />
+        </Animation.Item>
         <Animation.Item key="component-seperator-grid">
           <ListSubheader>Grid</ListSubheader>
         </Animation.Item>

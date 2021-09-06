@@ -87,7 +87,13 @@ export interface AppCodeType {
 export interface LayoutItemType {
   key?: string;
   label: string;
-  type: "Field" | "GridContainer" | "GridItem";
+  type:
+    | "Field"
+    | "GridContainer"
+    | "GridItem"
+    | "Animation"
+    | "AnimationContainer"
+    | "AnimationItem";
   items?: LayoutItemType[];
 }
 
