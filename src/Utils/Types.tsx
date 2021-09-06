@@ -33,6 +33,7 @@ export interface ModelType {
   locked?: boolean;
   fields: { [key: string]: ModelFieldType };
   layouts: { [key: string]: ModelLayoutType };
+  lists: { [key: string]: ModelListType };
   permissions: {
     create: string[];
     read: string[];
@@ -64,6 +65,13 @@ export interface ModelFieldType {
 export interface ModelLayoutType {
   label: string;
   layout: LayoutItemType[];
+}
+
+// List
+export interface ModelListType {
+  label?: string;
+  filter?: {};
+  fields?: string[];
 }
 
 // Apps

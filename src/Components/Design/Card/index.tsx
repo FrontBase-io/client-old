@@ -36,7 +36,7 @@ const Card: React.FC<{
       }`}
       style={{
         ...style,
-        margin: withoutMargin ? 0 : 15,
+        margin: withoutMargin ? 0 : 10,
         padding: withoutPadding ? 0 : "5px 10px",
         overflow,
       }}

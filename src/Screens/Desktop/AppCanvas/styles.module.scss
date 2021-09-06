@@ -41,6 +41,7 @@
 .appCanvas {
   height: 100%;
   flex: 1;
+  padding: 10px;
 }
 /* Dark mode */
 @media (prefers-color-scheme: dark) {
