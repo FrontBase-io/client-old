@@ -120,12 +120,14 @@ const AppLayout: React.FC<{
     };
 
     Socket.emit(
-      "systemGetsObject",
+      "getObject",
       "apps",
       { key: appKey },
       (response: ResponseType) => {
         onReceive(response.object);
-        Socket.on(`receive ${response.key}`, onReceive);
+        Socket.on(`receive ${response.key}`, (response) =>
+          onReceive(response.object)
+        );
       }
     );
 
@@ -211,20 +213,35 @@ const AppLayout: React.FC<{
         )}
         <div className={styles.appCanvas}>
           <Switch>
-            {map(flatPageMenu, (page: AppPageType) => (
-              <Route
-                path={`/${appKey}/${page.key}`}
-                render={(args) => {
-                  setSelectedPage(page.key);
-                  const Component = page.component;
-                  return context ? (
-                    <Component context={context} page={page} />
-                  ) : (
-                    <Loading />
-                  );
-                }}
-              />
-            ))}
+            {map(flatPageMenu, (page: AppPageType) => {
+              return (
+                <Route
+                  path={
+                    page.altKeys
+                      ? `/${appKey}/(${page.key}${page.altKeys?.map(
+                          (altKey) => `|${altKey}`
+                        )})`
+                      : `/${appKey}/${page.key}`
+                  }
+                  render={(args) => {
+                    setSelectedPage(page.key);
+                    const Component = page.component;
+                    return context ? (
+                      <Component
+                        context={context}
+                        page={page}
+                        selectedPageKey={
+                          //@ts-ignore
+                          args.match.params[0]
+                        }
+                      />
+                    ) : (
+                      <Loading />
+                    );
+                  }}
+                />
+              );
+            })}
           </Switch>
         </div>
       </div>

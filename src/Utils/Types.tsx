@@ -17,7 +17,8 @@ export interface ResponseType {
 
 export interface ObjectType {
   _id: string;
-  meta: {};
+  meta: { model: string };
+  [key: string]: any;
 }
 
 /* Models */
@@ -86,7 +87,13 @@ export interface AppPageType {
   key: string;
   icon: string;
   group?: string;
-  component: React.FC<{ context: AppContext; page: AppPageType }>;
+  component: React.FC<{
+    context: AppContext;
+    page: AppPageType;
+    selectedPageKey: string;
+  }>;
+  altKeys?: string[];
+  props?: { [key: string]: any };
 }
 export interface AppCodeType {
   settings?: { desktop?: {}; mobile?: { pages: "bottom" } };

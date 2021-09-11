@@ -155,6 +155,7 @@ const ModelListDetail: React.FC<{
                   context.data.models.update({
                     ...model,
                     lists: {
+                      ...model.lists,
                       [selectedKey]: newList,
                     },
                   })

@@ -19,9 +19,11 @@ export default class App {
           pages.push({
             label: model.label_plural,
             key: model.key_plural,
+            altKeys: [model.key],
             icon: model.icon,
             component: B,
             group: model.app,
+            props: { models },
           })
         );
         resolve(pages);

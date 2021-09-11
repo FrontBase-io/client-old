@@ -33,7 +33,7 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
     const onReceive = (objects: AppObjectType[]) => {
       setApps(objects);
     };
-    Socket.emit("systemGetsObjects", "apps", {}, (response: ResponseType) => {
+    Socket.emit("getObjects", "apps", {}, (response: ResponseType) => {
       onReceive(response.objects);
       Socket.on(`receive ${response.key}`, onReceive);
     });
