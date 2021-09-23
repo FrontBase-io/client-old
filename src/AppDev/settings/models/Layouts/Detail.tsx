@@ -23,6 +23,7 @@ import {
 } from "react-dnd-multi-backend";
 import DropTarget from "./DropTarget";
 import styles from "./styles.module.scss";
+import { isEqual } from "lodash";
 
 const ModelLayoutDetail: React.FC<{
   context: AppContext;
@@ -41,11 +42,15 @@ const ModelLayoutDetail: React.FC<{
 }) => {
   // Vars
   const [layout, setLayout] = useState<LayoutItemType[]>([]);
-
+  const [hasChanged, setHasChanged] = useState<boolean>(false);
   // Lifecycle
   useEffect(() => {
-    setLayout(model.layouts[selectedKey].layout || []);
+    setLayout([...(model.layouts[selectedKey].layout || [])]);
   }, [model, selectedKey]);
+  // Compare the original layotu and the runtime layout for changes
+  useEffect(() => {
+    setHasChanged(!isEqual(model.layouts[selectedKey].layout, layout));
+  }, [model, selectedKey, layout]);
 
   // UI
   return (
@@ -91,8 +96,7 @@ const ModelLayoutDetail: React.FC<{
             </Animation.Item>
           </Grid>
           <Grid item xs={4}>
-            {JSON.stringify(layout) !==
-              JSON.stringify(model.layouts[selectedKey].layout || []) && (
+            {hasChanged && (
               <Animation.Item key="savebutton">
                 <Button
                   color="primary"
@@ -151,7 +155,14 @@ const ModelLayoutDetail: React.FC<{
 
 export default ModelLayoutDetail;
 
-const hasDropZone = ["GridContainer", "GridItem"];
+const hasDropZone = [
+  "GridContainer",
+  "GridItem",
+  "AnimationContainer",
+  "AnimationItem",
+  "Animation",
+  "Card",
+];
 
 const LayoutItem: React.FC<{
   layoutItem: LayoutItemType;

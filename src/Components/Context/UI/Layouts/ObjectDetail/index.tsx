@@ -1,53 +1,57 @@
 import { useEffect, useState } from "react";
 import { AppContext } from "../../..";
 import { ModelType, ObjectType } from "../../../../../Utils/Types";
+import LayoutComponent from "./LayoutComponent";
 
 const ObjectDetail: React.FC<{
   context: AppContext;
   modelKey: string;
   objectId: string;
   baseUrl: string;
-}> = ({
-  objectId,
-  modelKey,
-  baseUrl,
-  context: {
-    data,
-    canvas,
-    UI: {
-      Loading,
-      Design: {
-        Animation: { Animate },
-        Card,
-        Icon,
-      },
-    },
-  },
-}) => {
+  layoutKey?: string;
+}> = ({ objectId, modelKey, baseUrl, context, layoutKey }) => {
   // Vars
   const [object, setObject] = useState<ObjectType>();
   const [model, setModel] = useState<ModelType>();
 
   // Lifecycle
   useEffect(() => {
-    data.objects.get(modelKey, { _id: objectId }, (objects) => {
+    context.data.objects.get(modelKey, { _id: objectId }, (objects) => {
       setObject(objects[0]);
-      data.models.get(objects[0].meta.model, (model) => {
+      context.data.models.get(objects[0].meta.model, (model) => {
         setModel(model);
-        canvas.name.set(objects[0][model.primary]);
-        canvas.up.set(baseUrl);
+        context.canvas.name.set(objects[0][model.primary]);
+        context.canvas.up.set(baseUrl);
       });
     });
 
     return () => {
-      canvas.name.set(undefined);
-      canvas.up.set(undefined);
+      context.canvas.name.set(undefined);
+      context.canvas.up.set(undefined);
     };
-  }, [objectId]);
+  }, [objectId, modelKey]);
 
   // UI
-  if (!model || !object) return <Loading />;
-  return <Animate>{object[model.primary]}</Animate>;
+  if (!model || !object) return <context.UI.Loading />;
+  if (!model.layouts[layoutKey || "default"])
+    return (
+      <context.UI.Design.Animation.Animate>
+        Layout {layoutKey || "default"} not found.
+      </context.UI.Design.Animation.Animate>
+    );
+  const layout = model.layouts[layoutKey || "default"].layout;
+
+  return (
+    <>
+      {layout.map((layoutItem, layoutItemIndex) => (
+        <LayoutComponent
+          layoutItem={layoutItem}
+          context={context}
+          key={`layoutItem-${layoutItemIndex}`}
+        />
+      ))}
+    </>
+  );
 };
 
 export default ObjectDetail;

@@ -36,7 +36,7 @@ const ModelLayoutComponents: React.FC<{
               type: "AnimationContainer",
             }}
             icon="angle-double-up"
-            label="Animation Component"
+            label="Animation Container"
           />
         </Animation.Item>
         <Animation.Item key="component-GridItem">
@@ -46,8 +46,8 @@ const ModelLayoutComponents: React.FC<{
             label="Animation Item"
           />
         </Animation.Item>
-        <Animation.Item key="component-seperator-grid">
-          <ListSubheader>Grid</ListSubheader>
+        <Animation.Item key="component-seperator-layout">
+          <ListSubheader>Layout</ListSubheader>
         </Animation.Item>
         <Animation.Item key="component-GridContainer">
           <DragItem
@@ -61,6 +61,16 @@ const ModelLayoutComponents: React.FC<{
             layoutItem={{ label: "Grid Item", type: "GridItem" }}
             icon="th-large"
             label="Grid Item"
+          />
+        </Animation.Item>
+        <Animation.Item key="Design">
+          <ListSubheader>Design</ListSubheader>
+        </Animation.Item>
+        <Animation.Item key="component-Card">
+          <DragItem
+            layoutItem={{ label: "Card", type: "Card" }}
+            icon="border-style"
+            label="Card"
           />
         </Animation.Item>
       </Animation.Container>

@@ -5,6 +5,7 @@ import { LayoutItemType } from "../../../../Utils/Types";
 import styles from "./styles.module.scss";
 import { useDrop } from "react-dnd";
 import uniqid from "uniqid";
+import { cloneDeep } from "lodash";
 
 const Dustbin: FC<{
   id: string;
@@ -17,7 +18,7 @@ const Dustbin: FC<{
   const [{ isOver, isOverCurrent }, drop] = useDrop(
     () => ({
       accept: "component",
-      drop(item: unknown, monitor) {
+      async drop(item: unknown, monitor) {
         const didDrop = monitor.didDrop();
         if (didDrop) {
           return;
@@ -33,8 +34,9 @@ const Dustbin: FC<{
           setLayout([...layout, newLayoutItem]);
           setHasDropped(false);
         } else {
-          //@ts-ignore
-          setLayout([...addItemRecursive(layout, id, newLayoutItem)]);
+          const newLayout = cloneDeep(layout);
+          addItemRecursive(newLayout, id, newLayoutItem);
+          setLayout(newLayout);
         }
         setHasDropped(true);
         setHasDroppedOnChild(didDrop);
@@ -77,16 +79,17 @@ const addItemRecursive = (
   array: { [key: string]: any }[],
   key: string,
   newItem: {}
-) => {
-  (array || []).map((item) => {
-    if (item.key === key) {
-      const newItems = item.items || [];
-      newItems.push(newItem);
-      item.items = newItems;
-    } else {
-      addItemRecursive(item.items, key, newItem);
-    }
+) =>
+  new Promise<void>((resolve, reject) => {
+    // eslint-disable-next-line array-callback-return
+    (array || []).map(function (item): void {
+      if (item.key === key) {
+        const newItems = item.items || [];
+        newItems.push(newItem);
+        item.items = newItems;
+        resolve();
+      } else {
+        addItemRecursive(item.items, key, newItem);
+      }
+    });
   });
-
-  return array;
-};
