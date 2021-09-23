@@ -1,18 +1,34 @@
 import { AppContext } from "../../..";
-import { LayoutItemType } from "../../../../../Utils/Types";
+import {
+  LayoutItemType,
+  ModelType,
+  ObjectType,
+} from "../../../../../Utils/Types";
 import LayoutComponents from "./Components";
 
 const LayoutComponent: React.FC<{
   layoutItem: LayoutItemType;
   context: AppContext;
-}> = ({ layoutItem, context }) => {
+  model: ModelType;
+  object: ObjectType;
+}> = ({ layoutItem, context, model, object }) => {
   if (!LayoutComponents[layoutItem.type])
     return <>Layout component {layoutItem.type} doesn't exist</>;
   const Component = LayoutComponents[layoutItem.type];
   return (
-    <Component context={context} layoutItem={layoutItem}>
+    <Component
+      context={context}
+      layoutItem={layoutItem}
+      model={model}
+      object={object}
+    >
       {layoutItem.items?.map((subLayoutItem, subLayoutItemIndex) => (
-        <LayoutComponent context={context} layoutItem={subLayoutItem} />
+        <LayoutComponent
+          context={context}
+          layoutItem={subLayoutItem}
+          model={model}
+          object={object}
+        />
       ))}
     </Component>
   );

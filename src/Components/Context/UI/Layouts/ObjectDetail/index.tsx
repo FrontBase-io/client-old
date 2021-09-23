@@ -33,7 +33,7 @@ const ObjectDetail: React.FC<{
 
   // UI
   if (!model || !object) return <context.UI.Loading />;
-  if (!model.layouts[layoutKey || "default"])
+  if (!(model.layouts || {})[layoutKey || "default"])
     return (
       <context.UI.Design.Animation.Animate>
         Layout {layoutKey || "default"} not found.
@@ -48,6 +48,8 @@ const ObjectDetail: React.FC<{
           layoutItem={layoutItem}
           context={context}
           key={`layoutItem-${layoutItemIndex}`}
+          model={model}
+          object={object}
         />
       ))}
     </>

@@ -1,15 +1,7 @@
-import {
-  Button,
-  Grid,
-  IconButton,
-  ListItem,
-  ListItemText,
-  Typography,
-} from "@material-ui/core";
+import { Button, Grid, IconButton, Typography } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import { AppContext } from "../../../../Components/Context";
 import {
-  DialogActionType,
   DialogFieldType,
   LayoutItemType,
   ListItemType,
@@ -81,7 +73,7 @@ const ModelLayoutDetail: React.FC<{
     >
       <Animation.Container>
         <Grid container>
-          <Grid item xs={8}>
+          <Grid item xs={9}>
             <Animation.Item key="details">
               <Card title="Details">Facts bar</Card>
             </Animation.Item>
@@ -101,7 +93,7 @@ const ModelLayoutDetail: React.FC<{
               </Card>
             </Animation.Item>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             {hasChanged && (
               <Animation.Item key="savebutton">
                 <Button

@@ -1,20 +1,31 @@
 import React from "react";
 import { AppContext } from "../../../..";
-import { LayoutItemType } from "../../../../../../Utils/Types";
+import {
+  LayoutItemType,
+  ModelType,
+  ObjectType,
+} from "../../../../../../Utils/Types";
 import AnimationContainer from "./AnimationContainer";
 import AnimationItem from "./AnimationItem";
 import Card from "./Card";
+import Field from "./Field";
 import GridContainer from "./GridContainer";
 import GridItem from "./GridItem";
 
 const LayoutComponents: {
-  [key: string]: React.FC<{ context: AppContext; layoutItem: LayoutItemType }>;
+  [key: string]: React.FC<{
+    context: AppContext;
+    layoutItem: LayoutItemType;
+    model: ModelType;
+    object: ObjectType;
+  }>;
 } = {
   GridContainer,
   GridItem,
   AnimationContainer,
   AnimationItem,
   Card,
+  Field,
 };
 
 export default LayoutComponents;

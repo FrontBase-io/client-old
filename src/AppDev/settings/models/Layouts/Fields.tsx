@@ -32,7 +32,11 @@ const ModelLayoutFields: React.FC<{
           return (
             <Animation.Item key={key}>
               <DragItem
-                layoutItem={{ label: field.label, type: "Field" }}
+                layoutItem={{
+                  label: field.label,
+                  type: "Field",
+                  args: { field: key },
+                }}
                 icon={icon}
                 label={field.label}
               />
