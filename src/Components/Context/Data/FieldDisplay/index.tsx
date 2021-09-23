@@ -4,8 +4,6 @@ import { ModelFieldType } from "../../../../Utils/Types";
 const FieldDisplay: React.FC<{ modelField: ModelFieldType; objectField: any }> =
   ({ modelField, objectField }) => {
     // Vars
-    console.log(modelField, objectField);
-
     // Lifecycle
     // UI
     return (

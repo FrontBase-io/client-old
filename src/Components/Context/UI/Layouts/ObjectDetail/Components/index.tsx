@@ -5,6 +5,7 @@ import {
   ModelType,
   ObjectType,
 } from "../../../../../../Utils/Types";
+import Animation from "./Animation";
 import AnimationContainer from "./AnimationContainer";
 import AnimationItem from "./AnimationItem";
 import Card from "./Card";
@@ -26,6 +27,7 @@ const LayoutComponents: {
   AnimationItem,
   Card,
   Field,
+  Animation,
 };
 
 export default LayoutComponents;
