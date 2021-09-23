@@ -33,6 +33,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import TextInput from "../../../Components/Inputs/Text";
+import NumberInput from "../../../Components/Inputs/Number";
 
 const container = {
   hidden: { opacity: 0, marginLeft: -64 },
@@ -262,7 +263,7 @@ const AppLayout: React.FC<{
           )}
           {dialog.content && dialog.content}
           {dialog.fields && (
-            <Grid container>
+            <Grid container spacing={2}>
               {map(dialog.fields, (field, key) => (
                 <Grid item key={key} xs={field.width || 12}>
                   {(!field.type ||
@@ -270,7 +271,12 @@ const AppLayout: React.FC<{
                     field.type === "key") && (
                     <TextInput
                       label={field.label}
-                      value={dialogFieldValues[key] || field.value || ""}
+                      value={
+                        dialogFieldValues[key] ||
+                        field.value ||
+                        (dialog.actionValues || {})[key] ||
+                        ""
+                      }
                       keyMode={field.type === "key"}
                       onChange={(value) =>
                         setDialogFieldValues({
@@ -280,11 +286,35 @@ const AppLayout: React.FC<{
                       }
                     />
                   )}
+                  {field.type === "number" && (
+                    <NumberInput
+                      label={field.label}
+                      value={
+                        dialogFieldValues[key] ||
+                        field.value ||
+                        (dialog.actionValues || {})[key] ||
+                        ""
+                      }
+                      onChange={(value) =>
+                        setDialogFieldValues({
+                          ...dialogFieldValues,
+                          [key]: field.valueModifier
+                            ? field.valueModifier(value)
+                            : value,
+                        })
+                      }
+                    />
+                  )}
                   {field.type === "custom" && (
                     //@ts-ignore
                     <field.component
                       context={context}
-                      value={dialogFieldValues[key] || field.value || ""}
+                      value={
+                        dialogFieldValues[key] ||
+                        field.value ||
+                        (dialog.actionValues || {})[key] ||
+                        ""
+                      }
                       onChange={(value: any) =>
                         setDialogFieldValues({
                           ...dialogFieldValues,

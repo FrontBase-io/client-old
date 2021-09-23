@@ -6,6 +6,7 @@ import styles from "./styles.module.scss";
 import { useDrop } from "react-dnd";
 import uniqid from "uniqid";
 import { cloneDeep } from "lodash";
+import { modifyRecursive } from "../../../../Utils/Functions";
 
 const Dustbin: FC<{
   id: string;
@@ -35,7 +36,12 @@ const Dustbin: FC<{
           setHasDropped(false);
         } else {
           const newLayout = cloneDeep(layout);
-          addItemRecursive(newLayout, id, newLayoutItem);
+          modifyRecursive(newLayout, id, (item) => {
+            const newItems = item.items || [];
+            newItems.push(newLayoutItem);
+            item.items = newItems;
+            return item;
+          });
           setLayout(newLayout);
         }
         setHasDropped(true);
@@ -74,22 +80,3 @@ export default DropTarget(
     canDrop: monitor.canDrop(),
   })
 )(Dustbin);
-
-const addItemRecursive = (
-  array: { [key: string]: any }[],
-  key: string,
-  newItem: {}
-) =>
-  new Promise<void>((resolve, reject) => {
-    // eslint-disable-next-line array-callback-return
-    (array || []).map(function (item): void {
-      if (item.key === key) {
-        const newItems = item.items || [];
-        newItems.push(newItem);
-        item.items = newItems;
-        resolve();
-      } else {
-        addItemRecursive(item.items, key, newItem);
-      }
-    });
-  });

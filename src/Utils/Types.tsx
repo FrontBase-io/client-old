@@ -104,6 +104,7 @@ export interface LayoutItemType {
   label: string;
   type: string;
   items?: LayoutItemType[];
+  args?: { [key: string]: any };
 }
 
 /* Interface */
@@ -121,34 +122,39 @@ export interface DialogType {
   content?: ReactElement<any, any>;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   fields?: {
-    [key: string]: {
-      type?: "text" | "key" | "custom";
-      label: string;
-      value?: string;
-      width?:
-        | false
-        | "auto"
-        | true
-        | 1
-        | 2
-        | 3
-        | 4
-        | 5
-        | 6
-        | 7
-        | 8
-        | 9
-        | 10
-        | 11
-        | 12;
-      component?: React.FC<any>;
-      componentProps?: {};
-    };
+    [key: string]: DialogFieldType;
   };
-  actions?: {
-    label: string;
-    onClick?: (form: { [key: string]: any }, close: () => void) => void;
-  }[];
+  actionValues?: { [key: string]: any };
+  actions?: DialogActionType[];
+}
+
+export interface DialogActionType {
+  label: string;
+  onClick?: (form: { [key: string]: any }, close: () => void) => void;
+}
+export interface DialogFieldType {
+  type?: "text" | "key" | "number" | "custom";
+  label: string;
+  value?: string;
+  width?:
+    | false
+    | "auto"
+    | true
+    | 1
+    | 2
+    | 3
+    | 4
+    | 5
+    | 6
+    | 7
+    | 8
+    | 9
+    | 10
+    | 11
+    | 12;
+  valueModifier?: (value: string | number) => string | number;
+  component?: React.FC<any>;
+  componentProps?: {};
 }
 
 export interface SelectOptionType {
