@@ -1,4 +1,4 @@
-import { difference, differenceWith, keys, map } from "lodash";
+import { map } from "lodash";
 import isEqual from "lodash/isEqual";
 import { useEffect, useState } from "react";
 import { AppContext } from "../../..";
@@ -61,7 +61,12 @@ const ObjectDetail: React.FC<{
             }
           });
 
-          //context.data.objects.update(object?._id, fieldsToUpdate);
+          context.data.objects.update(object!._id, fieldsToUpdate).then(
+            (result) => {
+              setViewMode("view");
+            },
+            (reason) => context.canvas.interact.snackbar(reason, "error")
+          );
         },
       });
     }
@@ -73,6 +78,7 @@ const ObjectDetail: React.FC<{
     context.canvas.navbar.name,
     context.canvas.navbar.actions,
     context.data.objects,
+    context.canvas.interact,
   ]);
 
   // UI
