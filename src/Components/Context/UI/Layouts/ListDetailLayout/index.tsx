@@ -136,7 +136,6 @@ const DetailComponentWrapper: React.FC<{
   component,
   selectedKey,
   baseUrl,
-  title,
   items,
   setSelectedItem,
   detailComponentProps,

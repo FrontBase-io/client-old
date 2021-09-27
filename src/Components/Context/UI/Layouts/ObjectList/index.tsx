@@ -16,6 +16,7 @@ import {
 } from "@material-ui/core";
 import { map } from "lodash";
 import { useHistory } from "react-router";
+import FieldDisplay from "../../../Data/FieldDisplay";
 
 const ObjectList: React.FC<{
   context: AppContext;
@@ -59,7 +60,7 @@ const ObjectList: React.FC<{
           : setSelectedList(undefined);
       });
     }
-  }, [modelKey]);
+  }, [data.models, inputModel, modelKey]);
   useEffect(() => {
     if (model && selectedList) {
       data.objects.get(
@@ -68,7 +69,7 @@ const ObjectList: React.FC<{
         (objects) => setObjects(objects)
       );
     }
-  }, [model?.lists, selectedList, modelKey]);
+  }, [model?.lists, selectedList, modelKey, model, data.objects]);
 
   // UI
   if (!model) return <Loading />;
@@ -160,10 +161,12 @@ const ObjectList: React.FC<{
                           history.push(`${baseUrl}/${model.key}/${object._id}`)
                         }
                       >
-                        {
-                          //@ts-ignore
-                          object[fieldKey] || ""
-                        }
+                        <FieldDisplay
+                          modelField={model.fields[fieldKey]}
+                          objectField={object[fieldKey]}
+                          fieldKey={fieldKey}
+                          withoutLabel
+                        />
                       </TableCell>
                     ))}
                   </TableRow>

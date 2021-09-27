@@ -7,18 +7,21 @@ const FieldDisplay: React.FC<{
   modelField: ModelFieldType;
   objectField: any;
   onDoubleClick?: (fieldName: string) => void;
-}> = ({ modelField, objectField, onDoubleClick, fieldKey }) => {
+  withoutLabel?: true;
+}> = ({ modelField, objectField, onDoubleClick, fieldKey, withoutLabel }) => {
   // Vars
   // Lifecycle
   // UI
   return (
     <div onDoubleClick={() => onDoubleClick && onDoubleClick(fieldKey)}>
-      <Typography
-        variant="caption"
-        style={{ fontSize: 16, display: "block", fontWeight: "bold" }}
-      >
-        {modelField.label}
-      </Typography>
+      {!withoutLabel && (
+        <Typography
+          variant="caption"
+          style={{ fontSize: 16, display: "block", fontWeight: "bold" }}
+        >
+          {modelField.label}
+        </Typography>
+      )}
       {modelField.type === "text" ||
       modelField.type === "formula" ||
       modelField.type === "number" ? (
