@@ -21,9 +21,9 @@ const ModelDetail: React.FC<{
       )
     );
 
-    context.canvas.name.set(page.label);
+    context.canvas.navbar.name.set(page.label);
     return () => {
-      context.canvas.name.set();
+      context.canvas.navbar.name.set();
     };
   }, [page]);
 

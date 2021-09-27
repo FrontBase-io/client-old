@@ -87,7 +87,7 @@ function App() {
         },
       },
     });
-  }, []);
+  }, [setColors, setTheme, setUser]);
 
   // UI
   if (mode === "loading") return <CircularProgress />;

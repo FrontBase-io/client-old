@@ -11,7 +11,22 @@ const LayoutComponent: React.FC<{
   context: AppContext;
   model: ModelType;
   object: ObjectType;
-}> = ({ layoutItem, context, model, object }) => {
+  newObject: ObjectType;
+  viewMode: "view" | "edit";
+  selectedField?: string;
+  selectField: (fieldName: string) => void;
+  updateField: (key: string, newValue: any) => void;
+}> = ({
+  layoutItem,
+  context,
+  model,
+  object,
+  newObject,
+  viewMode,
+  selectField,
+  selectedField,
+  updateField,
+}) => {
   if (!LayoutComponents[layoutItem.type])
     return <>Layout component {layoutItem.type} doesn't exist</>;
   const Component = LayoutComponents[layoutItem.type];
@@ -21,6 +36,11 @@ const LayoutComponent: React.FC<{
       layoutItem={layoutItem}
       model={model}
       object={object}
+      newObject={newObject}
+      viewMode={viewMode}
+      selectedField={selectedField}
+      selectField={selectField}
+      updateField={updateField}
     >
       {layoutItem.items?.map((subLayoutItem, subLayoutItemIndex) => (
         <LayoutComponent
@@ -28,6 +48,11 @@ const LayoutComponent: React.FC<{
           layoutItem={subLayoutItem}
           model={model}
           object={object}
+          newObject={newObject}
+          viewMode={viewMode}
+          selectedField={selectedField}
+          selectField={selectField}
+          updateField={updateField}
         />
       ))}
     </Component>

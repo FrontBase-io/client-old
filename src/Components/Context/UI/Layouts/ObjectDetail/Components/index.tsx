@@ -19,6 +19,11 @@ const LayoutComponents: {
     layoutItem: LayoutItemType;
     model: ModelType;
     object: ObjectType;
+    newObject: ObjectType;
+    viewMode: "view" | "edit";
+    selectedField?: string;
+    selectField: (fieldName: string) => void;
+    updateField: (key: string, newValue: any) => void;
   }>;
 } = {
   GridContainer,

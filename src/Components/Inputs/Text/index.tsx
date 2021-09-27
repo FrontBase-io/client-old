@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styles from "./styles.module.scss";
 import Typography from "@material-ui/core/Typography";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
@@ -11,7 +11,8 @@ const TextInput: React.FC<{
   disabled?: true | boolean;
   keyMode?: true | boolean;
   mode?: "text" | "textarea";
-}> = ({ label, value, onChange, disabled, keyMode, mode }) => {
+  autoFocus?: boolean;
+}> = ({ label, value, onChange, disabled, keyMode, mode, autoFocus }) => {
   // Vars
 
   // Lifecycle
@@ -22,6 +23,7 @@ const TextInput: React.FC<{
       {(!mode || mode === "text") && (
         <input
           className={styles.input}
+          autoFocus={autoFocus}
           value={value}
           onChange={(e) => {
             onChange &&
@@ -36,6 +38,7 @@ const TextInput: React.FC<{
       )}
       {mode === "textarea" && (
         <TextareaAutosize
+          autoFocus={autoFocus}
           className={styles.input}
           maxRows={8}
           value={value}

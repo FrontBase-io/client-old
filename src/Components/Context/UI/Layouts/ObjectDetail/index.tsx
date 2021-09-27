@@ -1,3 +1,5 @@
+import { difference, differenceWith, keys, map } from "lodash";
+import isEqual from "lodash/isEqual";
 import { useEffect, useState } from "react";
 import { AppContext } from "../../..";
 import { ModelType, ObjectType } from "../../../../../Utils/Types";
@@ -12,27 +14,69 @@ const ObjectDetail: React.FC<{
 }> = ({ objectId, modelKey, baseUrl, context, layoutKey }) => {
   // Vars
   const [object, setObject] = useState<ObjectType>();
+  const [newObject, setNewObject] = useState<ObjectType>();
   const [model, setModel] = useState<ModelType>();
+  const [viewMode, setViewMode] = useState<"view" | "edit">("view");
+  const [selectedField, setSelectedField] = useState<string>();
 
   // Lifecycle
   useEffect(() => {
     context.data.objects.get(modelKey, { _id: objectId }, (objects) => {
       setObject(objects[0]);
+      setNewObject(objects[0]);
       context.data.models.get(objects[0].meta.model, (model) => {
         setModel(model);
-        context.canvas.name.set(objects[0][model.primary]);
-        context.canvas.up.set(baseUrl);
+        context.canvas.navbar.name.set(objects[0][model.primary]);
+        context.canvas.navbar.up.set(baseUrl);
       });
     });
 
     return () => {
-      context.canvas.name.set(undefined);
-      context.canvas.up.set(undefined);
+      context.canvas.navbar.name.set(undefined);
+      context.canvas.navbar.up.set(undefined);
     };
-  }, [objectId, modelKey]);
+  }, [
+    objectId,
+    modelKey,
+    context.data.objects,
+    context.data.models,
+    context.canvas.navbar.name,
+    context.canvas.navbar.up,
+    baseUrl,
+  ]);
+  useEffect(() => {
+    if (isEqual(object, newObject)) {
+      context.canvas.navbar.actions.remove("update");
+    } else {
+      context.canvas.navbar.actions.add("update", {
+        label: "update",
+        icon: "save",
+        onClick: () => {
+          const fieldsToUpdate: { [key: string]: any } = {};
+          map(newObject, (value, key) => {
+            if (
+              JSON.stringify(object![key]) !== JSON.stringify(newObject![key])
+            ) {
+              fieldsToUpdate[key] = newObject![key];
+            }
+          });
+
+          //context.data.objects.update(object?._id, fieldsToUpdate);
+        },
+      });
+    }
+
+    return () => context.canvas.navbar.actions.remove("update");
+  }, [
+    object,
+    newObject,
+    context.canvas.navbar.name,
+    context.canvas.navbar.actions,
+    context.data.objects,
+  ]);
 
   // UI
-  if (!model || !object) return <context.UI.Loading />;
+  if (!model || !object || !newObject) return <context.UI.Loading />;
   if (!(model.layouts || {})[layoutKey || "default"])
     return (
       <context.UI.Design.Animation.Animate>
@@ -50,6 +94,16 @@ const ObjectDetail: React.FC<{
           key={`layoutItem-${layoutItemIndex}`}
           model={model}
           object={object}
+          newObject={newObject}
+          updateField={(key, value) =>
+            setNewObject({ ...newObject, [key]: value })
+          }
+          viewMode={viewMode}
+          selectedField={selectedField}
+          selectField={(fieldName) => {
+            setSelectedField(fieldName);
+            setViewMode("edit");
+          }}
         />
       ))}
     </>

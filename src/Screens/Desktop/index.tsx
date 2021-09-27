@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Socket from "../../Utils/Socket";
-import { AppObjectType, ResponseType } from "../../Utils/Types";
+import {
+  AppObjectType,
+  NavBarButtonType,
+  ResponseType,
+} from "../../Utils/Types";
 import Loading from "../../Components/Loading";
 import NavBar from "./NavBar";
 import Popover from "@material-ui/core/Popover";
@@ -16,6 +20,8 @@ import IconButton from "@material-ui/core/IconButton";
 import Icon from "../../Components/Design/Icon";
 import Typography from "@material-ui/core/Typography";
 import styles from "./styles.module.scss";
+import { map } from "lodash";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
   // Vars
@@ -27,6 +33,9 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
   const [upLink, setUpLink] = useState<string | undefined>();
   const [pageName, setPageName] = useState<string>("FrontBase");
   const [headerIsIndented, setHeaderIsIndented] = useState<Boolean>(false);
+  const [navBarActions, setNavBarActions] = useState<{
+    [key: string]: NavBarButtonType;
+  }>({});
 
   // Lifecycle
   useEffect(() => {
@@ -64,7 +73,7 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
               marginLeft: headerIsIndented ? 240 : 0,
             }}
           >
-            <Toolbar>
+            <Toolbar style={{ width: "calc(100% - 280px)" }}>
               {upLink !== undefined && (
                 <IconButton
                   edge="start"
@@ -78,7 +87,15 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
               <Typography variant="h6" noWrap>
                 {pageName}
               </Typography>
-              <div style={{ flex: 1 }} />
+              <div style={{ flex: 1, textAlign: "right" }}>
+                {map(navBarActions, (action, key) => (
+                  <Tooltip key={key} title={action.label} placement="bottom">
+                    <IconButton onClick={action.onClick}>
+                      <Icon icon={action.icon} />
+                    </IconButton>
+                  </Tooltip>
+                ))}
+              </div>
             </Toolbar>
           </AppBar>
           <div className={styles.canvasContent}>
@@ -97,6 +114,14 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
                       upLink={upLink}
                       pageName={pageName}
                       setPageName={setPageName}
+                      addNavbarAction={(key, action) =>
+                        setNavBarActions({ ...navBarActions, [key]: action })
+                      }
+                      removeNavbarAction={(key) => {
+                        const newNavBarActions = navBarActions;
+                        delete newNavBarActions[key];
+                        setNavBarActions({ ...newNavBarActions });
+                      }}
                       setHeaderIsIndented={setHeaderIsIndented}
                     />
                   );

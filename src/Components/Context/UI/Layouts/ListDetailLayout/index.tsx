@@ -145,16 +145,15 @@ const DetailComponentWrapper: React.FC<{
   // Lifecycle
   useEffect(() => {
     // Up
-    context.canvas.up.set(baseUrl);
-    if (item) context.canvas.name.set(item.label);
+    context.canvas.navbar.up.set(baseUrl);
+    if (item) context.canvas.navbar.name.set(item.label);
     if (item) setSelectedItem(item.key);
     return () => {
-      context.canvas.up.set(undefined);
-      context.canvas.name.set();
-      context.canvas.name.set(title);
+      context.canvas.navbar.up.set(undefined);
+      context.canvas.navbar.name.set();
       setSelectedItem();
     };
-  }, [selectedKey]);
+  }, [selectedKey, context.canvas.navbar, baseUrl, setSelectedItem]);
   // UI
   const Component = component;
   const item = find(items, (o) => o.key === selectedKey) as ListItemType;

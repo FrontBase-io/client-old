@@ -6,6 +6,7 @@ import {
   AppObjectType,
   AppPageType,
   DialogType,
+  NavBarButtonType,
   ResponseType,
 } from "../../../Utils/Types";
 import { motion } from "framer-motion";
@@ -64,6 +65,8 @@ const AppLayout: React.FC<{
   setUpLink: (title?: string) => void;
   upLink?: string;
   setHeaderIsIndented?: (isIndented: boolean) => void;
+  addNavbarAction: (key: string, action: NavBarButtonType) => void;
+  removeNavbarAction: (key: string) => void;
 }> = ({
   appKey,
   utils,
@@ -72,6 +75,8 @@ const AppLayout: React.FC<{
   setUpLink,
   upLink,
   setHeaderIsIndented,
+  addNavbarAction,
+  removeNavbarAction,
 }) => {
   // Vars
   const [app, setApp] = useState<AppObjectType>();
@@ -96,11 +101,17 @@ const AppLayout: React.FC<{
         `rgb(${object?.color?.r},${object?.color?.g},${object?.color?.b})`
       );
       const context = new AppContext(object, {
-        name: {
-          get: pageName,
-          set: (pageName?: string) => setPageName(pageName || object.name),
+        navbar: {
+          up: { set: setUpLink, get: upLink },
+          name: {
+            get: pageName,
+            set: (pageName?: string) => setPageName(pageName || object.name),
+          },
+          actions: {
+            add: addNavbarAction,
+            remove: removeNavbarAction,
+          },
         },
-        up: { set: setUpLink, get: upLink },
         interact: {
           snackbar: (msg: string, variant?: VariantType) =>
             enqueueSnackbar(msg, { variant }),

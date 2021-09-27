@@ -19,6 +19,7 @@ const SelectInput: React.FC<{
   clearable?: true;
   multi?: true;
   style?: CSSProperties;
+  autoFocus?: boolean;
 }> = ({
   label,
   value,
@@ -28,6 +29,7 @@ const SelectInput: React.FC<{
   clearable,
   multi,
   style,
+  autoFocus,
 }) => {
   // Vars
   const [newValue, setNewValue] = useState<OptionType>();
@@ -48,6 +50,7 @@ const SelectInput: React.FC<{
         options={options}
         isClearable={clearable}
         isMulti={multi}
+        autoFocus={autoFocus}
         value={newValue}
         onChange={(chosen) => {
           if (onChange) {

@@ -107,6 +107,13 @@ export interface LayoutItemType {
   args?: { [key: string]: any };
 }
 
+export interface NavBarButtonType {
+  label: string;
+  icon: string;
+  url?: string;
+  onClick?: () => void;
+}
+
 /* Interface */
 export interface ListItemType {
   label: string;

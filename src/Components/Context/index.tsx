@@ -1,4 +1,4 @@
-import { AppObjectType, DialogType } from "../../Utils/Types";
+import { AppObjectType, DialogType, NavBarButtonType } from "../../Utils/Types";
 import Design from "../Design";
 import Inputs from "../Inputs";
 import Loading from "../Loading";
@@ -8,11 +8,18 @@ import Utils from "./Utils";
 import { VariantType } from "notistack";
 
 interface CanvasType {
-  name: { set: (name?: string) => void; get: string };
-  up: {
-    set: (link: string | undefined) => void;
-    get: string | undefined;
+  navbar: {
+    up: {
+      set: (link: string | undefined) => void;
+      get: string | undefined;
+    };
+    name: { set: (name?: string) => void; get: string };
+    actions: {
+      add: (key: string, action: NavBarButtonType) => void;
+      remove: (key: string) => void;
+    };
   };
+
   interact: {
     snackbar: (msg: string, variant: VariantType) => void;
     dialog: (dialog: DialogType) => void;
@@ -26,8 +33,14 @@ export class AppContext {
   // A way to control the canvas
   appData: AppObjectType;
   canvas: CanvasType = {
-    name: { set: () => {}, get: "FrontBase" },
-    up: { set: () => {}, get: undefined },
+    navbar: {
+      name: { set: () => {}, get: "FrontBase" },
+      up: { set: () => {}, get: undefined },
+      actions: {
+        add: () => {},
+        remove: () => {},
+      },
+    },
     interact: { snackbar: () => {}, dialog: () => {} },
   };
   UI = { Design, Layouts, Loading, Inputs };

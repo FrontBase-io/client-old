@@ -9,16 +9,16 @@ const PageModels: React.FC<{ context: AppContext }> = ({ context }) => {
 
   // Lifecycle
   useEffect(() => {
-    context.canvas.name.set("Models");
+    context.canvas.navbar.name.set("Models");
 
     // Get data
     context.data.models.getAll((response) => {
       setModels(response);
     });
     return () => {
-      context.canvas.name.set();
+      context.canvas.navbar.name.set();
     };
-  }, []);
+  }, [context.canvas.navbar.name, context.data.models]);
 
   // UI
   if (!models) return <context.UI.Loading />;
