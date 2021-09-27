@@ -24,7 +24,6 @@ const get = (
 // Update object
 const update = (_id: string, newObject: { [key: string]: any }) =>
   new Promise((resolve, reject) => {
-    console.log(_id, newObject);
     Socket.emit("updateObject", _id, newObject, (response: ResponseType) => {
       if (response.success) {
         resolve(response.result);

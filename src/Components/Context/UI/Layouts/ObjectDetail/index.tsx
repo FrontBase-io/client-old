@@ -1,6 +1,6 @@
 import { map } from "lodash";
 import isEqual from "lodash/isEqual";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AppContext } from "../../..";
 import { ModelType, ObjectType } from "../../../../../Utils/Types";
 import LayoutComponent from "./LayoutComponent";
@@ -18,6 +18,21 @@ const ObjectDetail: React.FC<{
   const [model, setModel] = useState<ModelType>();
   const [viewMode, setViewMode] = useState<"view" | "edit">("view");
   const [selectedField, setSelectedField] = useState<string>();
+  const save = useCallback(() => {
+    const fieldsToUpdate: { [key: string]: any } = {};
+    map(newObject, (value, key) => {
+      if (JSON.stringify(object![key]) !== JSON.stringify(newObject![key])) {
+        fieldsToUpdate[key] = newObject![key];
+      }
+    });
+
+    context.data.objects.update(object!._id, fieldsToUpdate).then(
+      (result) => {
+        setViewMode("view");
+      },
+      (reason) => context.canvas.interact.snackbar(reason, "error")
+    );
+  }, [context.canvas.interact, context.data.objects, newObject, object]);
 
   // Lifecycle
   useEffect(() => {
@@ -51,23 +66,7 @@ const ObjectDetail: React.FC<{
       context.canvas.navbar.actions.add("update", {
         label: "update",
         icon: "save",
-        onClick: () => {
-          const fieldsToUpdate: { [key: string]: any } = {};
-          map(newObject, (value, key) => {
-            if (
-              JSON.stringify(object![key]) !== JSON.stringify(newObject![key])
-            ) {
-              fieldsToUpdate[key] = newObject![key];
-            }
-          });
-
-          context.data.objects.update(object!._id, fieldsToUpdate).then(
-            (result) => {
-              setViewMode("view");
-            },
-            (reason) => context.canvas.interact.snackbar(reason, "error")
-          );
-        },
+        onClick: save,
       });
     }
 
@@ -79,6 +78,7 @@ const ObjectDetail: React.FC<{
     context.canvas.navbar.actions,
     context.data.objects,
     context.canvas.interact,
+    save,
   ]);
 
   // UI
@@ -92,7 +92,22 @@ const ObjectDetail: React.FC<{
   const layout = model.layouts[layoutKey || "default"].layout;
 
   return (
-    <>
+    <div
+      style={{ height: "100%" }}
+      onKeyDown={(event) => {
+        if (
+          viewMode === "edit" &&
+          event.ctrlKey &&
+          String.fromCharCode(event.which).toLowerCase() === "s"
+        ) {
+          event.preventDefault();
+          save();
+        } else if (event.which === 27) {
+          setViewMode("view");
+          setNewObject(object);
+        }
+      }}
+    >
       {layout.map((layoutItem, layoutItemIndex) => (
         <LayoutComponent
           layoutItem={layoutItem}
@@ -112,7 +127,7 @@ const ObjectDetail: React.FC<{
           }}
         />
       ))}
-    </>
+    </div>
   );
 };
 

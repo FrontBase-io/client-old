@@ -1,5 +1,6 @@
 import Typography from "@material-ui/core/Typography";
-import { ModelFieldType } from "../../../../Utils/Types";
+import { ModelFieldType, SelectOptionType } from "../../../../Utils/Types";
+import find from "lodash/find";
 
 const FieldDisplay: React.FC<{
   fieldKey: string;
@@ -20,11 +21,15 @@ const FieldDisplay: React.FC<{
       </Typography>
       {modelField.type === "text" ||
       modelField.type === "formula" ||
-      modelField.type === "number" ||
-      modelField.type === "options" ? (
+      modelField.type === "number" ? (
         <Typography variant="body1">{objectField}</Typography>
       ) : modelField.type === "relationship" ? (
         objectField
+      ) : modelField.type === "options" ? (
+        find(
+          modelField.options!,
+          (o: SelectOptionType) => o.value === objectField
+        )?.label
       ) : (
         `Unknown type ${modelField.type}`
       )}

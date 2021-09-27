@@ -1,4 +1,6 @@
 import Models from "./Models";
 import Objects from "./Objects";
 
-export default { objects: Objects, models: Models };
+const Data = { objects: Objects, models: Models };
+
+export default Data;
