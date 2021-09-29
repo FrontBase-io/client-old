@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, CSSProperties } from "react";
 import Select from "react-select";
 import find from "lodash/find";
 import { useGlobal } from "reactn";
-import { CSSProperties } from "@material-ui/core/styles/withStyles";
 import chroma from "chroma-js";
 
 interface OptionType {

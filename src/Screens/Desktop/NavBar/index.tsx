@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styles from "./styles.module.scss";
 import logo from "./logo.png";
-import Tooltip from "@material-ui/core/Tooltip";
-import Avatar from "@material-ui/core/Avatar";
+import Tooltip from "@mui/material/Tooltip";
+import Avatar from "@mui/material/Avatar";
 import { useHistory } from "react-router";
 import { useGlobal } from "reactn";
 import { AppObjectType } from "../../../Utils/Types";

@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import CircularProgress from "@mui/material/CircularProgress";
 import { useGlobal, useState } from "reactn";
 import "./App.css";
 import socket, { serverUrl } from "./Utils/Socket";
 import asyncComponent from "./AsyncComponent";
 import { ResponseType } from "./Utils/Types";
 import Socket from "./Utils/Socket";
-import Hidden from "@material-ui/core/Hidden";
-import { createTheme, ThemeProvider } from "@material-ui/core";
+import Hidden from "@mui/material/Hidden";
+import { createTheme, ThemeProvider } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import chroma from "chroma-js";
 

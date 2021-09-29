@@ -1,25 +1,15 @@
 import React, { ReactElement, useState } from "react";
-import TabsMUI from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
+import TabsMUI from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 import { useHistory, Route, Switch } from "react-router-dom";
 import { useEffect } from "react";
 import Loading from "../../Loading";
-import { makeStyles } from "@material-ui/core/styles";
 
 interface TabType {
   label: string;
   key: string;
   component: ReactElement<any, any>;
 }
-
-const useStyles = makeStyles((theme) => ({
-  customTabRoot: {
-    color: "white",
-  },
-  customTabIndicator: {
-    backgroundColor: "white",
-  },
-}));
 
 const Tabs: React.FC<{
   tabs: TabType[];
@@ -30,7 +20,6 @@ const Tabs: React.FC<{
   // Vars
   const [selectedTab, setSelectedTab] = useState<string>(tabs[0].key);
   const history = useHistory();
-  const classes = useStyles();
 
   // Lifecycle
 
@@ -47,18 +36,17 @@ const Tabs: React.FC<{
           }
         }}
         variant="scrollable"
-        classes={
+        style={
           white
             ? {
-                root: classes.customTabRoot,
-                indicator: classes.customTabIndicator,
+                color: "white", // todo: make white
+                width: "100%",
               }
-            : {}
+            : { width: "100%" }
         }
         color="primary"
         indicatorColor="primary"
         aria-label="Tabs"
-        style={{ width: "100%" }}
       >
         {tabs.map((tab) => (
           <Tab label={tab.label} key={tab.key} value={tab.key} />
@@ -101,7 +89,7 @@ const CallbackComponent: React.FC<{
 }> = ({ tab, onCallback }) => {
   useEffect(() => {
     onCallback();
-  }, [tab]);
+  }, [onCallback, tab]);
 
   return tab.component;
 };

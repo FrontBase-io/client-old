@@ -1,9 +1,9 @@
-import { Button, Grid } from "@material-ui/core";
+import { Button, Grid } from "@mui/material";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { ModelType, SelectOptionType } from "../../../Utils/Types";
 import { AppContext } from "../../Context";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import { map } from "lodash";
 
 const FormulaDesigner: React.FC<{

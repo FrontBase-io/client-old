@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./styles.module.scss";
-import { Button, Grid, Typography } from "@material-ui/core";
+import { Button, Grid, Typography } from "@mui/material";
 import TextInput from "../../Components/Inputs/Text";
 import Socket from "../../Utils/Socket";
 import { ResponseType } from "../../Utils/Types";

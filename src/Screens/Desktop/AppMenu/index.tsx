@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Grid } from "@mui/material";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import Card from "../../../Components/Design/Card";

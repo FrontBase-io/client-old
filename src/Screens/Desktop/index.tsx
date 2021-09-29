@@ -7,21 +7,21 @@ import {
 } from "../../Utils/Types";
 import Loading from "../../Components/Loading";
 import NavBar from "./NavBar";
-import Popover from "@material-ui/core/Popover";
+import Popover from "@mui/material/Popover";
 import AppMenu from "./AppMenu";
 import AppCanvas from "./AppCanvas";
 import { Route, Switch, useHistory } from "react-router-dom";
 import HomeScreen from "../Home";
 import find from "lodash/find";
 import { AppUtilsType } from "../../App";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
 import Icon from "../../Components/Design/Icon";
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import styles from "./styles.module.scss";
 import { map } from "lodash";
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 
 const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
   // Vars

@@ -1,6 +1,5 @@
-import { CSSProperties } from "@material-ui/core/styles/withStyles";
-import Typography from "@material-ui/core/Typography";
-import React from "react";
+import Typography from "@mui/material/Typography";
+import React, { CSSProperties } from "react";
 import styles from "./styles.module.scss";
 
 const Card: React.FC<{

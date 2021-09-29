@@ -1,4 +1,4 @@
-import Tooltip from "@material-ui/core/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 import React from "react";
 import { Link } from "react-router-dom";
 import Icon from "../../../Components/Design/Icon";

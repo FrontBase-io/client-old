@@ -7,7 +7,7 @@ import {
   ListItemAvatar,
   ListItemSecondaryAction,
   ListItemText,
-} from "@material-ui/core";
+} from "@mui/material";
 import { map, remove } from "lodash";
 import { AppContext } from "../../../../Components/Context";
 import {

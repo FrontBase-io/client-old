@@ -1,4 +1,4 @@
-import { Button, Grid, Typography } from "@material-ui/core";
+import { Button, Grid, Typography } from "@mui/material";
 import React, { useState } from "react";
 import TextInput from "../../Components/Inputs/Text";
 import Interactor from "../../Utils/Socket";

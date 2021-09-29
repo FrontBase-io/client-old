@@ -4,7 +4,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-} from "@material-ui/core";
+} from "@mui/material";
 import find from "lodash/find";
 import React, { useEffect, useState } from "react";
 import { Switch, useHistory, Route } from "react-router-dom";

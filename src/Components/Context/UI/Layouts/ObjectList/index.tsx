@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { AppContext } from "../../..";
 import { ModelType, ObjectType } from "../../../../../Utils/Types";
-import Typography from "@material-ui/core/Typography";
-import Popover from "@material-ui/core/Popover";
-import List from "@material-ui/core/List";
+import Typography from "@mui/material/Typography";
+import Popover from "@mui/material/Popover";
+import List from "@mui/material/List";
 import {
   ListItem,
   ListItemText,
@@ -13,7 +13,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
-} from "@material-ui/core";
+} from "@mui/material";
 import { map } from "lodash";
 import { useHistory } from "react-router";
 import FieldDisplay from "../../../Data/FieldDisplay";

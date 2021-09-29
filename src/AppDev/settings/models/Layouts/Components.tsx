@@ -1,5 +1,5 @@
-import { ListSubheader } from "@material-ui/core";
-import List from "@material-ui/core/List";
+import { ListSubheader } from "@mui/material";
+import List from "@mui/material/List";
 import React from "react";
 import { AppContext } from "../../../../Components/Context";
 import { ModelType } from "../../../../Utils/Types";

@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./styles.module.scss";
-import Typography from "@material-ui/core/Typography";
-import TextareaAutosize from "@material-ui/core/TextareaAutosize";
+import Typography from "@mui/material/Typography";
+import TextareaAutosize from "@mui/material/TextareaAutosize";
 
 const TextInput: React.FC<{
   label: string;

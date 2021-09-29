@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styles from "./styles.module.scss";
-import Typography from "@material-ui/core/Typography";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
+import Typography from "@mui/material/Typography";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 
 const BooleanInput: React.FC<{
   label: string;

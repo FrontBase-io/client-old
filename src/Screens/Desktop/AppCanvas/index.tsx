@@ -18,8 +18,8 @@ import {
   ListItemText,
   ListSubheader,
   Typography,
-} from "@material-ui/core";
-import { List } from "@material-ui/core";
+} from "@mui/material";
+import { List } from "@mui/material";
 import { Link, Route, Switch, useHistory } from "react-router-dom";
 import { useGlobal } from "reactn";
 import Icon from "../../../Components/Design/Icon";
@@ -27,12 +27,12 @@ import { AppContext } from "../../../Components/Context";
 import { groupBy, map } from "lodash";
 import { AppUtilsType } from "../../../App";
 import { useSnackbar, VariantType } from "notistack";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
 import TextInput from "../../../Components/Inputs/Text";
 import NumberInput from "../../../Components/Inputs/Number";
 

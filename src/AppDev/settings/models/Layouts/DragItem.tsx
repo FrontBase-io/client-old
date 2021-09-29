@@ -1,5 +1,5 @@
-import { ListItem, ListItemIcon } from "@material-ui/core";
-import ListItemText from "@material-ui/core/ListItemText";
+import { ListItem, ListItemIcon } from "@mui/material";
+import ListItemText from "@mui/material/ListItemText";
 import { FC } from "react";
 import { DragSourceMonitor, ConnectDragSource } from "react-dnd";
 import { DragSource, DragSourceConnector } from "react-dnd";

@@ -1,4 +1,4 @@
-import Typography from "@material-ui/core/Typography";
+import Typography from "@mui/material/Typography";
 import { ModelFieldType, SelectOptionType } from "../../../../Utils/Types";
 import find from "lodash/find";
 

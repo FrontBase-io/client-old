@@ -1,5 +1,4 @@
-import { CSSProperties } from "@material-ui/core/styles/withStyles";
-import React from "react";
+import React, { CSSProperties } from "react";
 import { useGlobal } from "reactn";
 import styles from "./styles.module.scss";
 
