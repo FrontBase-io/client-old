@@ -2,3 +2,8 @@
   text-align: center;
   margin: auto;
 }
+@media (prefers-color-scheme: dark) {
+  .icon {
+    color: white;
+  }
+}

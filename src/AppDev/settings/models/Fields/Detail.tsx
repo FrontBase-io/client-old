@@ -1,4 +1,10 @@
-import { Grid, ListItem, ListItemText, Typography } from "@mui/material";
+import {
+  Grid,
+  ListItem,
+  ListItemText,
+  ListSubheader,
+  Typography,
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import React, { useState, useEffect } from "react";
@@ -24,10 +30,10 @@ const ModelFieldDetail: React.FC<{
   // Lifecycle
   useEffect(() => {
     context.data.models.getAll((models) => setModels(models));
-  }, []);
+  }, [context.data.models]);
   useEffect(() => {
     setField(item.object);
-  }, [selectedKey]);
+  }, [item.object, selectedKey]);
 
   // UI
   return (
@@ -103,14 +109,21 @@ const ModelFieldDetail: React.FC<{
                   </>
                 )}
                 {field.type === "formula" && (
-                  <Grid item xs={12}>
-                    <FormulaDesigner
-                      context={context}
-                      startModel={model.key}
-                      value={field.formula || ""}
-                      onChange={(formula) => setField({ ...field, formula })}
-                    />
-                  </Grid>
+                  <>
+                    <Grid item xs={10}>
+                      <FormulaDesigner
+                        context={context}
+                        startModel={model.key}
+                        value={field.formula || ""}
+                        onChange={(formula) => setField({ ...field, formula })}
+                      />
+                    </Grid>
+                    <Grid item xs={2}>
+                      <List>
+                        <ListSubheader>Dependencies</ListSubheader>
+                      </List>
+                    </Grid>
+                  </>
                 )}
                 {field.type === "options" && (
                   <>

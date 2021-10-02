@@ -75,7 +75,7 @@ function App() {
     setTheme({
       palette: {
         primary: { main: "#0283ff" },
-        type:
+        mode:
           window.matchMedia &&
           window.matchMedia("(prefers-color-scheme: dark)").matches
             ? "dark"
