@@ -1,5 +1,5 @@
 import Typography from "@mui/material/Typography";
-import { ModelFieldType, SelectOptionType } from "../../../../Utils/Types";
+import { ModelFieldType, SelectOptionType } from "../../../../../Utils/Types";
 import find from "lodash/find";
 import format from "date-fns/format";
 import parseISO from "date-fns/parseISO";

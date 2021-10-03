@@ -4,8 +4,8 @@ import {
   ModelType,
   ObjectType,
 } from "../../../../../../Utils/Types";
-import FieldDisplay from "../../../../Data/FieldDisplay";
-import FieldEdit from "../../../../Data/FieldEdit";
+import FieldDisplay from "../../../Data/FieldDisplay";
+import FieldEdit from "../../../Data/FieldEdit";
 
 const Field: React.FC<{
   context: AppContext;

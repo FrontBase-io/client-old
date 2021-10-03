@@ -1,5 +1,8 @@
+import { IconButton, Tooltip } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import React, { CSSProperties } from "react";
+import React, { CSSProperties, ReactElement } from "react";
+import { AppContext } from "../../Context";
+import Icon from "../Icon";
 import styles from "./styles.module.scss";
 
 const Card: React.FC<{
@@ -13,6 +16,7 @@ const Card: React.FC<{
   hoverable?: true | boolean;
   className?: string;
   overflow?: "none" | "auto" | "visible";
+  onExplanation?: () => void;
 }> = ({
   children,
   style,
@@ -25,6 +29,7 @@ const Card: React.FC<{
   hoverable,
   className,
   overflow,
+  onExplanation,
 }) => {
   return (
     <div
@@ -40,6 +45,13 @@ const Card: React.FC<{
         overflow,
       }}
     >
+      {onExplanation && (
+        <Tooltip placement="left" title="Explanation">
+          <IconButton style={{ float: "right" }} onClick={onExplanation}>
+            <Icon icon="question" size={15} />
+          </IconButton>
+        </Tooltip>
+      )}
       {title && (
         <Typography
           variant="h5"

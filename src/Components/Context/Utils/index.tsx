@@ -71,10 +71,11 @@ const modelListToModelObject = (list: ModelType[]) => {
   return newObject;
 };
 
-export default {
+const utils = {
   listify,
   listifyObject,
   listifyForSelect,
   listifyObjectForSelect,
   modelListToModelObject,
 };
+export default utils;

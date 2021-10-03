@@ -35,6 +35,7 @@ const PageModels: React.FC<{ context: AppContext }> = ({ context }) => {
       baseUrl="/settings/models"
       detailComponent={ModelDetail}
       navWidth={2}
+      withoutPadding
     />
   );
 };

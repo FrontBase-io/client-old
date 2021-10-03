@@ -1,6 +1,6 @@
 import { useGlobal } from "reactn";
-import { AppContext } from "../..";
-import { ModelFieldType } from "../../../../Utils/Types";
+import { AppContext } from "../../..";
+import { ModelFieldType } from "../../../../../Utils/Types";
 
 const FieldEdit: React.FC<{
   selectedField?: string;

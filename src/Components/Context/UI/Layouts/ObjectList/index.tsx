@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { map } from "lodash";
 import { useHistory } from "react-router";
-import FieldDisplay from "../../../Data/FieldDisplay";
+import FieldDisplay from "../../Data/FieldDisplay";
 
 const ObjectList: React.FC<{
   context: AppContext;

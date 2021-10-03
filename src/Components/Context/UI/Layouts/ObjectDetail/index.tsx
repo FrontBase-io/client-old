@@ -1,9 +1,11 @@
+import { Grid } from "@mui/material";
 import { map } from "lodash";
 import isEqual from "lodash/isEqual";
 import { useCallback, useEffect, useState } from "react";
 import { AppContext } from "../../..";
 import { ModelType, ObjectType } from "../../../../../Utils/Types";
 import LayoutComponent from "./LayoutComponent";
+import styles from "./styles.module.scss";
 
 const ObjectDetail: React.FC<{
   context: AppContext;
@@ -87,7 +89,7 @@ const ObjectDetail: React.FC<{
         Layout {layoutKey || "default"} not found.
       </context.UI.Design.Animation.Animate>
     );
-  const layout = model.layouts[layoutKey || "default"].layout;
+  const layout = model.layouts[layoutKey || "default"];
 
   return (
     <div
@@ -106,7 +108,29 @@ const ObjectDetail: React.FC<{
         }
       }}
     >
-      {layout.map((layoutItem, layoutItemIndex) => (
+      {layout.factsbar && (
+        <context.UI.Design.Card>
+          {layout.factsbar.fields && (
+            <Grid container>
+              {layout.factsbar.fields.map((f) => (
+                <Grid
+                  item
+                  //@ts-ignore
+                  xs={12 / (layout.factsbar?.fields || []).length || 12}
+                  key={`facts-${f}`}
+                >
+                  <context.UI.Data.FieldDisplay
+                    modelField={model.fields[f]}
+                    objectField={object[f]}
+                    fieldKey={f}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </context.UI.Design.Card>
+      )}
+      {layout.layout.map((layoutItem, layoutItemIndex) => (
         <LayoutComponent
           layoutItem={layoutItem}
           context={context}

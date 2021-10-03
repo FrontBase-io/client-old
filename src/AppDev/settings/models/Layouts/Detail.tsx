@@ -5,6 +5,7 @@ import {
   DialogFieldType,
   LayoutItemType,
   ListItemType,
+  ModelLayoutType,
   ModelType,
 } from "../../../../Utils/Types";
 import ModelLayoutComponents from "./Components";
@@ -38,18 +39,19 @@ const ModelLayoutDetail: React.FC<{
   model,
 }) => {
   // Vars
-  const [layout, setLayout] = useState<LayoutItemType[]>([]);
+  const [layout, setLayout] = useState<ModelLayoutType>();
   const [hasChanged, setHasChanged] = useState<boolean>(false);
   // Lifecycle
   useEffect(() => {
-    setLayout([...(model.layouts[selectedKey].layout || [])]);
+    setLayout(model.layouts[selectedKey]);
   }, [model, selectedKey]);
   // Compare the original layotu and the runtime layout for changes
   useEffect(() => {
-    setHasChanged(!isEqual(model.layouts[selectedKey].layout, layout));
+    setHasChanged(!isEqual(model.layouts[selectedKey], layout));
   }, [model, selectedKey, layout]);
 
   // UI
+  if (!layout) return <context.UI.Loading />;
   return (
     <DndProvider
       options={{
@@ -75,17 +77,61 @@ const ModelLayoutDetail: React.FC<{
         <Grid container>
           <Grid item xs={9}>
             <Animation.Item key="details">
-              <Card title="Details">Facts bar</Card>
+              <Card
+                title="Facts"
+                onExplanation={() =>
+                  context.canvas.interact.dialog({
+                    display: true,
+                    title: "More info",
+                    text: "The facts bar is meant for static information and the interactions of an object. It is not always shown. Up to 6 fields can be added and the fields cannot be edited. ",
+                    size: "sm",
+                  })
+                }
+              >
+                <Grid container>
+                  <Grid item xs={6}>
+                    <context.UI.Inputs.Select
+                      label="Displayed fields"
+                      value={layout.factsbar?.fields || []}
+                      options={context.utils.listifyObjectForSelect(
+                        model.fields,
+                        "label"
+                      )}
+                      multi
+                      onChange={(newVal) =>
+                        setLayout({
+                          ...layout,
+                          factsbar: {
+                            ...layout.factsbar,
+                            fields: newVal as string[],
+                          },
+                        })
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    Test
+                  </Grid>
+                </Grid>
+              </Card>
             </Animation.Item>
             <Animation.Item key="layout">
               <Card title="Layout">
-                <DropTarget id="root" layout={layout} setLayout={setLayout}>
-                  {layout.map((layoutItem, index) => (
+                <DropTarget
+                  id="root"
+                  layout={layout.layout}
+                  setLayout={(newLayout) =>
+                    setLayout({ ...layout, layout: newLayout })
+                  }
+                >
+                  {layout.layout.map((layoutItem, index) => (
                     <LayoutItem
                       layoutItem={layoutItem}
                       key={index}
-                      layout={layout}
-                      setLayout={setLayout}
+                      layout={layout.layout}
+                      setLayout={(newLayout) =>
+                        setLayout({ ...layout, layout: newLayout })
+                      }
                       context={context}
                     />
                   ))}
@@ -105,10 +151,7 @@ const ModelLayoutDetail: React.FC<{
                     const newModel = {
                       ...model,
                       layouts: {
-                        [selectedKey]: {
-                          ...model.layouts[selectedKey],
-                          layout,
-                        },
+                        [selectedKey]: layout,
                       },
                     };
                     context.data.models.update(newModel);

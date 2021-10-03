@@ -6,6 +6,7 @@ import Data from "./Data";
 import Layouts from "./UI/Layouts";
 import Utils from "./Utils";
 import { VariantType } from "notistack";
+import UIData from "./UI/Data";
 
 interface CanvasType {
   navbar: {
@@ -43,7 +44,7 @@ export class AppContext {
     },
     interact: { snackbar: () => {}, dialog: () => {} },
   };
-  UI = { Design, Layouts, Loading, Inputs };
+  UI = { Data: UIData, Design, Layouts, Loading, Inputs };
   data = Data;
   utils = Utils;
 

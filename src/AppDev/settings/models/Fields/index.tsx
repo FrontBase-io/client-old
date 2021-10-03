@@ -29,6 +29,7 @@ const ModelFields: React.FC<{ context: AppContext; model: ModelType }> = ({
         //@ts-ignore
         detailComponent={ModelFieldDetail}
         detailComponentProps={{ model }}
+        withoutPadding
         create={{
           onClick: () =>
             context.canvas.interact.dialog({

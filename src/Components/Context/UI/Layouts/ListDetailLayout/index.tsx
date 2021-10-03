@@ -9,7 +9,7 @@ import find from "lodash/find";
 import React, { useEffect, useState } from "react";
 import { Switch, useHistory, Route } from "react-router-dom";
 import { AppContext } from "../../..";
-import { ListItemType, ObjectType } from "../../../../../Utils/Types";
+import { ListItemType } from "../../../../../Utils/Types";
 import Icon from "../../../../Design/Icon";
 
 const ListDetailLayout: React.FC<{
@@ -26,6 +26,7 @@ const ListDetailLayout: React.FC<{
   transformIcon?: (val: string) => string;
   detailComponentProps?: { [key: string]: any };
   navWidth?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+  withoutPadding?: true;
 }> = ({
   context,
   title,
@@ -36,6 +37,7 @@ const ListDetailLayout: React.FC<{
   transformIcon,
   detailComponentProps,
   navWidth,
+  withoutPadding,
 }) => {
   // Vars
   const history = useHistory();
@@ -60,7 +62,7 @@ const ListDetailLayout: React.FC<{
                           history.push(`${baseUrl}/${menuItem.key}`)
                         }
                         selected={menuItem.key === selectedItem}
-                        style={{ paddingLeft: 0 }}
+                        style={{ paddingLeft: withoutPadding && 0 }}
                       >
                         {menuItem.icon && (
                           <ListItemIcon style={{ minWidth: 48 }}>

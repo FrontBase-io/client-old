@@ -69,6 +69,10 @@ export interface ModelFieldType {
 export interface ModelLayoutType {
   label: string;
   layout: LayoutItemType[];
+  factsbar?: {
+    fields?: string[];
+    buttons?: string[];
+  };
 }
 
 // List

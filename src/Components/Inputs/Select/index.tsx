@@ -11,7 +11,7 @@ interface OptionType {
 
 const SelectInput: React.FC<{
   label: string;
-  value: string;
+  value: string | string[];
   options: OptionType[];
   onChange?: (value: string | string[], args?: string | string[]) => void;
   disabled?: true | boolean;
@@ -31,14 +31,22 @@ const SelectInput: React.FC<{
   autoFocus,
 }) => {
   // Vars
-  const [newValue, setNewValue] = useState<OptionType>();
+  const [newValue, setNewValue] = useState<OptionType | OptionType[]>();
   const [colors] = useGlobal<any>("colors");
   const [theme] = useGlobal<any>("theme");
 
   // Lifecycle
   useEffect(() => {
-    setNewValue(find(options, (o) => o.value === value));
-  }, [value, options]);
+    if (multi) {
+      const nv: OptionType[] = [];
+      (value as string[]).map((v) =>
+        nv.push(find(options, (o) => o.value === v) as OptionType)
+      );
+      setNewValue(nv);
+    } else {
+      setNewValue(find(options, (o) => o.value === value));
+    }
+  }, [value, options, multi]);
 
   // UI
   return (
