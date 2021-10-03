@@ -293,6 +293,13 @@ const AppLayout: React.FC<{
                         setDialogFieldValues({
                           ...dialogFieldValues,
                           [key]: value,
+                          ...(field.linkToKeyField
+                            ? {
+                                [field.linkToKeyField]: value
+                                  .replace(/\W/g, "")
+                                  .toLowerCase(),
+                              }
+                            : {}), // If we're linked to a key field, set the key as well
                         })
                       }
                     />

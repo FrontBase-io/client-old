@@ -164,6 +164,7 @@ export interface DialogFieldType {
   valueModifier?: (value: string | number) => string | number;
   component?: React.FC<any>;
   componentProps?: {};
+  linkToKeyField?: string;
 }
 
 export interface SelectOptionType {

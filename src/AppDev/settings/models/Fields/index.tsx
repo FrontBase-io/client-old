@@ -36,7 +36,7 @@ const ModelFields: React.FC<{ context: AppContext; model: ModelType }> = ({
               title: "Create field",
               size: "sm",
               fields: {
-                label: { label: "Field label" },
+                label: { label: "Field label", linkToKeyField: "key" },
                 key: { label: "Field key", type: "key" },
               },
               actions: [
