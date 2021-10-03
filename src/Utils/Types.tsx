@@ -60,6 +60,7 @@ export interface ModelFieldType {
   relationshipTo?: string;
   // Formula
   formula?: string;
+  formulaOutputType?: "text" | "number" | "boolean" | "date";
   // Date
   variant?: "date" | "time" | "datetime";
 }

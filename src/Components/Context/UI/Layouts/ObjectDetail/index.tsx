@@ -27,9 +27,7 @@ const ObjectDetail: React.FC<{
     });
 
     context.data.objects.update(object!._id, fieldsToUpdate).then(
-      (result) => {
-        setViewMode("view");
-      },
+      (result) => setViewMode("view"),
       (reason) => context.canvas.interact.snackbar(reason, "error")
     );
   }, [context.canvas.interact, context.data.objects, newObject, object]);

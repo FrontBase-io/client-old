@@ -110,6 +110,10 @@ const ModelFieldDetail: React.FC<{
                     startModel={model.key}
                     value={field.formula || ""}
                     onChange={(formula) => setField({ ...field, formula })}
+                    outputType={field.formulaOutputType || "text"}
+                    onChangeOutputType={(formulaOutputType) =>
+                      setField({ ...field, formulaOutputType })
+                    }
                   />
                 )}
                 {field.type === "date" && (

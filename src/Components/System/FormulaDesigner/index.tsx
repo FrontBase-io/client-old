@@ -6,12 +6,23 @@ import { AppContext } from "../../Context";
 import Typography from "@mui/material/Typography";
 import { map } from "lodash";
 
+type OutputType = "text" | "number" | "boolean" | "date";
+
 const FormulaDesigner: React.FC<{
   context: AppContext;
   startModel: string;
   value: string;
   onChange: (result: string) => void;
-}> = ({ context, startModel, value, onChange }) => {
+  outputType: OutputType;
+  onChangeOutputType: (output: "text" | "number" | "boolean" | "date") => void;
+}> = ({
+  context,
+  startModel,
+  value,
+  onChange,
+  outputType,
+  onChangeOutputType,
+}) => {
   // Vars
   const [models, setModels] = useState<{ [key: string]: ModelType }>();
 
@@ -20,12 +31,12 @@ const FormulaDesigner: React.FC<{
     context.data.models.getAll((modelData) =>
       setModels(context.utils.modelListToModelObject(modelData))
     );
-  }, []);
+  }, [context.data.models, context.utils]);
 
   // UI
   if (!models) return <context.UI.Loading />;
   return (
-    <Grid container>
+    <Grid container style={{ padding: 10 }}>
       <Grid item xs={12}>
         <Typography variant="h6">Formula</Typography>
         <Button
@@ -63,6 +74,19 @@ const FormulaDesigner: React.FC<{
           mode="textarea"
           value={value}
           onChange={(value) => onChange(value)}
+        />
+      </Grid>
+      <Grid item xs={3}>
+        <context.UI.Inputs.Select
+          label="Formula output"
+          value={outputType}
+          onChange={(newVal) => onChangeOutputType(newVal as OutputType)}
+          options={[
+            { label: "Text", value: "text" },
+            { label: "Number", value: "number" },
+            { label: "Boolean", value: "boolean" },
+            { label: "Date", value: "date" },
+          ]}
         />
       </Grid>
     </Grid>

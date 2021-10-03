@@ -14,6 +14,7 @@ const FieldDisplay: React.FC<{
   // Vars
   // Lifecycle
   // UI
+
   return (
     <div onDoubleClick={() => onDoubleClick && onDoubleClick(fieldKey)}>
       {!withoutLabel && (
@@ -31,7 +32,11 @@ const FieldDisplay: React.FC<{
       ) : modelField.type === "relationship" ? (
         objectField
       ) : modelField.type === "date" ? (
-        format(parseISO(objectField), "dd/MM/yyyy")
+        objectField &&
+        format(
+          typeof objectField === "string" ? parseISO(objectField) : objectField,
+          "dd/MM/yyyy"
+        )
       ) : modelField.type === "options" ? (
         find(
           modelField.options!,
