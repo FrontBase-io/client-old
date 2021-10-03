@@ -49,7 +49,7 @@ export interface ModelType {
 // Field
 export interface ModelFieldType {
   label: string;
-  type?: "text" | "number" | "relationship" | "formula" | "options";
+  type?: "text" | "number" | "relationship" | "formula" | "options" | "date";
   required?: boolean;
   unique?: boolean;
   // Options
@@ -60,6 +60,8 @@ export interface ModelFieldType {
   relationshipTo?: string;
   // Formula
   formula?: string;
+  // Date
+  variant?: "date" | "time" | "datetime";
 }
 
 // Layout

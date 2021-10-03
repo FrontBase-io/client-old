@@ -8,7 +8,7 @@ const FieldEdit: React.FC<{
   modelField: ModelFieldType;
   objectField: any;
   context: AppContext;
-  onChange: (newValue: string) => void;
+  onChange: (newValue: string | Date) => void;
   hasChanged?: boolean;
 }> = ({
   selectedField,
@@ -29,7 +29,7 @@ const FieldEdit: React.FC<{
         hasChanged
           ? {
               backgroundColor:
-                theme.palette.type === "dark"
+                theme.palette.mode === "dark"
                   ? "rgb(80,80,80)"
                   : "rgb(240,240,240)",
               padding: 8,
@@ -54,6 +54,13 @@ const FieldEdit: React.FC<{
           autoFocus={selectedField === fieldKey}
           onChange={(value) => onChange(value as string)}
           options={modelField.options || []}
+        />
+      ) : modelField.type === "date" ? (
+        <context.UI.Inputs.Date
+          label={modelField.label}
+          value={objectField}
+          autoFocus={selectedField === fieldKey}
+          onChange={onChange}
         />
       ) : (
         `Unknown type ${modelField.type}`

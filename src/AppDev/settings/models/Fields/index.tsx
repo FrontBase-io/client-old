@@ -20,6 +20,7 @@ const ModelFields: React.FC<{ context: AppContext; model: ModelType }> = ({
             relationship: "bezier-curve",
             formula: "flask",
             options: "list",
+            date: "calendar-alt",
           };
           return map[icon];
         }}

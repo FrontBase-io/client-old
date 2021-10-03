@@ -4,12 +4,18 @@ import Tab from "@mui/material/Tab";
 import { useHistory, Route, Switch } from "react-router-dom";
 import { useEffect } from "react";
 import Loading from "../../Loading";
+import { makeStyles } from "@material-ui/core";
 
 interface TabType {
   label: string;
   key: string;
   component: ReactElement<any, any>;
 }
+
+const useStyles = makeStyles((theme) => ({
+  scrollButtons: { color: "white" },
+  indicator: { backgroundColor: "white" },
+}));
 
 const Tabs: React.FC<{
   tabs: TabType[];
@@ -20,6 +26,7 @@ const Tabs: React.FC<{
   // Vars
   const [selectedTab, setSelectedTab] = useState<string>(tabs[0].key);
   const history = useHistory();
+  const classes = useStyles();
 
   // Lifecycle
 
@@ -35,21 +42,25 @@ const Tabs: React.FC<{
             setSelectedTab(newValue);
           }
         }}
+        classes={white && classes}
         variant="scrollable"
-        style={
-          white
-            ? {
-                color: "white", // todo: make white
-                width: "100%",
-              }
-            : { width: "100%" }
-        }
         color="primary"
         indicatorColor="primary"
         aria-label="Tabs"
       >
         {tabs.map((tab) => (
-          <Tab label={tab.label} key={tab.key} value={tab.key} />
+          <Tab
+            label={tab.label}
+            key={tab.key}
+            value={tab.key}
+            style={
+              white
+                ? selectedTab !== tab.key
+                  ? { color: "white" }
+                  : { color: "#aeaeae" }
+                : {}
+            }
+          />
         ))}
       </TabsMUI>
       {urlTrackable ? (

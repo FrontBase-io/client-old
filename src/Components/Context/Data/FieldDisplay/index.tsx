@@ -1,6 +1,8 @@
 import Typography from "@mui/material/Typography";
 import { ModelFieldType, SelectOptionType } from "../../../../Utils/Types";
 import find from "lodash/find";
+import format from "date-fns/format";
+import parseISO from "date-fns/parseISO";
 
 const FieldDisplay: React.FC<{
   fieldKey: string;
@@ -28,6 +30,8 @@ const FieldDisplay: React.FC<{
         <Typography variant="body1">{objectField}</Typography>
       ) : modelField.type === "relationship" ? (
         objectField
+      ) : modelField.type === "date" ? (
+        format(parseISO(objectField), "dd/MM/yyyy")
       ) : modelField.type === "options" ? (
         find(
           modelField.options!,

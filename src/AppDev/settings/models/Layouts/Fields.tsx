@@ -1,8 +1,8 @@
-import { List, ListItem } from "@mui/material";
+import { List } from "@mui/material";
 import { map } from "lodash";
 import React from "react";
 import { AppContext } from "../../../../Components/Context";
-import { LayoutItemType, ModelType } from "../../../../Utils/Types";
+import { ModelType } from "../../../../Utils/Types";
 import DragItem from "./DragItem";
 
 const ModelLayoutFields: React.FC<{
@@ -26,6 +26,7 @@ const ModelLayoutFields: React.FC<{
             relationship: "bezier-curve",
             formula: "flask",
             options: "list",
+            date: "calendar-alt",
             error: "exclamation-triangle",
           };
           const icon: string = map[field.type || "error"];

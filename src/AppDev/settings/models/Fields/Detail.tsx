@@ -1,14 +1,9 @@
-import {
-  Grid,
-  ListItem,
-  ListItemText,
-  ListSubheader,
-  Typography,
-} from "@mui/material";
+import { Grid, ListItem, ListItemText, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import React, { useState, useEffect } from "react";
 import { AppContext } from "../../../../Components/Context";
+import SelectInput from "../../../../Components/Inputs/Select";
 import TextInput from "../../../../Components/Inputs/Text";
 import FormulaDesigner from "../../../../Components/System/FormulaDesigner";
 import {
@@ -78,6 +73,7 @@ const ModelFieldDetail: React.FC<{
                       { label: "Number", value: "number" },
                       { label: "Options", value: "options" },
                       { label: "Relationship", value: "relationship" },
+                      { label: "Date", value: "date" },
                       { label: "Formula", value: "formula" },
                     ]}
                   />
@@ -109,21 +105,29 @@ const ModelFieldDetail: React.FC<{
                   </>
                 )}
                 {field.type === "formula" && (
-                  <>
-                    <Grid item xs={10}>
-                      <FormulaDesigner
-                        context={context}
-                        startModel={model.key}
-                        value={field.formula || ""}
-                        onChange={(formula) => setField({ ...field, formula })}
-                      />
-                    </Grid>
-                    <Grid item xs={2}>
-                      <List>
-                        <ListSubheader>Dependencies</ListSubheader>
-                      </List>
-                    </Grid>
-                  </>
+                  <FormulaDesigner
+                    context={context}
+                    startModel={model.key}
+                    value={field.formula || ""}
+                    onChange={(formula) => setField({ ...field, formula })}
+                  />
+                )}
+                {field.type === "date" && (
+                  <Grid item xs={12}>
+                    <SelectInput
+                      label="Variant"
+                      value={field.variant || "date"}
+                      options={[
+                        { label: "Date", value: "date" },
+                        { label: "Time", value: "time" },
+                        { label: "Date / time", value: "datetime" },
+                      ]}
+                      onChange={(variant) =>
+                        //@ts-ignore
+                        setField({ ...field, variant })
+                      }
+                    />
+                  </Grid>
                 )}
                 {field.type === "options" && (
                   <>
