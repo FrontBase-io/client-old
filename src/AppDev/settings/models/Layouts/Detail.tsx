@@ -7,6 +7,7 @@ import {
   ListItemType,
   ModelLayoutType,
   ModelType,
+  SelectOptionType,
 } from "../../../../Utils/Types";
 import ModelLayoutComponents from "./Components";
 import ModelLayoutFields from "./Fields";
@@ -19,9 +20,19 @@ import {
 } from "react-dnd-multi-backend";
 import DropTarget from "./DropTarget";
 import styles from "./styles.module.scss";
-import { cloneDeep, isEqual } from "lodash";
+import { cloneDeep, isEqual, map } from "lodash";
 import Icon from "../../../../Components/Design/Icon";
 import { modifyRecursive } from "../../../../Utils/Functions";
+import Actions from "../../../../Components/Actions/index";
+
+const actionOptions: SelectOptionType[] = [];
+map(Actions, (action, actionKey) => {
+  console.log(action);
+
+  if (action.accepts.includes("None") || action.accepts.includes("One")) {
+    actionOptions.push({ label: action.label, value: actionKey });
+  }
+});
 
 const ModelLayoutDetail: React.FC<{
   context: AppContext;
@@ -41,6 +52,7 @@ const ModelLayoutDetail: React.FC<{
   // Vars
   const [layout, setLayout] = useState<ModelLayoutType>();
   const [hasChanged, setHasChanged] = useState<boolean>(false);
+
   // Lifecycle
   useEffect(() => {
     setLayout(model.layouts[selectedKey]);
@@ -88,11 +100,11 @@ const ModelLayoutDetail: React.FC<{
                   })
                 }
               >
-                <Grid container>
+                <Grid container spacing={2}>
                   <Grid item xs={6}>
                     <context.UI.Inputs.Select
                       label="Displayed fields"
-                      value={layout.factsbar?.fields || []}
+                      value={layout.factsbar || []}
                       options={context.utils.listifyObjectForSelect(
                         model.fields,
                         "label"
@@ -101,16 +113,24 @@ const ModelLayoutDetail: React.FC<{
                       onChange={(newVal) =>
                         setLayout({
                           ...layout,
-                          factsbar: {
-                            ...layout.factsbar,
-                            fields: newVal as string[],
-                          },
+                          factsbar: newVal as string[],
                         })
                       }
                     />
                   </Grid>
                   <Grid item xs={6}>
-                    Test
+                    <context.UI.Inputs.Select
+                      label="Actions"
+                      value={layout.buttons || []}
+                      options={actionOptions}
+                      multi
+                      onChange={(newVal) =>
+                        setLayout({
+                          ...layout,
+                          buttons: newVal as string[],
+                        })
+                      }
+                    />
                   </Grid>
                 </Grid>
               </Card>
@@ -347,7 +367,8 @@ const LayoutItem: React.FC<{
           </>
         ) : (
           <Typography variant="body1">
-            {layoutItem.type}: {layoutItem.label}: {layoutItem.key}
+            <Icon icon="font" style={{ marginRight: 10 }} />
+            {layoutItem.label}
           </Typography>
         )}
       </div>

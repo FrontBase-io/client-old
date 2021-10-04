@@ -22,7 +22,9 @@ const DateInput: React.FC<{
         inputFormat="MM/dd/yyyy"
         value={value}
         onChange={(newValue) => newValue && onChange && onChange(newValue)}
-        renderInput={(params) => <TextField {...params} />}
+        renderInput={(params) => (
+          <TextField style={{ margin: "15px 0" }} {...params} />
+        )}
       />
     </LocalizationProvider>
   );

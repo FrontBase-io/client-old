@@ -28,13 +28,19 @@
 @media (prefers-color-scheme: dark) {
   .dropTarget {
     border: 1px solid #3a3a3a;
-    background-color: #9a9a9a;
+    background-color: #1a1a1a;
     color: white;
+    &.hovered {
+      border: 1px solid #3a3a3a;
+      background-color: #111;
+      opacity: 0.8;
+    }
   }
 
-  .dropTargetHovered {
-    border: 1px solid #3a3a3a;
-    background-color: #333;
-    opacity: 0.8;
+  .layoutItem {
+    background-color: #3a3a3a;
+    padding: 5px;
+    border-radius: 8px;
+    margin-bottom: 15px;
   }
 }

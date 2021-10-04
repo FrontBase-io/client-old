@@ -29,7 +29,7 @@ const Box: FC<BoxProps> = ({
       ref={connectDragSource}
       role="component"
       className={styles.dragItem}
-      style={{ opacity }}
+      style={{ opacity, paddingLeft: 0 }}
     >
       <ListItemIcon>
         <Icon icon={icon} />

@@ -17,7 +17,7 @@ const ModelLayoutFields: React.FC<{
   model,
 }) => {
   return (
-    <List>
+    <List style={{ padding: 0 }}>
       <Animation.Container>
         {map(model.fields, (field, key) => {
           const map: { [key: string]: string } = {

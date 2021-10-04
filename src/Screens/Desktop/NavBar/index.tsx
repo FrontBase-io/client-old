@@ -51,9 +51,11 @@ const NavBar: React.FC<{
               ? onOpenAppMenu(event)
               : history.push("/");
           }}
-          onContextMenu={(e) => {
-            history.push("/");
-            e.preventDefault();
+          onContextMenu={(event) => {
+            window.location.pathname === "/" || window.location.pathname === ""
+              ? onOpenAppMenu(event)
+              : onOpenAppMenu(event);
+            event.preventDefault();
           }}
         >
           <Tooltip
