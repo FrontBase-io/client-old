@@ -24,7 +24,6 @@ const FieldDisplay: React.FC<{
 
   // Lifecycle
   // UI
-
   return (
     <div onDoubleClick={() => onDoubleClick && onDoubleClick(fieldKey)}>
       {!withoutLabel && (

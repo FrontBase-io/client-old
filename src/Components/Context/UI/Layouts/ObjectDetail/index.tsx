@@ -145,7 +145,7 @@ const ObjectDetail: React.FC<{
                 <context.UI.Data.FieldDisplay
                   context={context}
                   model={model}
-                  object={object[f]}
+                  object={object}
                   fieldKey={f}
                 />
               </Grid>
