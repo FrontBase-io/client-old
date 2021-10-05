@@ -1,19 +1,20 @@
+import { Typography } from "@mui/material";
 import { useGlobal } from "reactn";
 import { AppContext } from "../../..";
-import { ModelFieldType } from "../../../../../Utils/Types";
+import { ModelType, ObjectType } from "../../../../../Utils/Types";
 
 const FieldEdit: React.FC<{
   selectedField?: string;
   fieldKey: string;
-  modelField: ModelFieldType;
-  objectField: any;
+  model: ModelType;
+  object: ObjectType;
   context: AppContext;
   onChange: (newValue: string | Date) => void;
   hasChanged?: boolean;
 }> = ({
   selectedField,
-  modelField,
-  objectField,
+  model,
+  object,
   fieldKey,
   context,
   onChange,
@@ -21,6 +22,8 @@ const FieldEdit: React.FC<{
 }) => {
   // Vars
   const [theme] = useGlobal<any>("theme");
+  const modelField = model.fields[fieldKey];
+  const objectField = object[fieldKey];
 
   // UI
   return (
@@ -62,6 +65,26 @@ const FieldEdit: React.FC<{
           autoFocus={selectedField === fieldKey}
           onChange={onChange}
         />
+      ) : modelField.type === "relationship" ? (
+        <context.UI.Inputs.Relationship
+          label={modelField.label}
+          context={context}
+          modelKey={modelField.relationshipTo!}
+          object={object}
+          value={objectField}
+          autoFocus={selectedField === fieldKey}
+          onChange={(value) => onChange(value as string)}
+        />
+      ) : modelField.type === "formula" ? (
+        <>
+          <Typography
+            variant="caption"
+            style={{ fontSize: 16, display: "block", fontWeight: "bold" }}
+          >
+            {modelField.label}
+          </Typography>
+          {objectField}
+        </>
       ) : (
         `Unknown type ${modelField.type}`
       )}

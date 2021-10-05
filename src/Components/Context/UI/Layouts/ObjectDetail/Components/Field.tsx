@@ -30,22 +30,22 @@ const Field: React.FC<{
   updateField,
 }) => {
   // Vars
-  const modelField = model.fields[layoutItem.args?.field];
   const objectField = newObject[layoutItem.args?.field];
   // Lifecycle
   // UI
   return viewMode === "view" ? (
     <FieldDisplay
-      modelField={modelField}
-      objectField={objectField}
+      context={context}
+      model={model}
+      object={object}
       fieldKey={layoutItem.args?.field}
       onDoubleClick={(fieldName) => selectField(fieldName)}
     />
   ) : (
     <FieldEdit
       selectedField={selectedField}
-      modelField={modelField}
-      objectField={objectField}
+      model={model}
+      object={object}
       fieldKey={layoutItem.args?.field}
       context={context}
       onChange={(newValue) => updateField(layoutItem.args?.field, newValue)}

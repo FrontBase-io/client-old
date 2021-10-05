@@ -143,8 +143,9 @@ const ObjectDetail: React.FC<{
             {layout.factsbar.map((f) => (
               <Grid item xs={2} key={`facts-${f}`}>
                 <context.UI.Data.FieldDisplay
-                  modelField={model.fields[f]}
-                  objectField={object[f]}
+                  context={context}
+                  model={model}
+                  object={object[f]}
                   fieldKey={f}
                 />
               </Grid>

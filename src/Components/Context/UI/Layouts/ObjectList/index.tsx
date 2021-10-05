@@ -23,22 +23,7 @@ const ObjectList: React.FC<{
   modelKey: string;
   model?: ModelType;
   baseUrl: string;
-}> = ({
-  modelKey,
-  baseUrl,
-  model: inputModel,
-  context: {
-    data,
-    UI: {
-      Loading,
-      Design: {
-        Animation: { Animate },
-        Card,
-        Icon,
-      },
-    },
-  },
-}) => {
+}> = ({ modelKey, baseUrl, model: inputModel, context }) => {
   // Vars
   const [model, setModel] = useState<ModelType>(inputModel!);
   const [objects, setObjects] = useState<ObjectType[]>();
@@ -53,29 +38,29 @@ const ObjectList: React.FC<{
   // Lifecycle
   useEffect(() => {
     if (inputModel) {
-      data.models.get(modelKey, (model: ModelType) => {
+      context.data.models.get(modelKey, (model: ModelType) => {
         setModel(model);
         model.lists
           ? setSelectedList(Object.keys(model.lists)[0])
           : setSelectedList(undefined);
       });
     }
-  }, [data.models, inputModel, modelKey]);
+  }, [context.data.models, inputModel, modelKey]);
   useEffect(() => {
     if (model && selectedList) {
-      data.objects.get(
+      context.data.objects.get(
         modelKey,
         model?.lists[selectedList].filter || {},
         (objects) => setObjects(objects)
       );
     }
-  }, [model?.lists, selectedList, modelKey, model, data.objects]);
+  }, [model?.lists, selectedList, modelKey, model, context.data.objects]);
 
   // UI
-  if (!model) return <Loading />;
+  if (!model) return <context.UI.Loading />;
   return (
-    <Animate>
-      <Card title={model.label_plural}>
+    <context.UI.Design.Animation.Animate>
+      <context.UI.Design.Card title={model.label_plural}>
         <Typography variant="body2" style={{ cursor: "pointer" }}>
           {model.lists && selectedList && (
             <span
@@ -87,7 +72,7 @@ const ObjectList: React.FC<{
                 "_name",
                 model.label_plural
               )}{" "}
-              <Icon icon="angle-down" size={12} />
+              <context.UI.Design.Icon icon="angle-down" size={12} />
             </span>
           )}
         </Typography>
@@ -109,7 +94,7 @@ const ObjectList: React.FC<{
             style: { backgroundColor: "transparent" },
           }}
         >
-          <Card
+          <context.UI.Design.Card
             title="Lists"
             style={{ minWidth: 150, marginTop: -35 }}
             withoutPadding
@@ -133,7 +118,7 @@ const ObjectList: React.FC<{
               ))}
               <ListSubheader>My lists</ListSubheader>
             </List>
-          </Card>
+          </context.UI.Design.Card>
         </Popover>
         {selectedList !== undefined && (
           <Table aria-label="simple table">
@@ -162,8 +147,9 @@ const ObjectList: React.FC<{
                         }
                       >
                         <FieldDisplay
-                          modelField={model.fields[fieldKey]}
-                          objectField={object[fieldKey]}
+                          context={context}
+                          model={model}
+                          object={object}
                           fieldKey={fieldKey}
                           withoutLabel
                         />
@@ -172,13 +158,13 @@ const ObjectList: React.FC<{
                   </TableRow>
                 ))
               ) : (
-                <Loading />
+                <context.UI.Loading />
               )}
             </TableBody>
           </Table>
         )}
-      </Card>
-    </Animate>
+      </context.UI.Design.Card>
+    </context.UI.Design.Animation.Animate>
   );
 };
 

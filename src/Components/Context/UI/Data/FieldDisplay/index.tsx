@@ -1,17 +1,27 @@
 import Typography from "@mui/material/Typography";
-import { ModelFieldType, SelectOptionType } from "../../../../../Utils/Types";
+import {
+  ModelType,
+  ObjectType,
+  SelectOptionType,
+} from "../../../../../Utils/Types";
 import find from "lodash/find";
 import format from "date-fns/format";
 import parseISO from "date-fns/parseISO";
+import DisplayRelationship from "./Relationship";
+import { AppContext } from "../../..";
 
 const FieldDisplay: React.FC<{
+  context: AppContext;
   fieldKey: string;
-  modelField: ModelFieldType;
-  objectField: any;
+  model: ModelType;
+  object: ObjectType;
   onDoubleClick?: (fieldName: string) => void;
   withoutLabel?: true;
-}> = ({ modelField, objectField, onDoubleClick, fieldKey, withoutLabel }) => {
+}> = ({ model, object, onDoubleClick, fieldKey, withoutLabel, context }) => {
   // Vars
+  const modelField = model.fields[fieldKey];
+  const objectField = object[fieldKey];
+
   // Lifecycle
   // UI
 
@@ -30,7 +40,12 @@ const FieldDisplay: React.FC<{
       modelField.type === "number" ? (
         <Typography variant="body1">{objectField}</Typography>
       ) : modelField.type === "relationship" ? (
-        objectField
+        <DisplayRelationship
+          context={context}
+          model={model}
+          object={object}
+          fieldKey={fieldKey}
+        />
       ) : modelField.type === "date" ? (
         objectField &&
         format(
