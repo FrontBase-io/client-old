@@ -111,11 +111,19 @@ const ObjectDetail: React.FC<{
       {layout.buttons && (
         <div style={{ height: 35, marginRight: 15 }}>
           <div style={{ float: "right" }}>
-            <ButtonGroup variant="outlined" color="primary">
+            <ButtonGroup
+              variant="outlined"
+              color="primary"
+              style={{ marginBottom: 5, border: "1px solid white" }}
+            >
               {layout.buttons.slice(0, 3).map((button) => {
                 const action = Actions[button];
                 return (
-                  <Button key={button} onClick={() => action.onClick(context)}>
+                  <Button
+                    key={button}
+                    onClick={() => action.onClick(context, object, model)}
+                    style={{ color: "white" }}
+                  >
                     {button}
                   </Button>
                 );

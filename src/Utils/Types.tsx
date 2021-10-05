@@ -130,7 +130,7 @@ export interface ListItemType {
 export interface DialogType {
   display?: boolean;
   title?: string;
-  text?: string;
+  text?: string | ReactElement<any, any>;
   content?: ReactElement<any, any>;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   fields?: {
@@ -141,7 +141,7 @@ export interface DialogType {
 }
 
 export interface DialogActionType {
-  label: string;
+  label: string | ReactElement<any, any>;
   onClick?: (form: { [key: string]: any }, close: () => void) => void;
 }
 export interface DialogFieldType {

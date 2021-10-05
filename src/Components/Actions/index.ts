@@ -1,3 +1,4 @@
+import { ModelType, ObjectType } from "../../Utils/Types";
 import { AppContext } from "../Context";
 import Delete from "./Delete";
 
@@ -8,7 +9,11 @@ import Delete from "./Delete";
 interface ActionType {
   accepts: ("None" | "One" | "Many")[];
   label: string;
-  onClick: (context: AppContext) => void;
+  onClick: (
+    context: AppContext,
+    objects: ObjectType | ObjectType[],
+    model: ModelType
+  ) => void;
 }
 
 const Actions: {

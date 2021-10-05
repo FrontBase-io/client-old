@@ -1,3 +1,5 @@
+import { Typography } from "@mui/material";
+import { ModelType, ObjectType } from "../../../Utils/Types";
 import { AppContext } from "../../Context";
 
 const DeleteAction = {
@@ -13,11 +15,46 @@ const DeleteAction = {
   // - Many -> Can be shown in places with context of multiple items (list with multiple selected)
   accepts: ["None", "One", "Many"],
 
-  onClick(context: AppContext) {
+  onClick(
+    context: AppContext,
+    objects: ObjectType | ObjectType[],
+    model: ModelType
+  ) {
     context.canvas.interact.dialog({
       display: true,
       title: "Are you sure?",
-      text: "This item will be moved to the trash.",
+      text: (
+        <>
+          {Array.isArray(objects) ? (
+            <>
+              {model.label_plural}{" "}
+              <i>
+                {objects[0][model.primary]} and {objects.length} others
+              </i>
+            </>
+          ) : (
+            <>
+              {model.label} <i>{objects[model.primary]}</i>
+            </>
+          )}{" "}
+          will be moved to the trash!
+        </>
+      ),
+      size: "sm",
+      actions: [
+        {
+          label: "No, keep",
+          onClick: (_, close) => close(),
+        },
+        {
+          label: (
+            <Typography style={{ color: "red" }} variant="button">
+              Yes, delete
+            </Typography>
+          ),
+          onClick: (_, close) => close(),
+        },
+      ],
     });
   },
 };
