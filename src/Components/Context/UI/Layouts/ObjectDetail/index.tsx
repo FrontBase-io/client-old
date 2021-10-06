@@ -4,7 +4,6 @@ import isEqual from "lodash/isEqual";
 import { useCallback, useEffect, useState } from "react";
 import { AppContext } from "../../..";
 import {
-  LayoutItemType,
   ModelLayoutType,
   ModelType,
   ObjectType,
@@ -22,6 +21,7 @@ const ObjectDetail: React.FC<{
   baseUrl?: string;
   layoutKey?: string[];
   onChange?: (newObject: PreObjectType) => void;
+  onAfterButtonPress?: { [key: string]: () => void };
 }> = ({
   objectId,
   modelKey,
@@ -31,6 +31,7 @@ const ObjectDetail: React.FC<{
   model,
   object,
   onChange,
+  onAfterButtonPress,
 }) => {
   // Vars
   const [appliedObject, setAppliedObject] = useState<PreObjectType>({});
@@ -183,11 +184,18 @@ const ObjectDetail: React.FC<{
                   <Button
                     key={button}
                     onClick={() =>
-                      action.onClick(
-                        context,
-                        appliedObject as ObjectType,
-                        appliedModel
-                      )
+                      action
+                        .onClick(
+                          context,
+                          appliedObject as ObjectType,
+                          appliedModel
+                        )
+                        .then(
+                          () =>
+                            onAfterButtonPress &&
+                            onAfterButtonPress[button] &&
+                            onAfterButtonPress[button]()
+                        )
                     }
                     style={{ color: "white" }}
                   >

@@ -1,3 +1,4 @@
+import { useHistory } from "react-router";
 import { AppContext } from "../../Components/Context";
 import { ModelType } from "../../Utils/Types";
 
@@ -7,7 +8,7 @@ const ObjectDetail: React.FC<{ context: AppContext; model: ModelType }> = ({
 }) => {
   // Vars
   const objectId = window.location.href.split("/")[5];
-
+  const history = useHistory();
   // Lifecycle
 
   // UI
@@ -18,6 +19,15 @@ const ObjectDetail: React.FC<{ context: AppContext; model: ModelType }> = ({
       modelKey={model.key}
       objectId={objectId}
       baseUrl={`/explorer/${model.key_plural}`}
+      onAfterButtonPress={{
+        Delete: () => {
+          history.replace(`/explorer/${model.key_plural}`);
+          context.canvas.interact.snackbar(
+            `${model.label} deleted.`,
+            "success"
+          );
+        },
+      }}
     />
   );
 };

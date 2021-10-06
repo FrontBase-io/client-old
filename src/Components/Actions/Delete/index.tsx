@@ -15,48 +15,59 @@ const DeleteAction = {
   // - Many -> Can be shown in places with context of multiple items (list with multiple selected)
   accepts: ["None", "One", "Many"],
 
-  onClick(
+  onClick: (
     context: AppContext,
     objects: ObjectType | ObjectType[] | null,
     model: ModelType
-  ) {
-    context.canvas.interact.dialog({
-      display: true,
-      title: "Are you sure?",
-      text: (
-        <>
-          {Array.isArray(objects) ? (
-            <>
-              {model.label_plural}{" "}
-              <i>
-                {objects[0][model.primary]} and {objects.length} others
-              </i>
-            </>
-          ) : (
-            <>
-              {model.label} <i>{objects && objects[model.primary]}</i>
-            </>
-          )}{" "}
-          will be moved to the trash!
-        </>
-      ),
-      size: "sm",
-      actions: [
-        {
-          label: "No, keep",
-          onClick: (_, close) => close(),
-        },
-        {
-          label: (
-            <Typography style={{ color: "red" }} variant="button">
-              Yes, delete
-            </Typography>
-          ),
-          onClick: (_, close) => close(),
-        },
-      ],
-    });
-  },
+  ) =>
+    new Promise<void>((resolve) =>
+      context.canvas.interact.dialog({
+        display: true,
+        title: "Are you sure?",
+        text: (
+          <>
+            {Array.isArray(objects) ? (
+              <>
+                {model.label_plural}{" "}
+                <i>
+                  {objects[0][model.primary]} and {objects.length} others
+                </i>
+              </>
+            ) : (
+              <>
+                {model.label} <i>{objects && objects[model.primary]}</i>
+              </>
+            )}{" "}
+            will be moved to the trash!
+          </>
+        ),
+        size: "sm",
+        actions: [
+          {
+            label: "No, keep",
+            onClick: (_, close) => close(),
+          },
+          {
+            label: (
+              <Typography style={{ color: "red" }} variant="button">
+                Yes, delete
+              </Typography>
+            ),
+            onClick: (_, close) => {
+              if (Array.isArray(objects)) {
+                console.log("Todo: delete multiple entries at once");
+              } else {
+                context.data.objects
+                  .trash(model.key, objects!._id)
+                  .then(() => resolve());
+              }
+
+              close();
+            },
+          },
+        ],
+      })
+    ),
 };
 
 export default DeleteAction;

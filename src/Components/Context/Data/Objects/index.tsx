@@ -1,12 +1,26 @@
 import Socket from "../../../../Utils/Socket";
 import { ObjectType, ResponseType } from "../../../../Utils/Types";
 
+// Create object
 const create = (modelKey: string, newObject: {}) =>
   new Promise((resolve, reject) => {
     Socket.emit(
       "createObject",
       modelKey,
       newObject,
+      (response: ResponseType) => {
+        response.success ? resolve(response.result) : reject(response.reason);
+      }
+    );
+  });
+
+// Delete object
+const trash = (modelKey: string, objectId: string) =>
+  new Promise((resolve, reject) => {
+    Socket.emit(
+      "deleteObject",
+      modelKey,
+      objectId,
       (response: ResponseType) => {
         response.success ? resolve(response.result) : reject(response.reason);
       }
@@ -45,6 +59,6 @@ const update = (_id: string, newObject: { [key: string]: any }) =>
     });
   });
 
-const updateFunctions = { create, get, update };
+const updateFunctions = { create, get, update, trash };
 
 export default updateFunctions;

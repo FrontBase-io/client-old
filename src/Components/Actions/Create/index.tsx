@@ -19,33 +19,35 @@ const CreateAction = {
     objects: ObjectType | ObjectType[] | null,
     model: ModelType
   ) =>
-    context.canvas.interact.dialog({
-      display: true,
-      title: `Create new ${model.label}`,
-      fields: {
-        object: {
-          label: "test",
-          type: "custom",
-          component: context.UI.Layouts.ObjectDetail,
-          componentProps: {
-            context,
-            model,
-            modelKey: model.key,
-            layoutKey: ["create", "default"],
+    new Promise((resolve, reject) =>
+      context.canvas.interact.dialog({
+        display: true,
+        title: `Create new ${model.label}`,
+        fields: {
+          object: {
+            label: "test",
+            type: "custom",
+            component: context.UI.Layouts.ObjectDetail,
+            componentProps: {
+              context,
+              model,
+              modelKey: model.key,
+              layoutKey: ["create", "default"],
+            },
           },
         },
-      },
-      actions: [
-        {
-          label: `Create ${model.label}`,
-          onClick: (form, close) => {
-            context.data.objects.create(model.key, form.object);
-            close();
+        actions: [
+          {
+            label: `Create ${model.label}`,
+            onClick: (form, close) => {
+              context.data.objects.create(model.key, form.object);
+              close();
+            },
           },
-        },
-      ],
-      size: "md",
-    }),
+        ],
+        size: "md",
+      })
+    ),
 };
 
 export default CreateAction;

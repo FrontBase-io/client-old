@@ -14,7 +14,7 @@ interface ActionType {
     context: AppContext,
     objects: ObjectType | ObjectType[] | null,
     model: ModelType
-  ) => void;
+  ) => Promise<void>;
 }
 
 const Actions: {
