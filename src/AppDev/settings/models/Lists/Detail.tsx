@@ -14,8 +14,25 @@ import {
   ListItemType,
   ModelType,
   ModelListType,
+  SelectOptionType,
 } from "../../../../Utils/Types";
 import { useEffect, useState } from "react";
+import Actions from "../../../../Components/Actions";
+
+const globalActionOptions: SelectOptionType[] = [];
+const oneActionOptions: SelectOptionType[] = [];
+const manyActionOptions: SelectOptionType[] = [];
+map(Actions, (action, actionKey) => {
+  if (action.accepts.includes("None")) {
+    globalActionOptions.push({ label: action.label, value: actionKey });
+  }
+  if (action.accepts.includes("One")) {
+    oneActionOptions.push({ label: action.label, value: actionKey });
+  }
+  if (action.accepts.includes("Many")) {
+    manyActionOptions.push({ label: action.label, value: actionKey });
+  }
+});
 
 const ModelListDetail: React.FC<{
   context: AppContext;
@@ -25,7 +42,7 @@ const ModelListDetail: React.FC<{
 }> = ({
   context: {
     UI: {
-      Design: { Animation, Card, Tabs, Icon },
+      Design: { Animation, Card, Icon },
     },
   },
   selectedKey,
@@ -124,22 +141,97 @@ const ModelListDetail: React.FC<{
         </Grid>
         <Grid item xs={4}>
           <Animation.Item key="actionsGlobal">
-            <Card title="Global actions">
-              These actions will be shown when no objects are selected.
+            <Card
+              title="Global actions"
+              onExplanation={() =>
+                context.canvas.interact.dialog({
+                  display: true,
+                  title: "Global actions",
+                  text: "These actions will be shown when no objects are selected.",
+                  size: "xs",
+                })
+              }
+            >
+              <context.UI.Inputs.Select
+                label="Global"
+                value={newList.actions?.global || []}
+                multi
+                options={globalActionOptions}
+                onChange={(newVal) =>
+                  setNewList({
+                    ...newList,
+                    //@ts-ignore
+                    actions: {
+                      ...(newList.actions || {}),
+                      global: newVal as string[],
+                    },
+                  })
+                }
+              />
             </Card>
           </Animation.Item>
         </Grid>
         <Grid item xs={4}>
           <Animation.Item key="actionsSingle">
-            <Card title="Actions (object selected)">
-              These actions will be shown when one option is selected.
+            <Card
+              title="Actions (one selected)"
+              onExplanation={() =>
+                context.canvas.interact.dialog({
+                  display: true,
+                  title: "Actions (one selected)",
+                  text: "These actions will be shown to the right of an object in the list (dot menu) as well as when exactly one object is selected.",
+                  size: "xs",
+                })
+              }
+            >
+              <context.UI.Inputs.Select
+                label="One"
+                value={newList.actions?.single || []}
+                multi
+                options={oneActionOptions}
+                onChange={(newVal) =>
+                  setNewList({
+                    ...newList,
+                    //@ts-ignore
+                    actions: {
+                      ...(newList.actions || {}),
+                      single: newVal as string[],
+                    },
+                  })
+                }
+              />
             </Card>
           </Animation.Item>
         </Grid>
         <Grid item xs={4}>
           <Animation.Item key="actionsMultiple">
-            <Card title="Actions (multiple selected)">
-              These actions will be shown when multiple objects are selected.
+            <Card
+              title="Actions (multiple selected)"
+              onExplanation={() =>
+                context.canvas.interact.dialog({
+                  display: true,
+                  title: "Actions (multiple selected)",
+                  text: "These actions will be shown once a user has selected multiple objects at the same time.",
+                  size: "xs",
+                })
+              }
+            >
+              <context.UI.Inputs.Select
+                label="Many"
+                value={newList.actions?.many || []}
+                multi
+                options={manyActionOptions}
+                onChange={(newVal) =>
+                  setNewList({
+                    ...newList,
+                    //@ts-ignore
+                    actions: {
+                      ...(newList.actions || {}),
+                      many: newVal as string[],
+                    },
+                  })
+                }
+              />
             </Card>
           </Animation.Item>
         </Grid>

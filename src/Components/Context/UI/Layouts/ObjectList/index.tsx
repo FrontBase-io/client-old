@@ -5,6 +5,8 @@ import Typography from "@mui/material/Typography";
 import Popover from "@mui/material/Popover";
 import List from "@mui/material/List";
 import {
+  Button,
+  ButtonGroup,
   ListItem,
   ListItemText,
   ListSubheader,
@@ -17,6 +19,7 @@ import {
 import { map } from "lodash";
 import { useHistory } from "react-router";
 import FieldDisplay from "../../Data/FieldDisplay";
+import Actions from "../../../../Actions";
 
 const ObjectList: React.FC<{
   context: AppContext;
@@ -60,7 +63,25 @@ const ObjectList: React.FC<{
   if (!model) return <context.UI.Loading />;
   return (
     <context.UI.Design.Animation.Animate>
-      <context.UI.Design.Card title={model.label_plural}>
+      <context.UI.Design.Card>
+        {selectedList && model.lists[selectedList].actions && (
+          <div style={{ float: "right", padding: 5 }}>
+            <ButtonGroup color="primary">
+              {model.lists[selectedList].actions?.global.map((button) => {
+                const action = Actions[button];
+                return (
+                  <Button
+                    key={`button-${button}`}
+                    onClick={() => action.onClick(context, null, model)}
+                  >
+                    {action.label}
+                  </Button>
+                );
+              })}
+            </ButtonGroup>
+          </div>
+        )}
+        <Typography variant="h6">{model.label_plural}</Typography>
         <Typography variant="body2" style={{ cursor: "pointer" }}>
           {model.lists && selectedList && (
             <span

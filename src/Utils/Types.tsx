@@ -83,6 +83,7 @@ export interface ModelListType {
   label?: string;
   filter?: {};
   fields?: string[];
+  actions?: { global: string[]; single: string[]; many: string[] };
 }
 
 // Apps
