@@ -3,64 +3,115 @@ import { map } from "lodash";
 import isEqual from "lodash/isEqual";
 import { useCallback, useEffect, useState } from "react";
 import { AppContext } from "../../..";
-import { ModelType, ObjectType } from "../../../../../Utils/Types";
+import {
+  LayoutItemType,
+  ModelLayoutType,
+  ModelType,
+  ObjectType,
+  PreObjectType,
+} from "../../../../../Utils/Types";
 import LayoutComponent from "./LayoutComponent";
 import Actions from "../../../../Actions";
 
 const ObjectDetail: React.FC<{
   context: AppContext;
   modelKey: string;
-  objectId: string;
-  baseUrl: string;
-  layoutKey?: string;
-}> = ({ objectId, modelKey, baseUrl, context, layoutKey }) => {
+  objectId?: string;
+  object?: ObjectType;
+  model?: ModelType;
+  baseUrl?: string;
+  layoutKey?: string[];
+  onChange?: (newObject: PreObjectType) => void;
+}> = ({
+  objectId,
+  modelKey,
+  baseUrl,
+  context,
+  layoutKey,
+  model,
+  object,
+  onChange,
+}) => {
   // Vars
-  const [object, setObject] = useState<ObjectType>();
-  const [newObject, setNewObject] = useState<ObjectType>();
-  const [model, setModel] = useState<ModelType>();
+  const [appliedObject, setAppliedObject] = useState<PreObjectType>({});
+  const [newObject, setNewObject] = useState<PreObjectType>({});
+  const [appliedModel, setAppliedModel] = useState<ModelType>();
   const [viewMode, setViewMode] = useState<"view" | "edit">("view");
   const [selectedField, setSelectedField] = useState<string>();
   const save = useCallback(() => {
     const fieldsToUpdate: { [key: string]: any } = {};
     map(newObject, (value, key) => {
-      if (JSON.stringify(object![key]) !== JSON.stringify(newObject![key])) {
+      if (
+        JSON.stringify(appliedObject![key]) !== JSON.stringify(newObject![key])
+      ) {
         fieldsToUpdate[key] = newObject![key];
       }
     });
 
-    context.data.objects.update(object!._id, fieldsToUpdate).then(
-      (result) => setViewMode("view"),
-      (reason) => context.canvas.interact.snackbar(reason, "error")
-    );
-  }, [context.canvas.interact, context.data.objects, newObject, object]);
+    if (appliedObject._id) {
+      // Update
+      context.data.objects.update(appliedObject!._id, fieldsToUpdate).then(
+        (result) => setViewMode("view"),
+        (reason) => context.canvas.interact.snackbar(reason, "error")
+      );
+    } else {
+      // Create
+    }
+  }, [appliedObject, context.canvas.interact, context.data.objects, newObject]);
 
   // Lifecycle
+  // Pick model
+  useEffect(
+    () =>
+      model
+        ? setAppliedModel(model)
+        : context.data.models.get(modelKey, (fetchedModel) =>
+            setAppliedModel(fetchedModel)
+          ),
+    [context.data.models, model, modelKey]
+  );
+  // Pick Object
   useEffect(() => {
-    context.data.objects.get(modelKey, { _id: objectId }, (objects) => {
-      setObject(objects[0]);
-      setNewObject(objects[0]);
-      context.data.models.get(objects[0].meta.model, (model) => {
-        setModel(model);
-        context.canvas.navbar.name.set(objects[0][model.primary]);
-        context.canvas.navbar.up.set(baseUrl);
-      });
-    });
-
-    return () => {
-      context.canvas.navbar.name.set(undefined);
-      context.canvas.navbar.up.set(undefined);
-    };
+    if (object) {
+      setAppliedObject(object);
+    } else if (objectId) {
+      context.data.objects.get(
+        // Fetch object based on ID
+        modelKey,
+        { _id: objectId },
+        (fetchedObjects) => {
+          setAppliedObject(fetchedObjects[0]);
+          setNewObject(fetchedObjects[0]);
+        }
+      );
+    }
   }, [
-    objectId,
-    modelKey,
-    context.data.objects,
     context.data.models,
-    context.canvas.navbar.name,
-    context.canvas.navbar.up,
-    baseUrl,
+    context.data.objects,
+    model,
+    modelKey,
+    object,
+    objectId,
   ]);
   useEffect(() => {
-    if (isEqual(object, newObject)) {
+    if (appliedModel && appliedObject) {
+      context.canvas.navbar.name.set(appliedObject[appliedModel.primary]);
+      if (baseUrl) context.canvas.navbar.up.set(baseUrl);
+
+      return () => {
+        context.canvas.navbar.name.set(undefined);
+        context.canvas.navbar.up.set(undefined);
+      };
+    }
+  }, [
+    appliedModel,
+    appliedObject,
+    baseUrl,
+    context.canvas.navbar.name,
+    context.canvas.navbar.up,
+  ]);
+  useEffect(() => {
+    if (isEqual(appliedObject, newObject)) {
       context.canvas.navbar.actions.remove("update");
     } else {
       context.canvas.navbar.actions.add("update", {
@@ -71,25 +122,35 @@ const ObjectDetail: React.FC<{
     }
 
     return () => context.canvas.navbar.actions.remove("update");
-  }, [
-    object,
-    newObject,
-    context.canvas.navbar.name,
-    context.canvas.navbar.actions,
-    context.data.objects,
-    context.canvas.interact,
-    save,
-  ]);
+  }, [appliedObject, context.canvas.navbar.actions, newObject, save]);
+  useEffect(() => {
+    appliedObject._id ? setViewMode("view") : setViewMode("edit");
+  }, [appliedObject]);
 
   // UI
-  if (!model || !object || !newObject) return <context.UI.Loading />;
-  if (!(model.layouts || {})[layoutKey || "default"])
+  if (
+    !appliedModel ||
+    (!appliedObject && appliedObject !== null) ||
+    (!newObject && newObject !== null)
+  )
+    return <context.UI.Loading />;
+
+  let layout: ModelLayoutType | undefined = undefined;
+  if (layoutKey) {
+    layoutKey.map((lk) => {
+      if (appliedModel.layouts[lk] && !layout) {
+        layout = appliedModel.layouts[lk];
+      }
+    });
+  }
+  if (!layout) layout = appliedModel.layouts["default"];
+
+  if (!layout)
     return (
       <context.UI.Design.Animation.Animate>
         Layout {layoutKey || "default"} not found.
       </context.UI.Design.Animation.Animate>
     );
-  const layout = model.layouts[layoutKey || "default"];
 
   return (
     <div
@@ -104,7 +165,7 @@ const ObjectDetail: React.FC<{
           save();
         } else if (event.which === 27) {
           setViewMode("view");
-          setNewObject(object);
+          setNewObject(appliedObject);
         }
       }}
     >
@@ -121,7 +182,13 @@ const ObjectDetail: React.FC<{
                 return (
                   <Button
                     key={button}
-                    onClick={() => action.onClick(context, object, model)}
+                    onClick={() =>
+                      action.onClick(
+                        context,
+                        appliedObject as ObjectType,
+                        appliedModel
+                      )
+                    }
                     style={{ color: "white" }}
                   >
                     {button}
@@ -144,8 +211,8 @@ const ObjectDetail: React.FC<{
               <Grid item xs={2} key={`facts-${f}`}>
                 <context.UI.Data.FieldDisplay
                   context={context}
-                  model={model}
-                  object={object}
+                  model={appliedModel}
+                  object={appliedObject as ObjectType}
                   fieldKey={f}
                 />
               </Grid>
@@ -158,12 +225,13 @@ const ObjectDetail: React.FC<{
           layoutItem={layoutItem}
           context={context}
           key={`layoutItem-${layoutItemIndex}`}
-          model={model}
-          object={object}
-          newObject={newObject}
-          updateField={(key, value) =>
-            setNewObject({ ...newObject, [key]: value })
-          }
+          model={appliedModel}
+          object={appliedObject as ObjectType}
+          newObject={newObject as ObjectType}
+          updateField={(key, value) => {
+            onChange && onChange({ ...(newObject || {}), [key]: value });
+            setNewObject({ ...(newObject || {}), [key]: value });
+          }}
           viewMode={viewMode}
           selectedField={selectedField}
           selectField={(fieldName) => {

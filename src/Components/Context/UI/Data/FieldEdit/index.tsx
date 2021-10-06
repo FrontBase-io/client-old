@@ -7,7 +7,7 @@ const FieldEdit: React.FC<{
   selectedField?: string;
   fieldKey: string;
   model: ModelType;
-  object: ObjectType;
+  object?: ObjectType;
   context: AppContext;
   onChange: (newValue: string | Date) => void;
   hasChanged?: boolean;
@@ -23,7 +23,7 @@ const FieldEdit: React.FC<{
   // Vars
   const [theme] = useGlobal<any>("theme");
   const modelField = model.fields[fieldKey];
-  const objectField = object[fieldKey];
+  const objectField = object && object[fieldKey];
 
   // UI
   return (

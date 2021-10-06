@@ -6,7 +6,7 @@ import { ModelType, ObjectType } from "../../../../../Utils/Types";
 
 const DisplayRelationship: React.FC<{
   model: ModelType;
-  object: ObjectType;
+  object?: ObjectType;
   fieldKey: string;
   context: AppContext;
 }> = ({ model, object, fieldKey, context }) => {
@@ -15,19 +15,21 @@ const DisplayRelationship: React.FC<{
   const [targetModel, setTargetModel] = useState<ModelType>();
   // Lifecycle
   useEffect(() => {
-    context.data.objects.get(
-      model.fields[fieldKey].relationshipTo!,
-      { _id: object[fieldKey] },
-      (objects) => {
-        context.data.models.get(
-          model.fields[fieldKey].relationshipTo!,
-          (retrievedModel) => {
-            setTargetModel(retrievedModel);
-            setTargetObject(objects[0]);
-          }
-        );
-      }
-    );
+    if (object) {
+      context.data.objects.get(
+        model.fields[fieldKey].relationshipTo!,
+        { _id: object[fieldKey] },
+        (objects) => {
+          context.data.models.get(
+            model.fields[fieldKey].relationshipTo!,
+            (retrievedModel) => {
+              setTargetModel(retrievedModel);
+              setTargetObject(objects[0]);
+            }
+          );
+        }
+      );
+    }
   }, [
     context.data.models,
     context.data.objects,
@@ -40,7 +42,7 @@ const DisplayRelationship: React.FC<{
   return (
     <Link to={`/o/${targetObject._id}`}>
       <Typography color="primary">
-        {targetObject[targetModel.primary]}
+        {targetObject && targetObject[targetModel.primary]}
       </Typography>
     </Link>
   );

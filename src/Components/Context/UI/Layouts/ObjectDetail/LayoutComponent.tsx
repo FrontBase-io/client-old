@@ -10,8 +10,8 @@ const LayoutComponent: React.FC<{
   layoutItem: LayoutItemType;
   context: AppContext;
   model: ModelType;
-  object: ObjectType;
-  newObject: ObjectType;
+  object?: ObjectType;
+  newObject?: ObjectType;
   viewMode: "view" | "edit";
   selectedField?: string;
   selectField: (fieldName: string) => void;

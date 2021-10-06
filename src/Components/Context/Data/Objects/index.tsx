@@ -1,6 +1,18 @@
 import Socket from "../../../../Utils/Socket";
 import { ObjectType, ResponseType } from "../../../../Utils/Types";
 
+const create = (modelKey: string, newObject: {}) =>
+  new Promise((resolve, reject) => {
+    Socket.emit(
+      "createObject",
+      modelKey,
+      newObject,
+      (response: ResponseType) => {
+        response.success ? resolve(response.result) : reject(response.reason);
+      }
+    );
+  });
+
 // Get object
 const get = (
   modelKey: string,
@@ -33,6 +45,6 @@ const update = (_id: string, newObject: { [key: string]: any }) =>
     });
   });
 
-const updateFunctions = { get, update };
+const updateFunctions = { create, get, update };
 
 export default updateFunctions;

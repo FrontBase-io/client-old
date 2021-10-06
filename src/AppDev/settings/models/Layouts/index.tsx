@@ -25,7 +25,7 @@ const ModelLayouts: React.FC<{ context: AppContext; model: ModelType }> = ({
               title: "Create Layout",
               size: "sm",
               fields: {
-                label: { label: "Layout label" },
+                label: { label: "Layout label", linkToKeyField: "key" },
                 key: { label: "Layout key", type: "key" },
               },
               actions: [

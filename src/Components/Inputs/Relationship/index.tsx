@@ -5,14 +5,9 @@ import { AppContext } from "../../Context";
 import Select from "react-select";
 import { filter } from "lodash";
 
-interface OptionType {
-  label: string;
-  value: string;
-}
-
 const RelationshipInput: React.FC<{
   context: AppContext;
-  object: ObjectType;
+  object?: ObjectType;
   modelKey: string;
   model?: ModelType;
   label: string;

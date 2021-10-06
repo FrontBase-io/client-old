@@ -20,7 +20,12 @@ export interface ObjectType {
   meta: { model: string };
   [key: string]: any;
 }
-
+export interface PreObjectType {
+  // Optional object type before creation
+  _id?: string;
+  meta?: { model: string };
+  [key: string]: any;
+}
 /* Models */
 export interface ModelType {
   _id: string;

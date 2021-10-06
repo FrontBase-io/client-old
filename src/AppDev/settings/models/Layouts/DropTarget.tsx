@@ -32,7 +32,7 @@ const Dustbin: FC<{
         };
 
         if (id === "root") {
-          setLayout([...layout, newLayoutItem]);
+          setLayout([...(layout || []), newLayoutItem]);
           setHasDropped(false);
         } else {
           const newLayout = cloneDeep(layout);

@@ -14,13 +14,13 @@ const FieldDisplay: React.FC<{
   context: AppContext;
   fieldKey: string;
   model: ModelType;
-  object: ObjectType;
+  object?: ObjectType;
   onDoubleClick?: (fieldName: string) => void;
   withoutLabel?: true;
 }> = ({ model, object, onDoubleClick, fieldKey, withoutLabel, context }) => {
   // Vars
   const modelField = model.fields[fieldKey];
-  const objectField = object[fieldKey];
+  const objectField = object && object[fieldKey];
 
   // Lifecycle
   // UI

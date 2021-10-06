@@ -11,8 +11,8 @@ const Field: React.FC<{
   context: AppContext;
   layoutItem: LayoutItemType;
   model: ModelType;
-  object: ObjectType;
-  newObject: ObjectType;
+  object?: ObjectType;
+  newObject?: ObjectType;
   viewMode: "view" | "edit";
   selectedField?: string;
   selectField: (fieldName: string) => void;
@@ -30,7 +30,8 @@ const Field: React.FC<{
   updateField,
 }) => {
   // Vars
-  const objectField = newObject[layoutItem.args?.field];
+  const objectField = newObject ? newObject[layoutItem.args?.field] : "";
+
   // Lifecycle
   // UI
   return viewMode === "view" ? (
@@ -49,7 +50,9 @@ const Field: React.FC<{
       fieldKey={layoutItem.args?.field}
       context={context}
       onChange={(newValue) => updateField(layoutItem.args?.field, newValue)}
-      hasChanged={objectField !== object[layoutItem.args?.field]}
+      hasChanged={
+        objectField !== (object ? object[layoutItem.args?.field] : null)
+      }
     />
   );
 };

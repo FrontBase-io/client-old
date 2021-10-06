@@ -27,8 +27,6 @@ import Actions from "../../../../Components/Actions/index";
 
 const actionOptions: SelectOptionType[] = [];
 map(Actions, (action, actionKey) => {
-  console.log(action);
-
   if (action.accepts.includes("None") || action.accepts.includes("One")) {
     actionOptions.push({ label: action.label, value: actionKey });
   }
@@ -144,7 +142,7 @@ const ModelLayoutDetail: React.FC<{
                     setLayout({ ...layout, layout: newLayout })
                   }
                 >
-                  {layout.layout.map((layoutItem, index) => (
+                  {layout.layout?.map((layoutItem, index) => (
                     <LayoutItem
                       layoutItem={layoutItem}
                       key={index}
@@ -171,6 +169,7 @@ const ModelLayoutDetail: React.FC<{
                     const newModel = {
                       ...model,
                       layouts: {
+                        ...model.layouts,
                         [selectedKey]: layout,
                       },
                     };
@@ -273,10 +272,10 @@ const wrappers: { [key: string]: React.FC<{ layoutItem: LayoutItemType }> } = {
       item
       style={{ overflow: "hidden" }}
       xs={layoutItem.args?.xs}
-      sm={layoutItem.args?.xs}
-      md={layoutItem.args?.xs}
-      lg={layoutItem.args?.xs}
-      xl={layoutItem.args?.xs}
+      sm={layoutItem.args?.sm}
+      md={layoutItem.args?.md}
+      lg={layoutItem.args?.lg}
+      xl={layoutItem.args?.xl}
     >
       {children}
     </Grid>

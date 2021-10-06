@@ -17,7 +17,7 @@ const DeleteAction = {
 
   onClick(
     context: AppContext,
-    objects: ObjectType | ObjectType[],
+    objects: ObjectType | ObjectType[] | null,
     model: ModelType
   ) {
     context.canvas.interact.dialog({
@@ -34,7 +34,7 @@ const DeleteAction = {
             </>
           ) : (
             <>
-              {model.label} <i>{objects[model.primary]}</i>
+              {model.label} <i>{objects && objects[model.primary]}</i>
             </>
           )}{" "}
           will be moved to the trash!
