@@ -7,6 +7,7 @@ import List from "@mui/material/List";
 import {
   Button,
   ButtonGroup,
+  IconButton,
   ListItem,
   ListItemText,
   ListSubheader,
@@ -16,7 +17,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { map } from "lodash";
+import { find, map } from "lodash";
 import { useHistory } from "react-router";
 import FieldDisplay from "../../Data/FieldDisplay";
 import Actions from "../../../../Actions";
@@ -30,6 +31,11 @@ const ObjectList: React.FC<{
   // Vars
   const [model, setModel] = useState<ModelType>(inputModel!);
   const [objects, setObjects] = useState<ObjectType[]>();
+  const [singleActionAnchorEl, setSingleActionAnchorEl] =
+    useState<HTMLButtonElement | null>(null);
+  const [manyActionAnchorEl, setManyActionAnchorEl] =
+    useState<HTMLButtonElement | null>(null);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   //- Lists
   const [selectedList, setSelectedList] = useState<string | undefined>();
@@ -65,21 +71,77 @@ const ObjectList: React.FC<{
     <context.UI.Design.Animation.Animate>
       <context.UI.Design.Card>
         {selectedList && model.lists[selectedList].actions && (
-          <div style={{ float: "right", padding: 5 }}>
-            <ButtonGroup color="primary">
-              {model.lists[selectedList].actions?.global.map((button) => {
-                const action = Actions[button];
-                return (
-                  <Button
-                    key={`button-${button}`}
-                    onClick={() => action.onClick(context, null, model)}
-                  >
-                    {action.label}
-                  </Button>
-                );
-              })}
-            </ButtonGroup>
-          </div>
+          <>
+            {model.lists[selectedList].actions?.global && (
+              <div style={{ float: "right", padding: 5 }}>
+                <ButtonGroup color="primary">
+                  {model.lists[selectedList].actions?.global.map((button) => {
+                    const action = Actions[button];
+                    return (
+                      <Button
+                        key={`button-${button}`}
+                        onClick={() =>
+                          action.onClick(
+                            context,
+                            find(
+                              objects!,
+                              (o) => o._id === selectedItems[0]
+                            ) as ObjectType,
+                            model
+                          )
+                        }
+                      >
+                        {action.label}
+                      </Button>
+                    );
+                  })}
+                </ButtonGroup>
+              </div>
+            )}
+            {model.lists[selectedList].actions?.single && (
+              <Popover
+                id="singleActions"
+                open={Boolean(singleActionAnchorEl)}
+                anchorEl={singleActionAnchorEl}
+                onClose={() => setSingleActionAnchorEl(null)}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "center",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "center",
+                }}
+              >
+                <List>
+                  <ListSubheader>Actions</ListSubheader>
+                  {model.lists[selectedList].actions?.single.map(
+                    (actionKey) => {
+                      const action = Actions[actionKey];
+                      return (
+                        <ListItem
+                          key={`singleAction-${actionKey}`}
+                          button
+                          onClick={() =>
+                            action.onClick(
+                              context,
+                              find(
+                                objects!,
+                                (o) => o._id === selectedItems[0]
+                              ) as ObjectType,
+                              model
+                            )
+                          }
+                        >
+                          {action.label}
+                        </ListItem>
+                      );
+                    }
+                  )}
+                </List>
+              </Popover>
+            )}
+          </>
         )}
         <Typography variant="h6">{model.label_plural}</Typography>
         <Typography variant="body2" style={{ cursor: "pointer" }}>
@@ -153,6 +215,7 @@ const ObjectList: React.FC<{
                     </TableCell>
                   );
                 })}
+                <TableCell />
               </TableRow>
             </TableHead>
             <TableBody>
@@ -176,6 +239,18 @@ const ObjectList: React.FC<{
                         />
                       </TableCell>
                     ))}
+                    <TableCell width={20}>
+                      <IconButton
+                        onClick={(
+                          event: React.MouseEvent<HTMLButtonElement>
+                        ) => {
+                          setSelectedItems([object._id]);
+                          setSingleActionAnchorEl(event.currentTarget);
+                        }}
+                      >
+                        <context.UI.Design.Icon icon="ellipsis-v" size={14} />
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 ))
               ) : (

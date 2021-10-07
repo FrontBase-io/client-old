@@ -1,4 +1,10 @@
-import { Grid, ListItem, ListItemText, Typography } from "@mui/material";
+import {
+  Divider,
+  Grid,
+  ListItem,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import React, { useState, useEffect } from "react";
@@ -205,6 +211,7 @@ const ModelFieldDetail: React.FC<{
                             <ListItemText>{option.label}</ListItemText>
                           </ListItem>
                         ))}
+                        <Divider />
                         <ListItem
                           button
                           onClick={() =>
@@ -212,7 +219,10 @@ const ModelFieldDetail: React.FC<{
                               display: true,
                               title: "Add option",
                               fields: {
-                                label: { label: "Label" },
+                                label: {
+                                  label: "Label",
+                                  linkToKeyField: "value",
+                                },
                                 value: { label: "Value", type: "key" },
                               },
                               actions: [
