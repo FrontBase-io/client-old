@@ -37,9 +37,9 @@ const Dustbin: FC<{
         } else {
           const newLayout = cloneDeep(layout);
           modifyRecursive(newLayout, id, (item) => {
-            const newItems = item.items || [];
+            const newItems = item!.items || [];
             newItems.push(newLayoutItem);
-            item.items = newItems;
+            item!.items = newItems;
             return item;
           });
           setLayout(newLayout);

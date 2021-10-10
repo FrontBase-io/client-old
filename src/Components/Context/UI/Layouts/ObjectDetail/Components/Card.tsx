@@ -1,6 +1,6 @@
-import { AppContext } from "../../../..";
+import { LayoutComponentPropType } from ".";
 
-const Card: React.FC<{ context: AppContext }> = ({ context, children }) => {
+const Card: React.FC<LayoutComponentPropType> = ({ context, children }) => {
   return <context.UI.Design.Card>{children}</context.UI.Design.Card>;
 };
 

@@ -1,25 +1,9 @@
-import { AppContext } from "../../../..";
-import {
-  LayoutItemType,
-  ModelType,
-  ObjectType,
-} from "../../../../../../Utils/Types";
+import { LayoutComponentPropType } from ".";
 import FieldDisplay from "../../../Data/FieldDisplay";
 import FieldEdit from "../../../Data/FieldEdit";
 
-const Field: React.FC<{
-  context: AppContext;
-  layoutItem: LayoutItemType;
-  model: ModelType;
-  object?: ObjectType;
-  newObject?: ObjectType;
-  viewMode: "view" | "edit";
-  selectedField?: string;
-  selectField: (fieldName: string) => void;
-  updateField: (key: string, newValue: any) => void;
-}> = ({
+const Field: React.FC<LayoutComponentPropType> = ({
   context,
-  children,
   layoutItem,
   model,
   object,

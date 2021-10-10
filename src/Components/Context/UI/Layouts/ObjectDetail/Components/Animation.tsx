@@ -1,10 +1,10 @@
-import { AppContext } from "../../../..";
-import { LayoutItemType } from "../../../../../../Utils/Types";
+import { LayoutComponentPropType } from ".";
 
-const Animation: React.FC<{
-  context: AppContext;
-  layoutItem: LayoutItemType;
-}> = ({ context, children, layoutItem }) => {
+const Animation: React.FC<LayoutComponentPropType> = ({
+  context,
+  children,
+  layoutItem,
+}) => {
   return (
     <context.UI.Design.Animation.Animate>
       {children}

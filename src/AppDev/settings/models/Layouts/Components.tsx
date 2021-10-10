@@ -1,8 +1,9 @@
 import { ListSubheader } from "@mui/material";
 import List from "@mui/material/List";
-import React from "react";
+import { filter, map } from "lodash";
+import React, { useEffect, useState } from "react";
 import { AppContext } from "../../../../Components/Context";
-import { ModelType } from "../../../../Utils/Types";
+import { ModelFieldType, ModelType } from "../../../../Utils/Types";
 import DragItem from "./DragItem";
 
 const ModelLayoutComponents: React.FC<{
@@ -16,6 +17,15 @@ const ModelLayoutComponents: React.FC<{
   },
   model,
 }) => {
+  // Vars
+  const [formulas, setFormulas] = useState<ModelFieldType[]>([]);
+
+  // Lifecycle
+  useEffect(() => {
+    setFormulas(filter(model.fields, (o) => o.type === "relationship"));
+  }, [model]);
+
+  // UI
   return (
     <List>
       <Animation.Container>
@@ -29,7 +39,7 @@ const ModelLayoutComponents: React.FC<{
             label="Animate"
           />
         </Animation.Item>
-        <Animation.Item key="component-GridItem">
+        <Animation.Item key="component-AnimationContainer">
           <DragItem
             layoutItem={{
               label: "Animation Container",
@@ -39,7 +49,7 @@ const ModelLayoutComponents: React.FC<{
             label="Animation Container"
           />
         </Animation.Item>
-        <Animation.Item key="component-GridItem">
+        <Animation.Item key="component-AnimationItem">
           <DragItem
             layoutItem={{ label: "Animation Item", type: "AnimationItem" }}
             icon="angle-up"
@@ -73,6 +83,30 @@ const ModelLayoutComponents: React.FC<{
             label="Card"
           />
         </Animation.Item>
+        {formulas.length > 0 && (
+          <>
+            <Animation.Item key="Relationships">
+              <ListSubheader>Relationships</ListSubheader>
+            </Animation.Item>
+            {map(
+              model.fields,
+              (field, key) =>
+                field.type === "relationship" && (
+                  <Animation.Item key={`component-RelatedItem-${key}`}>
+                    <DragItem
+                      layoutItem={{
+                        label: field.label,
+                        type: "RelatedItem",
+                        args: { field: key },
+                      }}
+                      icon="address-card"
+                      label={`Related item: ${field.label}`}
+                    />
+                  </Animation.Item>
+                )
+            )}
+          </>
+        )}
       </Animation.Container>
     </List>
   );

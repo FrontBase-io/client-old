@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
-import { AppContext } from "../../../..";
+import { LayoutComponentPropType } from ".";
 
-const GridContainer: React.FC<{ context: AppContext }> = ({
+const GridContainer: React.FC<LayoutComponentPropType> = ({
   context,
   children,
 }) => {

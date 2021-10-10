@@ -53,6 +53,7 @@ const LayoutComponent: React.FC<{
           selectedField={selectedField}
           selectField={selectField}
           updateField={updateField}
+          key={`layoutComponent-${subLayoutItemIndex}`}
         />
       ))}
     </Component>

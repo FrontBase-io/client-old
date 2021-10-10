@@ -1,5 +1,4 @@
-import { Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AppContext } from "../../..";
 import { ModelType, ObjectType } from "../../../../../Utils/Types";
@@ -42,12 +41,12 @@ const DisplayRelationshipM: React.FC<{
   return (
     <>
       {targetObjects.map((obj, objIndex) => (
-        <>
+        <Fragment key={objIndex}>
           <Link to={`/o/${obj._id}`} key={obj._id}>
             {obj[targetModel.primary]}
           </Link>
           {targetObjects.length - 1 > objIndex && ", "}{" "}
-        </>
+        </Fragment>
       ))}
     </>
   );

@@ -1,4 +1,4 @@
-import { Button, Grid, IconButton, Typography } from "@mui/material";
+import { Button, Grid, IconButton, Tooltip, Typography } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { AppContext } from "../../../../Components/Context";
 import {
@@ -151,6 +151,7 @@ const ModelLayoutDetail: React.FC<{
                         setLayout({ ...layout, layout: newLayout })
                       }
                       context={context}
+                      model={model}
                     />
                   ))}
                 </DropTarget>
@@ -215,6 +216,44 @@ const ModelLayoutDetail: React.FC<{
 
 export default ModelLayoutDetail;
 
+// Component for field selection (RelatedItemType)
+const SelectFieldComponent: React.FC<{
+  context: AppContext;
+  model: ModelType;
+  onChange: (arg: string[] | string) => void;
+  value: string[];
+  field: string;
+  multi?: true;
+}> = ({ context, model, onChange, value, field, multi }) => {
+  // Vars
+  const [targetModel, setTargetModel] = useState<ModelType>();
+
+  // Lifecycle
+  useEffect(() => {
+    context.data.models.get(
+      model.fields[field].relationshipTo!,
+      (fetchedModel) => setTargetModel(fetchedModel)
+    );
+  }, [model, field, context.data.models]);
+
+  // UI
+  if (!targetModel) return <context.UI.Loading />;
+  return (
+    <context.UI.Inputs.Select
+      label="Fields"
+      multi={multi}
+      options={context.utils.listifyObjectForSelect(
+        targetModel.fields,
+        "label"
+      )}
+      value={value || []}
+      onChange={(value) =>
+        multi ? onChange(value as string[]) : onChange(value as string)
+      }
+    />
+  );
+};
+
 const hasDropZone = [
   "GridContainer",
   "GridItem",
@@ -224,41 +263,43 @@ const hasDropZone = [
   "Card",
 ];
 
-const typeProperties: {
+const typeProperties: () => {
   [key: string]: { [key: string]: DialogFieldType };
-} = {
-  GridItem: {
-    xs: {
-      label: "Extra small",
-      type: "number",
-      width: 4,
-      valueModifier: (value) => (value > 0 ? (value < 13 ? value : 12) : 1),
+} = () => {
+  return {
+    GridItem: {
+      xs: {
+        label: "Extra small",
+        type: "number",
+        width: 4,
+        valueModifier: (value) => (value > 0 ? (value < 13 ? value : 12) : 1),
+      },
+      sm: {
+        label: "Small",
+        type: "number",
+        width: 4,
+        valueModifier: (value) => (value > 0 ? (value < 13 ? value : 12) : 1),
+      },
+      md: {
+        label: "Medium",
+        type: "number",
+        width: 4,
+        valueModifier: (value) => (value > 0 ? (value < 13 ? value : 12) : 1),
+      },
+      lg: {
+        label: "Large",
+        type: "number",
+        width: 4,
+        valueModifier: (value) => (value > 0 ? (value < 13 ? value : 12) : 1),
+      },
+      xl: {
+        label: "Extra large",
+        type: "number",
+        width: 4,
+        valueModifier: (value) => (value > 0 ? (value < 13 ? value : 12) : 1),
+      },
     },
-    sm: {
-      label: "Small",
-      type: "number",
-      width: 4,
-      valueModifier: (value) => (value > 0 ? (value < 13 ? value : 12) : 1),
-    },
-    md: {
-      label: "Medium",
-      type: "number",
-      width: 4,
-      valueModifier: (value) => (value > 0 ? (value < 13 ? value : 12) : 1),
-    },
-    lg: {
-      label: "Large",
-      type: "number",
-      width: 4,
-      valueModifier: (value) => (value > 0 ? (value < 13 ? value : 12) : 1),
-    },
-    xl: {
-      label: "Extra large",
-      type: "number",
-      width: 4,
-      valueModifier: (value) => (value > 0 ? (value < 13 ? value : 12) : 1),
-    },
-  },
+  };
 };
 
 const wrappers: { [key: string]: React.FC<{ layoutItem: LayoutItemType }> } = {
@@ -287,7 +328,8 @@ const LayoutItem: React.FC<{
   layout: LayoutItemType[];
   setLayout: (layout: LayoutItemType[]) => void;
   context: AppContext;
-}> = ({ layoutItem, layout, setLayout, context }) => {
+  model: ModelType;
+}> = ({ layoutItem, layout, setLayout, context, model }) => {
   // Vars
   const Wrapper = // Outer wrapper for everything that has a wrapper
     layoutItem.type !== "GridContainer"
@@ -302,50 +344,72 @@ const LayoutItem: React.FC<{
       <div className={styles.layoutItem}>
         {hasDropZone.includes(layoutItem.type) ? (
           <>
-            <Typography
-              variant="h6"
-              style={{ fontSize: 18, textAlign: "center" }}
-            >
-              {typeProperties[layoutItem.type] && (
-                <IconButton
-                  onClick={() =>
-                    context.canvas.interact.dialog({
-                      display: true,
-                      title: "Properties",
-                      fields: typeProperties[layoutItem.type],
-                      actionValues: layoutItem.args,
-                      actions: [
-                        {
-                          label: "Update",
-                          onClick: async (form, close) => {
-                            // Update the item
-                            const newLayout = cloneDeep(layout);
+            <div className={styles.layoutItemHeader}>
+              <div style={{ float: "right" }} className={styles.deleteIcon}>
+                <Tooltip title={`Delete ${layoutItem.label}`} placement="left">
+                  <IconButton
+                    onClick={async () => {
+                      const newLayout = cloneDeep(layout);
+                      await modifyRecursive(
+                        newLayout,
+                        layoutItem.key!,
+                        (item) => {
+                          return { pooP: true };
+                        }
+                      ).then((bl) => {
+                        console.log(newLayout, bl);
+                      });
+                    }}
+                  >
+                    <Icon icon="trash" size={14} />
+                  </IconButton>
+                </Tooltip>
+              </div>
+              <Typography
+                variant="h6"
+                style={{ fontSize: 18, textAlign: "center" }}
+              >
+                {typeProperties()[layoutItem.type] && (
+                  <IconButton
+                    onClick={() =>
+                      context.canvas.interact.dialog({
+                        display: true,
+                        title: "Properties",
+                        fields: typeProperties()[layoutItem.type],
+                        actionValues: layoutItem.args,
+                        actions: [
+                          {
+                            label: "Update",
+                            onClick: async (form, close) => {
+                              // Update the item
+                              const newLayout = cloneDeep(layout);
 
-                            modifyRecursive(
-                              newLayout,
-                              layoutItem.key!,
-                              (item) => {
-                                const newItem = item;
-                                newItem.args = {
-                                  ...(item.args || {}),
-                                  ...form,
-                                };
-                                return newItem;
-                              }
-                            );
-                            setLayout(newLayout);
-                            close();
+                              modifyRecursive(
+                                newLayout,
+                                layoutItem.key!,
+                                (item) => {
+                                  const newItem = item;
+                                  newItem!.args = {
+                                    ...(item!.args || {}),
+                                    ...form,
+                                  };
+                                  return newItem;
+                                }
+                              );
+                              setLayout(newLayout);
+                              close();
+                            },
                           },
-                        },
-                      ],
-                    })
-                  }
-                >
-                  <Icon icon="wrench" size={16} />
-                </IconButton>
-              )}
-              {layoutItem.label}
-            </Typography>
+                        ],
+                      })
+                    }
+                  >
+                    <Icon icon="wrench" size={16} />
+                  </IconButton>
+                )}
+                {layoutItem.label}
+              </Typography>
+            </div>
             <DropTarget
               id={layoutItem.key!}
               layout={layout}
@@ -359,11 +423,56 @@ const LayoutItem: React.FC<{
                     layout={layout}
                     setLayout={setLayout}
                     context={context}
+                    model={model}
                   />
                 ))}
               </SubWrapper>
             </DropTarget>
           </>
+        ) : layoutItem.type === "RelatedItem" ? (
+          <Typography variant="body1">
+            <Icon icon="address-card" style={{ marginRight: 10 }} />
+            <IconButton
+              onClick={() =>
+                context.canvas.interact.dialog({
+                  display: true,
+                  title: "Properties",
+                  fields: {
+                    fields: {
+                      label: "Fields",
+                      type: "custom",
+                      component: SelectFieldComponent,
+                      componentProps: { model, field: layoutItem.args?.field },
+                    },
+                  },
+                  actionValues: layoutItem.args,
+                  actions: [
+                    {
+                      label: "Update",
+                      onClick: async (form, close) => {
+                        // Update the item
+                        const newLayout = cloneDeep(layout);
+
+                        modifyRecursive(newLayout, layoutItem.key!, (item) => {
+                          const newItem = item;
+                          newItem!.args = {
+                            ...(item!.args || {}),
+                            ...form,
+                          };
+                          return newItem;
+                        });
+                        setLayout(newLayout);
+                        close();
+                      },
+                    },
+                  ],
+                })
+              }
+            >
+              <Icon icon="wrench" size={16} />
+            </IconButton>
+            {layoutItem.label}
+          </Typography>
         ) : (
           <Typography variant="body1">
             <Icon icon="font" style={{ marginRight: 10 }} />

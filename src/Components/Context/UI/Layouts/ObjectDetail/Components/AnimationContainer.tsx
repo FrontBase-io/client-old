@@ -1,6 +1,6 @@
-import { AppContext } from "../../../..";
+import { LayoutComponentPropType } from ".";
 
-const AnimationContainer: React.FC<{ context: AppContext }> = ({
+const AnimationContainer: React.FC<LayoutComponentPropType> = ({
   context,
   children,
 }) => {
