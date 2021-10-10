@@ -75,6 +75,17 @@ const FieldEdit: React.FC<{
           autoFocus={selectedField === fieldKey}
           onChange={(value) => onChange(value as string)}
         />
+      ) : modelField.type === "relationship_m" ? (
+        <context.UI.Inputs.Relationship
+          label={modelField.label}
+          multi
+          context={context}
+          modelKey={modelField.relationshipTo!}
+          object={object}
+          value={objectField}
+          autoFocus={selectedField === fieldKey}
+          onChange={(value) => onChange(value as string)}
+        />
       ) : modelField.type === "formula" ? (
         <>
           <Typography

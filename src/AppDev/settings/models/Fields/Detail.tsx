@@ -79,37 +79,39 @@ const ModelFieldDetail: React.FC<{
                       { label: "Number", value: "number" },
                       { label: "Options", value: "options" },
                       { label: "Relationship", value: "relationship" },
+                      { label: "Relationship (many)", value: "relationship_m" },
                       { label: "Date", value: "date" },
                       { label: "Formula", value: "formula" },
                     ]}
                   />
                 </Grid>
-                {field.type === "relationship" && (
-                  <>
-                    <Grid item xs={6}>
-                      <context.UI.Inputs.Select
-                        label="Relationship to"
-                        value={field.relationshipTo || ""}
-                        options={context.utils.listifyForSelect(
-                          models,
-                          "label",
-                          "key"
-                        )}
-                        onChange={(relationshipTo) =>
-                          setField({
-                            ...field,
-                            relationshipTo: relationshipTo as string,
-                          })
-                        }
-                      />
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography variant="body1">
-                        Filter relationship
-                      </Typography>
-                    </Grid>
-                  </>
-                )}
+                {field.type === "relationship" ||
+                  (field.type === "relationship_m" && (
+                    <>
+                      <Grid item xs={6}>
+                        <context.UI.Inputs.Select
+                          label="Relationship to"
+                          value={field.relationshipTo || ""}
+                          options={context.utils.listifyForSelect(
+                            models,
+                            "label",
+                            "key"
+                          )}
+                          onChange={(relationshipTo) =>
+                            setField({
+                              ...field,
+                              relationshipTo: relationshipTo as string,
+                            })
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Typography variant="body1">
+                          Filter relationship
+                        </Typography>
+                      </Grid>
+                    </>
+                  ))}
                 {field.type === "formula" && (
                   <FormulaDesigner
                     context={context}
@@ -121,6 +123,26 @@ const ModelFieldDetail: React.FC<{
                       setField({ ...field, formulaOutputType })
                     }
                   />
+                )}
+                {field.type === "text" && (
+                  <Grid item xs={12}>
+                    <context.UI.Inputs.Select
+                      label="Input type"
+                      value={field?.displayType || "textfield"}
+                      options={[
+                        { label: "Textfield", value: "textfield" },
+                        { label: "Textarea", value: "textarea" },
+                        { label: "Rich text", value: "html" },
+                        { label: "Markdown", value: "markdown" },
+                      ]}
+                      onChange={(displayType) =>
+                        setField({
+                          ...field,
+                          displayType: displayType as string,
+                        })
+                      }
+                    />
+                  </Grid>
                 )}
                 {field.type === "date" && (
                   <Grid item xs={12}>

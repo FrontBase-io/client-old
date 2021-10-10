@@ -48,9 +48,9 @@ const RelationshipInput: React.FC<{
     if (appliedModel) {
       context.data.objects.get(appliedModel.key, {}, (objects) => {
         const newOptions: SelectOptionType[] = [];
-        objects.map((o) => {
-          newOptions.push({ label: o[appliedModel.primary], value: o._id });
-        });
+        objects.map((o) =>
+          newOptions.push({ label: o[appliedModel.primary], value: o._id })
+        );
         setIsLoading(false);
         setOptions(newOptions);
       });
@@ -64,12 +64,24 @@ const RelationshipInput: React.FC<{
       <Select
         isLoading={isLoading}
         options={options}
+        isMulti={multi}
         value={
-          filter(options, (o) => {
-            return o.value === value;
-          })[0]
+          Array.isArray(value)
+            ? filter(options, (o) => value.includes(o.value))
+            : filter(options, (o) => o.value === value)[0]
         }
-        onChange={(selected) => onChange && onChange(selected?.value || "")}
+        onChange={(selected) => {
+          if (onChange) {
+            if (multi) {
+              const toReturn: string[] = [];
+              selected.map((s) => toReturn.push(s.value));
+              onChange(toReturn);
+            } else {
+              //@ts-ignore
+              onChange(selected?.value || "");
+            }
+          }
+        }}
       />
     </label>
   );

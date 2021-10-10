@@ -54,9 +54,18 @@ export interface ModelType {
 // Field
 export interface ModelFieldType {
   label: string;
-  type?: "text" | "number" | "relationship" | "formula" | "options" | "date";
+  type?:
+    | "text"
+    | "number"
+    | "relationship"
+    | "relationship_m"
+    | "formula"
+    | "options"
+    | "date";
   required?: boolean;
   unique?: boolean;
+  // Text
+  displayType?: string;
   // Options
   selectMultiple?: boolean;
   optionsDisplayAs?: "dropdown" | "list" | string;
@@ -130,6 +139,7 @@ export interface ListItemType {
   label: string;
   key: string;
   icon?: string;
+  secondary?: string;
   object?: any;
 }
 

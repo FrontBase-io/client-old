@@ -1,4 +1,5 @@
 import {
+  Divider,
   Grid,
   List,
   ListItem,
@@ -76,16 +77,24 @@ const ListDetailLayout: React.FC<{
                             />
                           </ListItemIcon>
                         )}
-                        <ListItemText>{menuItem.label}</ListItemText>
+                        <ListItemText
+                          primary={menuItem.label}
+                          secondary={menuItem.secondary}
+                        />
                       </ListItem>
                     </context.UI.Design.Animation.Item>
                   ))}
                   {create && (
-                    <context.UI.Design.Animation.Item key="create">
-                      <ListItem button onClick={create.onClick}>
-                        <ListItemText>{create.label || "Create"}</ListItemText>
-                      </ListItem>
-                    </context.UI.Design.Animation.Item>
+                    <>
+                      <Divider />
+                      <context.UI.Design.Animation.Item key="create">
+                        <ListItem button onClick={create.onClick}>
+                          <ListItemText>
+                            {create.label || "Create"}
+                          </ListItemText>
+                        </ListItem>
+                      </context.UI.Design.Animation.Item>
+                    </>
                   )}
                 </context.UI.Design.Animation.Container>
               </List>

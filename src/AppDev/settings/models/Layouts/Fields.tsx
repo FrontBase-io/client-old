@@ -23,7 +23,8 @@ const ModelLayoutFields: React.FC<{
           const map: { [key: string]: string } = {
             text: "font",
             number: "sort-numeric-down",
-            relationship: "bezier-curve",
+            relationship: "link",
+            relationship_m: "network-wired",
             formula: "flask",
             options: "list",
             date: "calendar-alt",

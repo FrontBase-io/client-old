@@ -122,7 +122,7 @@ const ObjectList: React.FC<{
                         <ListItem
                           key={`singleAction-${actionKey}`}
                           button
-                          onClick={() =>
+                          onClick={() =>{
                             action.onClick(
                               context,
                               find(
@@ -130,7 +130,9 @@ const ObjectList: React.FC<{
                                 (o) => o._id === selectedItems[0]
                               ) as ObjectType,
                               model
-                            )
+                            );
+                          setSingleActionAnchorEl(null)
+                          }
                           }
                         >
                           {action.label}

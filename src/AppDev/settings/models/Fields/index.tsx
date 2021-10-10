@@ -12,12 +12,18 @@ const ModelFields: React.FC<{ context: AppContext; model: ModelType }> = ({
       <context.UI.Layouts.ListDetailLayout
         context={context}
         title="Models"
-        items={context.utils.listifyObject(model.fields, "label", "type")}
+        items={context.utils.listifyObject(
+          model.fields,
+          "label",
+          "type",
+          "type"
+        )}
         transformIcon={(icon: string) => {
           const map: { [key: string]: string } = {
             text: "font",
             number: "sort-numeric-down",
-            relationship: "bezier-curve",
+            relationship: "link",
+            relationship_m: "network-wired",
             formula: "flask",
             options: "list",
             date: "calendar-alt",

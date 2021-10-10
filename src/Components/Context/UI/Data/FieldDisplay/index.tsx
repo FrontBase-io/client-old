@@ -9,6 +9,7 @@ import format from "date-fns/format";
 import parseISO from "date-fns/parseISO";
 import DisplayRelationship from "./Relationship";
 import { AppContext } from "../../..";
+import DisplayRelationshipM from "./Relationship_m";
 
 const FieldDisplay: React.FC<{
   context: AppContext;
@@ -40,6 +41,13 @@ const FieldDisplay: React.FC<{
         <Typography variant="body1">{objectField}</Typography>
       ) : modelField.type === "relationship" ? (
         <DisplayRelationship
+          context={context}
+          model={model}
+          object={object}
+          fieldKey={fieldKey}
+        />
+      ) : modelField.type === "relationship_m" ? (
+        <DisplayRelationshipM
           context={context}
           model={model}
           object={object}

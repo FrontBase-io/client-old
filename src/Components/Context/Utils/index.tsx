@@ -22,7 +22,8 @@ const listify = (
 const listifyObject = (
   list: { [key: string]: any },
   label: string,
-  icon?: string
+  icon?: string,
+  secondary?: string
 ) => {
   const newArray: ListItemType[] = [];
   map(list || {}, (item, key: string) =>
@@ -30,6 +31,7 @@ const listifyObject = (
       label: item[label],
       key: key,
       icon: icon ? item[icon] : undefined,
+      secondary: secondary ? item[secondary] : undefined,
       object: item,
     })
   );
