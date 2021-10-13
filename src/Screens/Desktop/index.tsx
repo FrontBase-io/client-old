@@ -22,6 +22,7 @@ import Typography from "@mui/material/Typography";
 import styles from "./styles.module.scss";
 import { map } from "lodash";
 import Tooltip from "@mui/material/Tooltip";
+import O from "../../AppDev/system/o";
 
 const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
   // Vars
@@ -100,6 +101,11 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
           </AppBar>
           <div className={styles.canvasContent}>
             <Switch>
+              <Route
+                path="/o/:objectId"
+                render={(args) => <O id={args.match.params.objectId} />}
+              />
+
               <Route
                 path="/:appKey"
                 render={(args) => {

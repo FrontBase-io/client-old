@@ -7,7 +7,8 @@ const app = {
   handlers: {
     "object-detail": {
       label: "Open object in explorer",
-      url: "/{model.key_plural}/{object._id}",
+      url: "/{model.key}/{object._id}",
+      accepts: "*",
     },
   },
 

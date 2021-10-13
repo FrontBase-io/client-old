@@ -59,6 +59,20 @@ const update = (_id: string, newObject: { [key: string]: any }) =>
     });
   });
 
-const updateFunctions = { create, get, update, trash };
+// Turn objectId into modelKey
+const turnObjectIdIntoModelKey = (_id: string) =>
+  new Promise<string>((resolve, reject) => {
+    Socket.emit("turnObjectIdIntoModelKey", _id, (response: ResponseType) =>
+      resolve(response.modelKey)
+    );
+  });
 
-export default updateFunctions;
+const objectFunctions = {
+  create,
+  get,
+  update,
+  trash,
+  turnObjectIdIntoModelKey,
+};
+
+export default objectFunctions;

@@ -28,4 +28,5 @@ const update = (model: {}) =>
     });
   });
 
-export default { getAll, update, get };
+const modelFunctions = { getAll, update, get };
+export default modelFunctions;

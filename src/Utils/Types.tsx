@@ -40,6 +40,7 @@ export interface ModelType {
   fields: { [key: string]: ModelFieldType };
   layouts: { [key: string]: ModelLayoutType };
   lists: { [key: string]: ModelListType };
+  handler?: string;
   permissions: {
     create: string[];
     read: string[];
@@ -117,7 +118,13 @@ export interface AppPageType {
   props?: { [key: string]: any };
 }
 export interface AppCodeType {
-  handlers?: { [key: string]: { url: string; label: string } };
+  handlers?: {
+    [key: string]: {
+      url: string;
+      label: string;
+      accepts: string[] | string | "*";
+    };
+  };
   settings?: {
     desktop?: {};
     mobile?: { pages?: string };
