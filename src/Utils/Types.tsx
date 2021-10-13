@@ -102,6 +102,7 @@ export interface AppObjectType extends ObjectType {
   key: string;
   color: ColorType;
 }
+
 export interface AppPageType {
   label: string;
   key: string;
@@ -116,8 +117,16 @@ export interface AppPageType {
   props?: { [key: string]: any };
 }
 export interface AppCodeType {
-  settings?: { desktop?: {}; mobile?: { pages: "bottom" } };
-  getPages: () => Promise<AppPageType[]>;
+  handlers?: { [key: string]: { url: string; label: string } };
+  settings?: {
+    desktop?: {};
+    mobile?: { pages?: string };
+    pages?: {
+      searchable?: boolean;
+      groups?: { enabled?: boolean; collapsible?: boolean };
+    };
+  };
+  getPages: (context: AppContext) => Promise<AppPageType[]>;
 }
 export interface LayoutItemType {
   key?: string;
@@ -190,3 +199,11 @@ export interface SelectOptionType {
   label: string;
   value: string;
 }
+
+export interface ListDetailType {
+  context: AppContext;
+  selectedKey: string;
+  item: ListItemType;
+}
+
+// Specific object types

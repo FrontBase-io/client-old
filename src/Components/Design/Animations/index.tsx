@@ -35,10 +35,10 @@ const Animate: React.FC = ({ children }) => {
 
 const Container: React.FC = ({ children }) => (
   <motion.div
-    className="container"
     variants={container}
     initial="hidden"
     animate="visible"
+    style={{ height: "100%" }}
   >
     {children}
   </motion.div>

@@ -1,17 +1,18 @@
+import { AppPageType } from "../../Utils/Types";
 import B from "./B";
 import PageModels from "./models";
+import PageSettings from "./settings";
 
-export default class App {
-  constructor() {}
+const app = {
   // Settings
-  settings = {
+  settings: {
     pages: { searchable: true, groups: { enabled: true, collapsible: true } },
     mobile: { pages: "bottom" },
-  };
+  },
 
   // Pages
-  getPages = () =>
-    new Promise((resolve, reject) =>
+  getPages: () =>
+    new Promise<AppPageType[]>((resolve) =>
       resolve([
         {
           label: "Models",
@@ -31,7 +32,7 @@ export default class App {
           label: "Settings",
           key: "settings",
           icon: "cogs",
-          component: B,
+          component: PageSettings,
           group: "System",
         },
         {
@@ -42,5 +43,7 @@ export default class App {
           group: "System",
         },
       ])
-    );
-}
+    ),
+};
+
+export default app;

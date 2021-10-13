@@ -49,8 +49,8 @@ const ListDetailLayout: React.FC<{
   // UI
   return (
     <context.UI.Design.Animation.Container>
-      <Grid container>
-        <Grid item xs={navWidth || 2}>
+      <Grid container style={{ height: "100%" }}>
+        <Grid item xs={navWidth || 2} style={{ height: "100%" }}>
           <context.UI.Design.Animation.Item key="menu">
             <context.UI.Design.Card title={title} withoutPadding>
               <List disablePadding>

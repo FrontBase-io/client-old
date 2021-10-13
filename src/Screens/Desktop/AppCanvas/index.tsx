@@ -120,9 +120,8 @@ const AppLayout: React.FC<{
       });
       setContext(context);
 
-      const AppCode =
+      const appCode =
         require(`../../../AppDev/${object.key}/index.tsx`).default;
-      const appCode = new AppCode();
 
       // Get app pages (and sort them in groups)
       appCode.getPages(context).then((result: AppPageType[]) => {

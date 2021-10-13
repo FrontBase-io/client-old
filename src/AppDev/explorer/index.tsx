@@ -2,17 +2,24 @@ import { AppContext } from "../../Components/Context";
 import { AppPageType, ModelType } from "../../Utils/Types";
 import B from "./Detail";
 
-export default class App {
-  constructor() {}
+const app = {
+  // Handlers
+  handlers: {
+    "object-detail": {
+      label: "Open object in explorer",
+      url: "/{model.key_plural}/{object._id}",
+    },
+  },
+
   // Settings
-  settings = {
+  settings: {
     pages: { searchable: true, groups: { enabled: true, collapsible: true } },
     mobile: { pages: "bottom" },
-  };
+  },
 
   // Pages
-  getPages = (context: AppContext) =>
-    new Promise((resolve, reject) =>
+  getPages: (context: AppContext) =>
+    new Promise<AppPageType[]>((resolve, reject) =>
       context.data.models.getAll((models) => {
         const pages: AppPageType[] = [];
         models.map((model: ModelType) =>
@@ -28,5 +35,7 @@ export default class App {
         );
         resolve(pages);
       })
-    );
-}
+    ),
+};
+
+export default app;

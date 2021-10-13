@@ -1,6 +1,7 @@
-import Models from "./Models";
-import Objects from "./Objects";
+import models from "./Models";
+import objects from "./Objects";
+import settings from "./Settings";
 
-const Data = { objects: Objects, models: Models };
+const Data = { objects, models, settings };
 
 export default Data;

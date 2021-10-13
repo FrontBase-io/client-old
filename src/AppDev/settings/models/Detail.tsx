@@ -3,6 +3,7 @@ import { AppContext } from "../../../Components/Context";
 import { ListItemType } from "../../../Utils/Types";
 import ModelFields from "./Fields";
 import ModelGeneral from "./General";
+import ModelHandlers from "./Handlers";
 import ModelLayouts from "./Layouts";
 import ModelLists from "./Lists";
 
@@ -51,6 +52,17 @@ const ModelDetail: React.FC<{
             key: "lists",
             component: (
               <ModelLists
+                context={context}
+                model={item.object}
+                updateModel={updateModel}
+              />
+            ),
+          },
+          {
+            label: "Handlers",
+            key: "handlers",
+            component: (
+              <ModelHandlers
                 context={context}
                 model={item.object}
                 updateModel={updateModel}
