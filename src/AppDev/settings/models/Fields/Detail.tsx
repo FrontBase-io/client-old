@@ -82,6 +82,7 @@ const ModelFieldDetail: React.FC<{
                       { label: "Relationship (many)", value: "relationship_m" },
                       { label: "Date", value: "date" },
                       { label: "Formula", value: "formula" },
+                      { label: "Free data", value: "free-data" },
                     ]}
                   />
                 </Grid>

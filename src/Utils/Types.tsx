@@ -62,7 +62,8 @@ export interface ModelFieldType {
     | "relationship_m"
     | "formula"
     | "options"
-    | "date";
+    | "date"
+    | "free-data";
   required?: boolean;
   unique?: boolean;
   // Text
@@ -220,4 +221,18 @@ export interface PermissionObjectType extends ObjectType {
 }
 export interface SystemTaskObjectType extends ObjectType {
   name: string;
+}
+
+// Processes
+export interface ProcessObjectType extends ObjectType {
+  name: string;
+  description: string;
+  logic: ProcesLogicStepItem[];
+}
+
+export interface ProcesLogicStepItem {
+  id: string;
+  type: string;
+  data: { label: string };
+  position: { x: number; y: number };
 }

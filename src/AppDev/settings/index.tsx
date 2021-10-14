@@ -1,6 +1,6 @@
 import { AppPageType } from "../../Utils/Types";
-import B from "./B";
 import PageModels from "./models";
+import SettingsProcesses from "./processes";
 import PageSettings from "./settings";
 import SettingsUpdate from "./Update";
 
@@ -23,10 +23,10 @@ const app = {
           group: "Apps",
         },
         {
-          label: "Routines",
-          key: "routines",
+          label: "Processes",
+          key: "processes",
           icon: "code-branch",
-          component: B,
+          component: SettingsProcesses,
           group: "Apps",
         },
         {
