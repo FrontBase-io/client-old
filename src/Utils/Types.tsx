@@ -178,7 +178,7 @@ export interface DialogActionType {
   onClick?: (form: { [key: string]: any }, close: () => void) => void;
 }
 export interface DialogFieldType {
-  type?: "text" | "key" | "number" | "custom";
+  type?: "text" | "key" | "number" | "options" | "custom";
   label: string;
   value?: string;
   width?:
@@ -201,6 +201,13 @@ export interface DialogFieldType {
   component?: React.FC<any>;
   componentProps?: {};
   linkToKeyField?: string;
+  // Options
+  options?: SelectOptionType[];
+  // Conditional fields
+  onlyDisplayWhen?: {
+    and?: { [key: string]: any };
+    or?: { [key: string]: any }[];
+  };
 }
 
 export interface SelectOptionType {
@@ -227,12 +234,17 @@ export interface SystemTaskObjectType extends ObjectType {
 export interface ProcessObjectType extends ObjectType {
   name: string;
   description: string;
-  logic: ProcesLogicStepItem[];
+  logic: ProcesLogicStepItemType[];
+  variables?: { [key: string]: ProcessVariableType };
 }
 
-export interface ProcesLogicStepItem {
+export interface ProcesLogicStepItemType {
   id: string;
   type: string;
   data: { label: string };
   position: { x: number; y: number };
+}
+
+export interface ProcessVariableType {
+  label: string;
 }

@@ -8,6 +8,7 @@ import ReactFlow, {
 } from "react-flow-renderer";
 import { useEffect, useState } from "react";
 import { isEqual } from "lodash";
+import ProcessVariables from "./Variables";
 
 const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
   // Vars
@@ -28,6 +29,7 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
             <context.UI.Design.Card
               title="Process"
               style={{ height: "calc(100vh - 150px)" }}
+              withoutPadding
             >
               <ReactFlow
                 elements={newObject?.logic}
@@ -82,8 +84,14 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
             </context.UI.Design.Animation.Item>
           )}
           <context.UI.Design.Animation.Item key="process-variables">
-            <context.UI.Design.Card title="Variables">
-              Toolbox
+            <context.UI.Design.Card title="Variables" withoutPadding>
+              <ProcessVariables
+                context={context}
+                value={newObject.variables}
+                onChange={(variables) =>
+                  setNewObject({ ...newObject, variables })
+                }
+              />
             </context.UI.Design.Card>
           </context.UI.Design.Animation.Item>
           <context.UI.Design.Animation.Item key="process-components">
