@@ -40,7 +40,10 @@ const CreateAction = {
           {
             label: `Create ${model.label}`,
             onClick: (form, close) => {
-              context.data.objects.create(model.key, form.object);
+              context.data.objects.create(model.key, form.object).then(
+                () => {},
+                (reason) => context.canvas.interact.snackbar(reason, "error")
+              );
               close();
             },
           },

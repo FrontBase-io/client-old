@@ -24,7 +24,7 @@ const item = {
 const Animate: React.FC = ({ children }) => {
   return (
     <motion.div
-      style={{ position: "relative" }}
+      style={{ position: "relative", height: "100%" }}
       initial={{ opacity: 0, top: -20 }}
       animate={{ opacity: 1, top: 0 }}
     >
@@ -51,4 +51,5 @@ const Item: React.FC<{ key: string }> = ({ key, children }) => (
 );
 
 export { Animate, Container, Item };
-export default { Animate, Container, Item };
+const animations = { Animate, Container, Item };
+export default animations;

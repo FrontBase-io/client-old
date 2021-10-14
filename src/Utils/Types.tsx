@@ -214,3 +214,7 @@ export interface ListDetailType {
 }
 
 // Specific object types
+export interface PermissionObjectType extends ObjectType {
+  name: string;
+  description: string;
+}

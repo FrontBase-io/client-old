@@ -6,6 +6,7 @@ import ModelGeneral from "./General";
 import ModelHandlers from "./Handlers";
 import ModelLayouts from "./Layouts";
 import ModelLists from "./Lists";
+import ModelPermissions from "./Permissions";
 
 const ModelDetail: React.FC<{
   context: AppContext;
@@ -14,7 +15,7 @@ const ModelDetail: React.FC<{
 }> = ({ context, selectedKey, item }) => {
   // Vars
   const updateModel = (newModel: {}) => {
-    context.data.models.update(newModel).then(
+    context.data.models.update({ ...newModel, key: item.object.key }).then(
       () => {},
       (reason: string) => context.canvas.interact.snackbar(reason, "error")
     );
@@ -63,6 +64,17 @@ const ModelDetail: React.FC<{
             key: "handlers",
             component: (
               <ModelHandlers
+                context={context}
+                model={item.object}
+                updateModel={updateModel}
+              />
+            ),
+          },
+          {
+            label: "Permissions",
+            key: "permissions",
+            component: (
+              <ModelPermissions
                 context={context}
                 model={item.object}
                 updateModel={updateModel}

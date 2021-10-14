@@ -57,9 +57,10 @@ const DeleteAction = {
               if (Array.isArray(objects)) {
                 console.log("Todo: delete multiple entries at once");
               } else {
-                context.data.objects
-                  .trash(model.key, objects!._id)
-                  .then(() => resolve());
+                context.data.objects.trash(model.key, objects!._id).then(
+                  () => resolve(),
+                  (reason) => context.canvas.interact.snackbar(reason, "error")
+                );
               }
 
               close();

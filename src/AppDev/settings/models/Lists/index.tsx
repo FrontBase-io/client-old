@@ -11,7 +11,6 @@ const ModelLists: React.FC<{
   updateModel: (updatedFields: {}) => void;
 }> = ({ context, model, updateModel }) => {
   // Vars
-  const [newModel, setNewModel] = useState<ModelType>(model);
 
   // Lifecycle
 
@@ -34,7 +33,7 @@ const ModelLists: React.FC<{
               title: "Create list",
               size: "sm",
               fields: {
-                label: { label: "List label" },
+                label: { label: "List label", linkToKeyField: "key" },
                 key: { label: "List key", type: "key" },
               },
               actions: [
