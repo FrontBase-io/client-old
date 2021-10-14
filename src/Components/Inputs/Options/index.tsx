@@ -1,8 +1,4 @@
-import React, { useState, useEffect, CSSProperties } from "react";
-import Select from "react-select";
-import find from "lodash/find";
-import { useGlobal } from "reactn";
-import chroma from "chroma-js";
+import React, { CSSProperties } from "react";
 import {
   FormControl,
   FormControlLabel,

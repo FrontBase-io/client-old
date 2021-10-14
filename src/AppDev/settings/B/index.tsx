@@ -6,11 +6,11 @@ const B: React.FC<{ context: AppContext }> = ({ context }) => {
 
   // Lifecycle
   useEffect(() => {
-    context.canvas.navbar.up.set("/settings");
-    context.canvas.navbar.name.set("Page B");
+    context.canvas.navbar.up("/settings");
+    context.canvas.navbar.name("Page B");
     return () => {
-      context.canvas.navbar.up.set(undefined);
-      context.canvas.navbar.name.set();
+      context.canvas.navbar.up(undefined);
+      context.canvas.navbar.name();
     };
   }, [context.canvas.navbar]);
 

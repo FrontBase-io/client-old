@@ -35,6 +35,7 @@ import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import TextInput from "../../../Components/Inputs/Text";
 import NumberInput from "../../../Components/Inputs/Number";
+import slugify from "slugify";
 
 const container = {
   hidden: { opacity: 0, marginLeft: -64 },
@@ -62,8 +63,8 @@ const AppLayout: React.FC<{
   utils: AppUtilsType;
   setPageName: (title: string) => void;
   pageName: string;
-  setUpLink: (title?: string) => void;
-  upLink?: string;
+  setUpLink: (title?: string | (() => void)) => void;
+  upLink?: string | (() => void);
   setHeaderIsIndented?: (isIndented: boolean) => void;
   addNavbarAction: (key: string, action: NavBarButtonType) => void;
   removeNavbarAction: (key: string) => void;
@@ -102,11 +103,8 @@ const AppLayout: React.FC<{
       );
       const context = new AppContext(object, {
         navbar: {
-          up: { set: setUpLink, get: upLink },
-          name: {
-            get: pageName,
-            set: (pageName?: string) => setPageName(pageName || object.name),
-          },
+          up: setUpLink,
+          name: (pageName?: string) => setPageName(pageName || object.name),
           actions: {
             add: addNavbarAction,
             remove: removeNavbarAction,
@@ -294,9 +292,8 @@ const AppLayout: React.FC<{
                           [key]: value,
                           ...(field.linkToKeyField
                             ? {
-                                [field.linkToKeyField]: value
-                                  .replace(/\W/g, "")
-                                  .toLowerCase(),
+                                [field.linkToKeyField]:
+                                  slugify(value).toLowerCase(),
                               }
                             : {}), // If we're linked to a key field, set the key as well
                         })

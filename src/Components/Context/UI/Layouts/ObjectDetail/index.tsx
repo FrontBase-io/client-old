@@ -96,20 +96,30 @@ const ObjectDetail: React.FC<{
   ]);
   useEffect(() => {
     if (appliedModel && appliedObject) {
-      context.canvas.navbar.name.set(appliedObject[appliedModel.primary]);
-      if (baseUrl) context.canvas.navbar.up.set(baseUrl);
+      context.canvas.navbar.name(appliedObject[appliedModel.primary]);
+      if (baseUrl)
+        context.canvas.navbar.up(
+          viewMode === "edit"
+            ? () => {
+                setViewMode("view");
+                setNewObject(appliedObject);
+              }
+            : baseUrl
+        );
 
       return () => {
-        context.canvas.navbar.name.set(undefined);
-        context.canvas.navbar.up.set(undefined);
+        context.canvas.navbar.name(undefined);
+        context.canvas.navbar.up(undefined);
       };
     }
   }, [
     appliedModel,
     appliedObject,
     baseUrl,
+    context.canvas.navbar,
     context.canvas.navbar.name,
     context.canvas.navbar.up,
+    viewMode,
   ]);
   useEffect(() => {
     if (isEqual(appliedObject, newObject)) {

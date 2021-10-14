@@ -31,7 +31,7 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
   const [userMenuElement, setUserMenuElement] = useState<Element | null>();
   const [selectedApp, setSelectedApp] = useState<AppObjectType>();
   const history = useHistory();
-  const [upLink, setUpLink] = useState<string | undefined>();
+  const [upLink, setUpLink] = useState<(() => void) | string | undefined>();
   const [pageName, setPageName] = useState<string>("FrontBase");
   const [headerIsIndented, setHeaderIsIndented] = useState<Boolean>(false);
   const [navBarActions, setNavBarActions] = useState<{
@@ -80,7 +80,9 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
                   edge="start"
                   color="inherit"
                   aria-label="open drawer"
-                  onClick={() => history.push(upLink)}
+                  onClick={() =>
+                    typeof upLink === "string" ? history.push(upLink) : upLink()
+                  }
                 >
                   <Icon icon="chevron-left" />
                 </IconButton>

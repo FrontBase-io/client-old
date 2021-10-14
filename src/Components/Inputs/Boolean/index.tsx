@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from "react";
-import styles from "./styles.module.scss";
-import Typography from "@mui/material/Typography";
+import React from "react";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 

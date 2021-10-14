@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AppContext } from "../../Components/Context";
-import { AppPageType, ModelType, ObjectType } from "../../Utils/Types";
+import { AppPageType, ModelType } from "../../Utils/Types";
 import find from "lodash/find";
 import ObjectDetail from "./ObjectDetail";
 
@@ -21,11 +21,11 @@ const ModelDetail: React.FC<{
       )
     );
 
-    context.canvas.navbar.name.set(page.label);
+    context.canvas.navbar.name(page.label);
     return () => {
-      context.canvas.navbar.name.set();
+      context.canvas.navbar.name();
     };
-  }, [page]);
+  }, [context.canvas.navbar, page]);
 
   // UI
   if (!model) return <context.UI.Loading />;

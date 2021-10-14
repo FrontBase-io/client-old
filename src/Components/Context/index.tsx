@@ -10,11 +10,8 @@ import UIData from "./UI/Data";
 
 interface CanvasType {
   navbar: {
-    up: {
-      set: (link: string | undefined) => void;
-      get: string | undefined;
-    };
-    name: { set: (name?: string) => void; get: string };
+    up: (link: (() => void) | string | undefined) => void;
+    name: (name?: string) => void;
     actions: {
       add: (key: string, action: NavBarButtonType) => void;
       remove: (key: string) => void;
@@ -35,8 +32,8 @@ export class AppContext {
   appData: AppObjectType;
   canvas: CanvasType = {
     navbar: {
-      name: { set: () => {}, get: "FrontBase" },
-      up: { set: () => {}, get: undefined },
+      name: () => {},
+      up: () => {},
       actions: {
         add: () => {},
         remove: () => {},

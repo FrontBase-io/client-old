@@ -1,7 +1,6 @@
 import { IconButton, Tooltip } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import React, { CSSProperties, ReactElement } from "react";
-import { AppContext } from "../../Context";
+import React, { CSSProperties } from "react";
 import Icon from "../Icon";
 import styles from "./styles.module.scss";
 

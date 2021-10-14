@@ -2,6 +2,7 @@ import { AppPageType } from "../../Utils/Types";
 import B from "./B";
 import PageModels from "./models";
 import PageSettings from "./settings";
+import SettingsUpdate from "./Update";
 
 const app = {
   // Settings
@@ -39,7 +40,7 @@ const app = {
           label: "Update",
           key: "update",
           icon: "cloud-download-alt",
-          component: B,
+          component: SettingsUpdate,
           group: "System",
         },
       ])

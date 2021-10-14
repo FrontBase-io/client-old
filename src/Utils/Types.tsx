@@ -218,3 +218,6 @@ export interface PermissionObjectType extends ObjectType {
   name: string;
   description: string;
 }
+export interface SystemTaskObjectType extends ObjectType {
+  name: string;
+}

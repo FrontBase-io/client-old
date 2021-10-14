@@ -11,7 +11,7 @@ const ModelFields: React.FC<{ context: AppContext; model: ModelType }> = ({
     <context.UI.Design.Animation.Animate>
       <context.UI.Layouts.ListDetailLayout
         context={context}
-        title="Models"
+        title="Fields"
         items={context.utils.listifyObject(
           model.fields,
           "label",
