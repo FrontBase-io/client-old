@@ -28,5 +28,17 @@ const update = (model: {}) =>
     });
   });
 
-const modelFunctions = { getAll, update, get };
+// Create
+const create = (model: {}) =>
+  new Promise<void>((resolve, reject) => {
+    Socket.emit("createModel", model, (response: ResponseType) => {
+      if (response.success) {
+        resolve();
+      } else {
+        reject(response.reason);
+      }
+    });
+  });
+
+const modelFunctions = { getAll, update, get, create };
 export default modelFunctions;
