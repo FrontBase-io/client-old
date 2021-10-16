@@ -16,6 +16,7 @@ const Card: React.FC<{
   className?: string;
   overflow?: "none" | "auto" | "visible";
   onExplanation?: () => void;
+  ref?: React.Ref<any>;
 }> = ({
   children,
   style,
