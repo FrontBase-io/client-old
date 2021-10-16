@@ -6,10 +6,8 @@ import {
   AppObjectType,
   AppPageType,
   DialogType,
-  ListItemType,
   NavBarButtonType,
   ResponseType,
-  SelectOptionType,
 } from "../../../Utils/Types";
 import { motion } from "framer-motion";
 import styles from "./styles.module.scss";
@@ -39,6 +37,7 @@ import TextInput from "../../../Components/Inputs/Text";
 import NumberInput from "../../../Components/Inputs/Number";
 import slugify from "slugify";
 import SelectInput from "../../../Components/Inputs/Select";
+import BooleanInput from "../../../Components/Inputs/Boolean";
 
 const container = {
   hidden: { opacity: 0, marginLeft: -64 },
@@ -367,6 +366,26 @@ const AppLayout: React.FC<{
                                 : value,
                             })
                           }
+                        />
+                      )}
+                      {field.type === "boolean" && (
+                        <BooleanInput
+                          label={field.label}
+                          value={
+                            dialogFieldValues[key] ||
+                            field.value ||
+                            (dialog.actionValues || {})[key] ||
+                            ""
+                          }
+                          onChange={(value) =>
+                            setDialogFieldValues({
+                              ...dialogFieldValues,
+                              [key]: field.valueModifier
+                                ? field.valueModifier(value)
+                                : value,
+                            })
+                          }
+                          explanation={field.explanation}
                         />
                       )}
                       {field.type === "custom" && (

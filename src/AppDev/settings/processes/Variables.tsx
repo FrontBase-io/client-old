@@ -1,7 +1,14 @@
-import { Divider, List, ListItem, ListItemText } from "@mui/material";
+import {
+  Divider,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import { map } from "lodash";
 import { useEffect, useState } from "react";
 import { AppContext } from "../../../Components/Context";
+import Icon from "../../../Components/Design/Icon";
 import { ProcessVariableType, SelectOptionType } from "../../../Utils/Types";
 
 const ProcessVariables: React.FC<{
@@ -27,8 +34,21 @@ const ProcessVariables: React.FC<{
     <List disablePadding>
       {Object.keys(value || {}).length > 0 ? (
         map(value, (variable, key) => (
-          <ListItem key={key}>
-            <ListItemText>{variable.label}</ListItemText>
+          <ListItem key={key} button>
+            <ListItemIcon>
+              <Icon
+                icon={
+                  {
+                    text: "font",
+                    number: "sort-numeric-down",
+                    boolean: "toggle-off",
+                    object: "cube",
+                    objects: "cubes",
+                  }[variable.type] || "error"
+                }
+              />
+            </ListItemIcon>
+            <ListItemText primary={variable.label} secondary={variable.type} />
           </ListItem>
         ))
       ) : (
@@ -66,7 +86,49 @@ const ProcessVariables: React.FC<{
                   or: [{ type: "object" }, { type: "objects" }],
                 },
               },
+              isInput: {
+                label: "Is input",
+                type: "boolean",
+                explanation:
+                  "This variable can be supplied before the process starts.",
+                onlyDisplayWhen: {
+                  or: [
+                    { type: "text" },
+                    { type: "object" },
+                    { type: "objects" },
+                  ],
+                },
+                width: 6,
+              },
+              isOutput: {
+                label: "Is output",
+                type: "boolean",
+                explanation:
+                  "This variable will be output once the process is done. On a 'before save' trigger this will override the saved values. In other cases this can be used by different processes.",
+                onlyDisplayWhen: {
+                  or: [{ type: "object" }, { type: "objects" }],
+                },
+                width: 6,
+              },
             },
+            actions: [
+              {
+                label: "Create",
+                onClick: (form, close) => {
+                  onChange({
+                    ...value,
+                    [form.key]: {
+                      label: form.label,
+                      type: form.type,
+                      recordModel: form.recordModel,
+                      isInput: form.isInput,
+                      isOutput: form.isOutput,
+                    },
+                  });
+                  close();
+                },
+              },
+            ],
           })
         }
       >

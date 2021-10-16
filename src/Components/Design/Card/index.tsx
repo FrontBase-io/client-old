@@ -38,10 +38,10 @@ const Card: React.FC<{
         shadow !== undefined && shadow !== "default" && styles[shadow]
       }`}
       style={{
-        ...style,
         margin: withoutMargin ? 0 : 10,
         padding: withoutPadding ? 0 : "5px 10px",
         overflow,
+        ...style,
       }}
     >
       {onExplanation && (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 import { motion } from "framer-motion";
 
 const container = {
@@ -44,8 +44,12 @@ const Container: React.FC = ({ children }) => (
   </motion.div>
 );
 
-const Item: React.FC<{ key: string }> = ({ key, children }) => (
-  <motion.div key={key} className="item" variants={item}>
+const Item: React.FC<{ key: string; style?: CSSProperties }> = ({
+  key,
+  children,
+  style,
+}) => (
+  <motion.div key={key} className="item" variants={item} style={style}>
     {children}
   </motion.div>
 );

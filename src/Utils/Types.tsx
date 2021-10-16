@@ -178,7 +178,7 @@ export interface DialogActionType {
   onClick?: (form: { [key: string]: any }, close: () => void) => void;
 }
 export interface DialogFieldType {
-  type?: "text" | "key" | "number" | "options" | "custom";
+  type?: "text" | "key" | "number" | "options" | "boolean" | "custom";
   label: string;
   value?: string;
   width?:
@@ -197,7 +197,11 @@ export interface DialogFieldType {
     | 10
     | 11
     | 12;
-  valueModifier?: (value: string | number) => string | number;
+  valueModifier?: (
+    value: string | number | boolean
+  ) => string | number | boolean;
+  explanation?: string;
+  // Custom
   component?: React.FC<any>;
   componentProps?: {};
   linkToKeyField?: string;
@@ -247,4 +251,8 @@ export interface ProcesLogicStepItemType {
 
 export interface ProcessVariableType {
   label: string;
+  type: string;
+  recordModel?: string;
+  isInput?: boolean;
+  isOutput?: boolean;
 }

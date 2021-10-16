@@ -23,12 +23,14 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
   if (!newObject) return <context.UI.Loading />;
   return (
     <context.UI.Design.Animation.Container>
-      <Grid container>
-        <Grid item xs={9}>
-          <context.UI.Design.Animation.Item key="process-canvas">
+      <Grid container style={{ height: "100%" }}>
+        <Grid item xs={9} style={{ height: "100%" }}>
+          <context.UI.Design.Animation.Item
+            key="process-canvas"
+            style={{ height: "100%" }}
+          >
             <context.UI.Design.Card
-              title="Process"
-              style={{ height: "calc(100vh - 150px)" }}
+              style={{ height: "calc(100% - 120px)", marginBottom: 100 }}
               withoutPadding
             >
               <ReactFlow

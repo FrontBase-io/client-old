@@ -1,6 +1,8 @@
 import React from "react";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import Icon from "../../Design/Icon";
+import Tooltip from "@mui/material/Tooltip";
 
 const BooleanInput: React.FC<{
   label: string;
@@ -8,7 +10,8 @@ const BooleanInput: React.FC<{
   onChange?: (newValue: boolean) => void;
   disabled?: true | boolean;
   fullWidth?: true;
-}> = ({ label, value, onChange, disabled, fullWidth }) => {
+  explanation?: string;
+}> = ({ label, value, onChange, disabled, fullWidth, explanation }) => {
   // Vars
 
   // Lifecycle
@@ -26,7 +29,20 @@ const BooleanInput: React.FC<{
           color="primary"
         />
       }
-      label={label}
+      label={
+        <>
+          {label}
+          {explanation && (
+            <Tooltip title={explanation} placement="left">
+              <Icon
+                icon="question-circle"
+                size={13}
+                style={{ marginLeft: 5 }}
+              />
+            </Tooltip>
+          )}
+        </>
+      }
     />
   );
 };
