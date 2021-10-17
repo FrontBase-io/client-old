@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 
 const TextInput: React.FC<{
-  label: string;
+  label?: string;
   value?: string;
   onChange?: (newValue: string) => void;
   password?: true;

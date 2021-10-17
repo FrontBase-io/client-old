@@ -59,6 +59,7 @@ const SelectInput: React.FC<{
         isMulti={multi}
         autoFocus={autoFocus}
         value={newValue}
+        style={style}
         onChange={(chosen) => {
           if (onChange) {
             if (Array.isArray(chosen)) {

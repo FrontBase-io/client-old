@@ -43,11 +43,12 @@ const listifyForSelect = (
   label: string,
   key: string
 ) => {
-  const newArray: { label: string; value: string }[] = [];
+  const newArray: { label: string; value: string; object?: any }[] = [];
   list.map((item) =>
     newArray.push({
       label: item[label],
       value: item[key],
+      object: item,
     })
   );
   return newArray;
@@ -57,11 +58,12 @@ const listifyObjectForSelect = (
   list: { [key: string]: any },
   label: string
 ) => {
-  const newArray: { label: string; value: string }[] = [];
+  const newArray: { label: string; value: string; object: any }[] = [];
   map(list || {}, (item, key: string) =>
     newArray.push({
       label: item[label],
       value: key,
+      object: item,
     })
   );
   return newArray;

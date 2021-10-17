@@ -3,7 +3,7 @@ import styles from "./styles.module.scss";
 import Typography from "@mui/material/Typography";
 
 const NumberInput: React.FC<{
-  label: string;
+  label?: string;
   value?: number;
   onChange?: (newValue: number) => void;
   password?: true;

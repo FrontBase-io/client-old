@@ -217,6 +217,7 @@ export interface DialogFieldType {
 export interface SelectOptionType {
   label: string;
   value: string;
+  object?: any;
 }
 
 export interface ListDetailType {
@@ -240,6 +241,7 @@ export interface ProcessObjectType extends ObjectType {
   description: string;
   logic: ProcesLogicStepItemType[];
   variables?: { [key: string]: ProcessVariableType };
+  triggers?: ProcessTriggersType;
 }
 
 export interface ProcesLogicStepItemType {
@@ -255,4 +257,22 @@ export interface ProcessVariableType {
   recordModel?: string;
   isInput?: boolean;
   isOutput?: boolean;
+}
+export interface ProcessTriggerType {
+  label: string;
+  // Change
+  modelKey?: string;
+  fields?: string[];
+  oldObject?: string;
+  newObject?: string;
+  output?: string;
+}
+
+export interface ProcessTriggersType {
+  beforeChange?: ProcessTriggerType[];
+  afterChange?: ProcessTriggerType[];
+  time?: ProcessTriggerType[];
+  globalAction?: ProcessTriggerType[];
+  singleAction?: ProcessTriggerType;
+  manyAction?: ProcessTriggerType[];
 }

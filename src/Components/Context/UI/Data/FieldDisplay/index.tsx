@@ -63,7 +63,8 @@ const FieldDisplay: React.FC<{
         find(
           modelField.options!,
           (o: SelectOptionType) => o.value === objectField
-        )?.label
+          //@ts-ignore
+        )?.label || "error"
       ) : (
         `Unknown type ${modelField.type}`
       )}

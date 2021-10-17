@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import {
   ListDetailType,
+  ModelType,
   ProcesLogicStepItemType,
   ProcessObjectType,
 } from "../../../Utils/Types";
@@ -22,13 +23,14 @@ import ReactFlow, {
   Node,
 } from "react-flow-renderer";
 import { useEffect, useRef, useState } from "react";
-import { isEqual } from "lodash";
+import { findIndex, isEqual } from "lodash";
 import ProcessVariables from "./Variables";
 import ProcessComponents from "./Components";
 import uniqid from "uniqid";
 import Icon from "../../../Components/Design/Icon";
 import FourOhFour from "../../../Components/FourOhFour";
 import EditAssignValuesNode from "./EditNodes/AssignValues";
+import ProcessTriggers from "./Triggers";
 
 const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
   // Vars
@@ -38,14 +40,19 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
   const [selectedElementOnCanvas, setSelectedElementOnCanvas] =
     useState<HTMLDivElement | null>(null);
   const [selectedNode, setSelectedNode] = useState<Node | null>();
+  const [models, setModels] = useState<ModelType[]>();
 
   // Lifecycle
   useEffect(() => {
     setNewObject(item.object);
   }, [item]);
+  useEffect(() => {
+    context.data.models.getAll((fetchedModels) => setModels(fetchedModels));
+  }, [context.data.models]);
 
   // UI
   if (!newObject) return <context.UI.Loading />;
+
   return (
     <context.UI.Design.Animation.Container>
       <Grid container style={{ height: "100%" }}>
@@ -201,20 +208,34 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
                               assign_values: EditAssignValuesNode,
                               conditions: FourOhFour,
                             }[selectedNode?.data.type as string] || FourOhFour,
-                          componentProps: { process: newObject },
+                          componentProps: { process: newObject, models },
                         },
                       },
                       actions: [
                         {
                           label: "Save",
                           onClick: (form, close) => {
-                            console.log(form);
+                            const newNode = {
+                              ...(selectedNode || {}),
+                              data: {
+                                ...(selectedNode?.data || {}),
+                                args: form.args,
+                              },
+                            };
+                            let logic = newObject.logic;
+                            //@ts-ignore
+                            logic[
+                              findIndex(logic, (o) => o.id === newNode.id)
+                            ] = newNode;
+
+                            setNewObject({ ...newObject, logic });
+
                             close();
+                            setSelectedNode(null);
                           },
                         },
                       ],
                     });
-                    setSelectedNode(null);
                     setSelectedElementOnCanvas(null);
                   }}
                 >
@@ -281,8 +302,15 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
             </context.UI.Design.Card>
           </context.UI.Design.Animation.Item>
           <context.UI.Design.Animation.Item key="process-triggers">
-            <context.UI.Design.Card title="Triggers" withoutPadding>
-              Toolbox
+            <context.UI.Design.Card withoutPadding title="Triggers">
+              <ProcessTriggers
+                context={context}
+                process={newObject}
+                models={models!}
+                onChange={(triggers) =>
+                  setNewObject({ ...newObject, triggers })
+                }
+              />
             </context.UI.Design.Card>
           </context.UI.Design.Animation.Item>
         </Grid>
