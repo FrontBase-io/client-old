@@ -245,7 +245,7 @@ export interface ProcessObjectType extends ObjectType {
 export interface ProcesLogicStepItemType {
   id: string;
   type: string;
-  data: { label: string };
+  data: { type: string; label: string };
   position: { x: number; y: number };
 }
 

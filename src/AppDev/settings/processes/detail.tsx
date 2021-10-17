@@ -1,4 +1,13 @@
-import { Button, Grid } from "@mui/material";
+import {
+  Button,
+  Grid,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  ListSubheader,
+  Popover,
+} from "@mui/material";
 import {
   ListDetailType,
   ProcesLogicStepItemType,
@@ -10,18 +19,25 @@ import ReactFlow, {
   removeElements,
   addEdge,
   ReactFlowProvider,
+  Node,
 } from "react-flow-renderer";
 import { useEffect, useRef, useState } from "react";
 import { isEqual } from "lodash";
 import ProcessVariables from "./Variables";
 import ProcessComponents from "./Components";
 import uniqid from "uniqid";
+import Icon from "../../../Components/Design/Icon";
+import FourOhFour from "../../../Components/FourOhFour";
+import EditAssignValuesNode from "./EditNodes/AssignValues";
 
 const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
   // Vars
   const [newObject, setNewObject] = useState<ProcessObjectType>();
   const reactFlowWrapper = useRef(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  const [selectedElementOnCanvas, setSelectedElementOnCanvas] =
+    useState<HTMLDivElement | null>(null);
+  const [selectedNode, setSelectedNode] = useState<Node | null>();
 
   // Lifecycle
   useEffect(() => {
@@ -53,7 +69,17 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
                       setNewObject({
                         ...newObject,
                         //@ts-ignore
-                        logic: addEdge(params, newObject.logic),
+                        logic: addEdge(
+                          //@ts-ignore
+                          {
+                            ...params,
+                            //@ts-ignore
+                            arrowHeadType: "arrowclosed",
+                            animated: true,
+                            type: "step",
+                          },
+                          newObject.logic
+                        ),
                       })
                     }
                     deleteKeyCode={46}
@@ -73,8 +99,6 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
                     }}
                     onDrop={(event) => {
                       event.preventDefault();
-                      console.log(event);
-
                       const reactFlowBounds =
                         //@ts-ignore
                         reactFlowWrapper.current?.getBoundingClientRect();
@@ -88,9 +112,19 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
                       });
                       const newNode: ProcesLogicStepItemType = {
                         id: uniqid(),
-                        type,
+                        type: "default",
                         position,
-                        data: { label: `New ${type}` },
+                        data: {
+                          type,
+                          label:
+                            {
+                              get_objects: "Get objects",
+                              create_objects: "Create objects",
+                              update_objects: "Update objects",
+                              assign_values: "Assign values",
+                              conditions: "Conditions",
+                            }[type] || "Unknown type",
+                        },
                       };
 
                       setNewObject({
@@ -102,6 +136,13 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
                       //@ts-ignore
                       setReactFlowInstance(_reactFlowInstance)
                     }
+                    snapToGrid={true}
+                    onNodeContextMenu={(event, node) => {
+                      event.preventDefault();
+                      //@ts-ignore
+                      setSelectedElementOnCanvas(event.currentTarget);
+                      setSelectedNode(node);
+                    }}
                   >
                     <MiniMap
                       nodeColor={(node) => {
@@ -124,6 +165,83 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
                 </div>
               </ReactFlowProvider>
             </context.UI.Design.Card>
+            <Popover
+              id="right-click-menu"
+              open={Boolean(selectedElementOnCanvas)}
+              anchorEl={selectedElementOnCanvas}
+              onClose={() => setSelectedElementOnCanvas(null)}
+              anchorOrigin={{
+                vertical: "center",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left",
+              }}
+            >
+              <List disablePadding>
+                <ListSubheader>{selectedNode?.data.label}</ListSubheader>
+                <ListItem
+                  button
+                  onClick={() => {
+                    context.canvas.interact.dialog({
+                      display: true,
+                      title: `Edit ${selectedNode?.data.label}`,
+                      size: "md",
+                      fields: {
+                        args: {
+                          label: "Args",
+                          type: "custom",
+                          value: selectedNode?.data.args || {},
+                          component:
+                            {
+                              get_objects: FourOhFour,
+                              create_objects: FourOhFour,
+                              update_objects: FourOhFour,
+                              assign_values: EditAssignValuesNode,
+                              conditions: FourOhFour,
+                            }[selectedNode?.data.type as string] || FourOhFour,
+                          componentProps: { process: newObject },
+                        },
+                      },
+                      actions: [
+                        {
+                          label: "Save",
+                          onClick: (form, close) => {
+                            console.log(form);
+                            close();
+                          },
+                        },
+                      ],
+                    });
+                    setSelectedNode(null);
+                    setSelectedElementOnCanvas(null);
+                  }}
+                >
+                  <ListItemIcon style={{ minWidth: 16, paddingRight: 5 }}>
+                    <Icon icon="edit" size={16} />
+                  </ListItemIcon>
+                  <ListItemText>Edit node</ListItemText>
+                </ListItem>
+                <ListItem
+                  button
+                  onClick={() => {
+                    setSelectedNode(null);
+                    setSelectedElementOnCanvas(null);
+                    setNewObject({
+                      ...newObject,
+                      //@ts-ignore
+                      logic: removeElements([selectedNode], newObject.logic),
+                    });
+                  }}
+                >
+                  <ListItemIcon style={{ minWidth: 16, paddingRight: 5 }}>
+                    <Icon icon="trash" size={16} />
+                  </ListItemIcon>
+                  <ListItemText>Delete</ListItemText>
+                </ListItem>
+              </List>
+            </Popover>
           </context.UI.Design.Animation.Item>
         </Grid>
         <Grid item xs={3}>
@@ -133,7 +251,14 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
                 variant="outlined"
                 style={{ color: "white", border: "1px solid white" }}
                 fullWidth
-                onClick={() => console.log(newObject.logic)}
+                onClick={() =>
+                  context.data.objects.update(newObject._id, newObject).then(
+                    () =>
+                      context.canvas.interact.snackbar("Updated", "success"),
+                    (reason) =>
+                      context.canvas.interact.snackbar(reason, "error")
+                  )
+                }
               >
                 Save
               </Button>

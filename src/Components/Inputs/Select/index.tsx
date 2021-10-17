@@ -11,7 +11,7 @@ interface OptionType {
 
 const SelectInput: React.FC<{
   label: string;
-  value: string | string[];
+  value?: string | string[];
   options: OptionType[];
   onChange?: (value: string | string[], args?: string | string[]) => void;
   disabled?: true | boolean;

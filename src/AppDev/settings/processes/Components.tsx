@@ -1,5 +1,4 @@
 import {
-  Divider,
   List,
   ListItem,
   ListItemIcon,
@@ -27,7 +26,7 @@ const ProcessComponents: React.FC<{
       <ListItem
         className={styles.component}
         onDragStart={(event: React.DragEvent<HTMLDivElement>) =>
-          onDragStart(event, "fetch_objects")
+          onDragStart(event, "get_objects")
         }
         component="div"
         draggable
@@ -62,6 +61,33 @@ const ProcessComponents: React.FC<{
           <Icon icon="exchange-alt" />
         </ListItemIcon>
         <ListItemText>Update object</ListItemText>
+      </ListItem>
+      <ListItem
+        className={styles.component}
+        onDragStart={(event: React.DragEvent<HTMLDivElement>) =>
+          onDragStart(event, "assign_values")
+        }
+        component="div"
+        draggable
+      >
+        <ListItemIcon>
+          <Icon icon="equals" />
+        </ListItemIcon>
+        <ListItemText>Assign values</ListItemText>
+      </ListItem>
+      <ListSubheader>Logic</ListSubheader>{" "}
+      <ListItem
+        className={styles.component}
+        onDragStart={(event: React.DragEvent<HTMLDivElement>) =>
+          onDragStart(event, "conditions")
+        }
+        component="div"
+        draggable
+      >
+        <ListItemIcon>
+          <Icon icon="bezier-curve" />
+        </ListItemIcon>
+        <ListItemText>Conditions</ListItemText>
       </ListItem>
     </List>
   );
