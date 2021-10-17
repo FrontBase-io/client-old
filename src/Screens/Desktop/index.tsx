@@ -80,9 +80,11 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
                   edge="start"
                   color="inherit"
                   aria-label="open drawer"
-                  onClick={() =>
-                    typeof upLink === "string" ? history.push(upLink) : upLink()
-                  }
+                  onClick={() => {
+                    typeof upLink === "string"
+                      ? history.push(upLink)
+                      : upLink();
+                  }}
                 >
                   <Icon icon="chevron-left" />
                 </IconButton>

@@ -30,7 +30,7 @@ const Field: React.FC<LayoutComponentPropType> = ({
     <FieldEdit
       selectedField={selectedField}
       model={model}
-      object={object}
+      object={newObject}
       fieldKey={layoutItem.args?.field}
       context={context}
       onChange={(newValue) => updateField(layoutItem.args?.field, newValue)}

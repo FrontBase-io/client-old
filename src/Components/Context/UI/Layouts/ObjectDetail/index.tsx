@@ -97,15 +97,7 @@ const ObjectDetail: React.FC<{
   useEffect(() => {
     if (appliedModel && appliedObject) {
       context.canvas.navbar.name(appliedObject[appliedModel.primary]);
-      if (baseUrl)
-        context.canvas.navbar.up(
-          viewMode === "edit"
-            ? () => {
-                setViewMode("view");
-                setNewObject(appliedObject);
-              }
-            : baseUrl
-        );
+      if (baseUrl) context.canvas.navbar.up(baseUrl);
 
       return () => {
         context.canvas.navbar.name(undefined);

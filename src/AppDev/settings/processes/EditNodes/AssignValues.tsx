@@ -2,6 +2,7 @@ import {
   Button,
   Divider,
   Grid,
+  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -12,6 +13,7 @@ import {
 import { map, findLast } from "lodash";
 import { useEffect, useState } from "react";
 import { AppContext } from "../../../../Components/Context";
+import Icon from "../../../../Components/Design/Icon";
 import {
   ModelType,
   ProcessObjectType,
@@ -49,7 +51,21 @@ const EditAssignValuesNode: React.FC<{
         return (
           <Grid item xs={12} key={variableKey}>
             {v.type === "object" ? (
-              "object"
+              <AssignValuesToObject
+                context={context}
+                process={process}
+                value={variableValue}
+                varKey={variableKey}
+                model={
+                  findLast(
+                    models,
+                    (o: ModelType) => o.key === v.recordModel
+                  ) as ModelType
+                }
+                onChange={(newVal) =>
+                  onChange({ ...(value || {}), [variableKey]: newVal })
+                }
+              />
             ) : v.type === "objects" ? (
               <AssignValuesToObject
                 context={context}
@@ -145,6 +161,7 @@ const AssignValuesToObject: React.FC<{
           <TableHead>
             <TableCell>Field</TableCell>
             <TableCell>Value</TableCell>
+            <TableCell />
           </TableHead>
           <TableBody>
             {map(value, (fieldValue, optionKey) => {
@@ -172,7 +189,17 @@ const AssignValuesToObject: React.FC<{
                       <>Unknown field type {field.type}</>
                     )}
                   </TableCell>
-                  <Divider />
+                  <TableCell>
+                    <IconButton
+                      onClick={() => {
+                        const nv: { [key: string]: any } = value;
+                        delete nv[optionKey];
+                        onChange(nv);
+                      }}
+                    >
+                      <Icon icon="trash" size={14} />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               );
             })}
