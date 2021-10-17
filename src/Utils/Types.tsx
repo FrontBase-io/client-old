@@ -266,6 +266,7 @@ export interface ProcessTriggerType {
   oldObject?: string;
   newObject?: string;
   output?: string;
+  operations?: string[];
 }
 
 export interface ProcessTriggersType {

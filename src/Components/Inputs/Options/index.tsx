@@ -1,11 +1,14 @@
 import React, { CSSProperties } from "react";
 import {
+  Checkbox,
   FormControl,
   FormControlLabel,
+  FormGroup,
   FormLabel,
   Radio,
   RadioGroup,
 } from "@mui/material";
+import { remove } from "lodash";
 
 interface OptionType {
   label: string;
@@ -13,8 +16,8 @@ interface OptionType {
 }
 
 const OptionsInput: React.FC<{
-  label: string;
-  value: string | string[];
+  label?: string;
+  value?: string | string[];
   options: OptionType[];
   mode?: "radio" | "checkbox";
   onChange?: (value: string | string[]) => void;
@@ -55,7 +58,34 @@ const OptionsInput: React.FC<{
       </RadioGroup>
     </FormControl>
   ) : (
-    <>Mode checkbox not built yet</>
+    <FormControl
+      sx={{ m: 3 }}
+      variant="standard"
+      style={{ display: "block", margin: "10px 0" }}
+    >
+      {label && <FormLabel component="legend">{label}</FormLabel>}
+      <FormGroup>
+        {options.map((option) => (
+          <FormControlLabel
+            key={option.value}
+            control={
+              <Checkbox
+                checked={(value || []).includes(option.value)}
+                onChange={() => {
+                  const newValue = (value as string[]) || [];
+                  newValue.includes(option.value)
+                    ? remove(newValue, (o) => o === option.value)
+                    : newValue.push(option.value);
+                  onChange && onChange(newValue);
+                }}
+                name={option.value}
+              />
+            }
+            label={option.label}
+          />
+        ))}
+      </FormGroup>
+    </FormControl>
   );
 };
 

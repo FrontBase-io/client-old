@@ -32,7 +32,7 @@ const ProcessTriggers: React.FC<{
           <>
             <ListSubheader>Before change</ListSubheader>
             {process.triggers.beforeChange.map((trigger, triggerIndex) => (
-              <ListItem key={`beforeChangeTrigger-${triggerIndex}`}>
+              <ListItem key={`beforeChangeTrigger-${triggerIndex}`} button>
                 <ListItemText>{trigger.label}</ListItemText>
               </ListItem>
             ))}
@@ -71,6 +71,7 @@ const ProcessTriggers: React.FC<{
                               oldObject: form.newTrigger.oldObject,
                               newObject: form.newTrigger.newObject,
                               output: form.newTrigger.output,
+                              operations: form.newTrigger.operations,
                             },
                           ],
                         });
@@ -108,6 +109,7 @@ const NewTriggerInputType: React.FC<{
     oldObject?: string;
     newObject?: string;
     output?: string;
+    operations?: string[];
   };
   onChange: (newValue: {}) => void;
   context: AppContext;
@@ -172,6 +174,19 @@ const NewTriggerInputType: React.FC<{
             That variable will be saved. The process will be ran as the user
             saving the object.
           </Typography>
+          <context.UI.Inputs.Options
+            label="What operations?"
+            options={[
+              { label: "Insert", value: "insert" },
+              { label: "Update", value: "update" },
+              { label: "Delete", value: "delete" },
+            ]}
+            mode="checkbox"
+            value={value.operations}
+            onChange={(operations) =>
+              onChange({ ...value, operations: operations as string[] })
+            }
+          />
           <context.UI.Inputs.Select
             label="Model"
             value={value.modelKey}
@@ -220,7 +235,7 @@ const NewTriggerInputType: React.FC<{
                 onChange={(oldObject) =>
                   onChange({ ...value, oldObject: oldObject as string })
                 }
-              />{" "}
+              />
               <context.UI.Inputs.Select
                 label="Output variable"
                 value={value.output || ""}
