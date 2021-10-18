@@ -49,14 +49,14 @@ const SettingsProcesses: React.FC<{ context: AppContext }> = ({ context }) => {
                           type: "input",
                           selectable: false,
                           data: { label: "Start" },
-                          position: { x: 10, y: 5 },
+                          position: { x: 255, y: 15 },
                         },
                         {
                           id: "output",
                           type: "output",
                           selectable: false,
                           data: { label: "Done" },
-                          position: { x: 500, y: 700 },
+                          position: { x: 255, y: 700 },
                         },
                       ],
                     })

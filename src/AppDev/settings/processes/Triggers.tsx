@@ -2,6 +2,7 @@ import {
   Divider,
   List,
   ListItem,
+  ListItemIcon,
   ListItemText,
   ListSubheader,
   Typography,
@@ -9,6 +10,7 @@ import {
 import { filter, findLast } from "lodash";
 import { useEffect, useState } from "react";
 import { AppContext } from "../../../Components/Context";
+import Icon from "../../../Components/Design/Icon";
 import {
   ModelType,
   ProcessObjectType,
@@ -33,6 +35,35 @@ const ProcessTriggers: React.FC<{
             <ListSubheader>Before change</ListSubheader>
             {process.triggers.beforeChange.map((trigger, triggerIndex) => (
               <ListItem key={`beforeChangeTrigger-${triggerIndex}`} button>
+                <ListItemIcon>
+                  <Icon icon="undo" />
+                </ListItemIcon>
+                <ListItemText>{trigger.label}</ListItemText>
+              </ListItem>
+            ))}
+          </>
+        )}
+        {process.triggers?.singleAction && (
+          <>
+            <ListSubheader>Single action</ListSubheader>
+            {process.triggers.singleAction.map((trigger, triggerIndex) => (
+              <ListItem key={`singleActionTrigger-${triggerIndex}`} button>
+                <ListItemIcon>
+                  <Icon icon="cube" />
+                </ListItemIcon>
+                <ListItemText>{trigger.label}</ListItemText>
+              </ListItem>
+            ))}
+          </>
+        )}
+        {process.triggers?.manyAction && (
+          <>
+            <ListSubheader>Many action</ListSubheader>
+            {process.triggers.manyAction.map((trigger, triggerIndex) => (
+              <ListItem key={`manyActionTrigger-${triggerIndex}`} button>
+                <ListItemIcon>
+                  <Icon icon="cubes" />
+                </ListItemIcon>
                 <ListItemText>{trigger.label}</ListItemText>
               </ListItem>
             ))}
@@ -76,6 +107,32 @@ const ProcessTriggers: React.FC<{
                           ],
                         });
                         break;
+                      case "singleAction":
+                        onChange({
+                          ...process.triggers,
+                          singleAction: [
+                            ...(process.triggers?.singleAction || []),
+                            {
+                              label: form.newTrigger.label,
+                              modelKey: form.newTrigger.modelKey,
+                              input: form.newTrigger.input,
+                            },
+                          ],
+                        });
+                        break;
+                      case "manyAction":
+                        onChange({
+                          ...process.triggers,
+                          manyAction: [
+                            ...(process.triggers?.manyAction || []),
+                            {
+                              label: form.newTrigger.label,
+                              modelKey: form.newTrigger.modelKey,
+                              input: form.newTrigger.input,
+                            },
+                          ],
+                        });
+                        break;
                       default:
                         context.canvas.interact.snackbar(
                           `Unknown trigger ${form.newTrigger.type}`,
@@ -110,6 +167,9 @@ const NewTriggerInputType: React.FC<{
     newObject?: string;
     output?: string;
     operations?: string[];
+
+    // Actions
+    input?: string;
   };
   onChange: (newValue: {}) => void;
   context: AppContext;
@@ -252,6 +312,79 @@ const NewTriggerInputType: React.FC<{
                 }
               />
             </>
+          )}
+        </context.UI.Design.Card>
+      )}
+      {value.type === "singleAction" && (
+        <context.UI.Design.Card
+          title="Single action"
+          withoutMargin
+          style={{ marginTop: 15 }}
+        >
+          <Typography variant="body2">
+            This trigger allows the process to be fired from the UI. It can be
+            attached to buttons with exactly one object as input.
+          </Typography>
+          <context.UI.Inputs.Select
+            label="Model"
+            value={value.modelKey}
+            onChange={(modelKey) =>
+              onChange({ ...value, modelKey: modelKey as string })
+            }
+            options={modelList}
+          />
+          {value.modelKey && (
+            <context.UI.Inputs.Select
+              label="Input variable"
+              value={value.input || ""}
+              options={filter(
+                variableList,
+                (o) =>
+                  (o.object?.type === "object" ||
+                    o.object?.type === "objects") &&
+                  o.object.recordModel === value.modelKey &&
+                  o.object.isInput === true
+              )}
+              onChange={(input) =>
+                onChange({ ...value, input: input as string })
+              }
+            />
+          )}
+        </context.UI.Design.Card>
+      )}
+      {value.type === "manyAction" && (
+        <context.UI.Design.Card
+          title="Many action"
+          withoutMargin
+          style={{ marginTop: 15 }}
+        >
+          <Typography variant="body2">
+            This trigger allows the process to be fired from the UI. It can be
+            attached to buttons with more than one object as input.
+          </Typography>
+          <context.UI.Inputs.Select
+            label="Model"
+            value={value.modelKey}
+            onChange={(modelKey) =>
+              onChange({ ...value, modelKey: modelKey as string })
+            }
+            options={modelList}
+          />
+          {value.modelKey && (
+            <context.UI.Inputs.Select
+              label="Input variable"
+              value={value.input || ""}
+              options={filter(
+                variableList,
+                (o) =>
+                  o.object?.type === "objects" &&
+                  o.object.recordModel === value.modelKey &&
+                  o.object.isInput === true
+              )}
+              onChange={(input) =>
+                onChange({ ...value, newObject: input as string })
+              }
+            />
           )}
         </context.UI.Design.Card>
       )}

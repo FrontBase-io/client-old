@@ -8,6 +8,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { map, findLast } from "lodash";
@@ -129,7 +130,7 @@ export default EditAssignValuesNode;
 const AssignValuesToObject: React.FC<{
   context: AppContext;
   process: ProcessObjectType;
-  value: {};
+  value: { [key: string]: any };
   model: ModelType;
   onChange: (newVal: {}) => void;
   varKey: string;
@@ -171,23 +172,69 @@ const AssignValuesToObject: React.FC<{
                 <TableRow key={optionKey}>
                   <TableCell>{field.label}</TableCell>
                   <TableCell>
-                    {field.type === "text" ? (
-                      <context.UI.Inputs.Text
-                        value={fieldValue}
-                        onChange={(newValue) =>
-                          onChange({ ...value, [optionKey]: newValue })
-                        }
-                      />
-                    ) : field.type === "number" ? (
-                      <context.UI.Inputs.Number
-                        value={fieldValue}
-                        onChange={(newValue) =>
-                          onChange({ ...value, [optionKey]: newValue })
-                        }
-                      />
-                    ) : (
-                      <>Unknown field type {field.type}</>
-                    )}
+                    <Grid container>
+                      <Grid item xs={11}>
+                        {(fieldValue || {})["___form"] ? (
+                          <context.UI.Inputs.Text
+                            value={fieldValue["___form"]}
+                            onChange={(newValue) =>
+                              onChange({
+                                ...value,
+                                [optionKey]: { ___form: newValue },
+                              })
+                            }
+                          />
+                        ) : field.type === "text" ? (
+                          <context.UI.Inputs.Text
+                            value={fieldValue}
+                            onChange={(newValue) =>
+                              onChange({ ...value, [optionKey]: newValue })
+                            }
+                          />
+                        ) : field.type === "number" ? (
+                          <context.UI.Inputs.Number
+                            value={fieldValue}
+                            onChange={(newValue) =>
+                              onChange({ ...value, [optionKey]: newValue })
+                            }
+                          />
+                        ) : (
+                          <>Unknown field type {field.type}</>
+                        )}
+                      </Grid>
+                      <Grid item xs={1}>
+                        {(fieldValue || {})["___form"] ? (
+                          <Tooltip
+                            title="Switch back to value"
+                            placement="right"
+                          >
+                            <IconButton
+                              onClick={() => {
+                                onChange({
+                                  ...value,
+                                  [optionKey]: fieldValue["___form"],
+                                });
+                              }}
+                            >
+                              <Icon icon="keyboard" />
+                            </IconButton>
+                          </Tooltip>
+                        ) : (
+                          <Tooltip title="Switch to formula" placement="right">
+                            <IconButton
+                              onClick={() => {
+                                onChange({
+                                  ...value,
+                                  [optionKey]: { ___form: value[optionKey] },
+                                });
+                              }}
+                            >
+                              <Icon icon="vial" />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                      </Grid>
+                    </Grid>
                   </TableCell>
                   <TableCell>
                     <IconButton

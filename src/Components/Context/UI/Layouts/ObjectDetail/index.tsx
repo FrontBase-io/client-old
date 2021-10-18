@@ -1,5 +1,5 @@
 import { Button, ButtonGroup, Grid } from "@mui/material";
-import { map } from "lodash";
+import { filter, map } from "lodash";
 import isEqual from "lodash/isEqual";
 import { useCallback, useEffect, useState } from "react";
 import { AppContext } from "../../..";
@@ -8,6 +8,7 @@ import {
   ModelType,
   ObjectType,
   PreObjectType,
+  ProcessObjectType,
 } from "../../../../../Utils/Types";
 import LayoutComponent from "./LayoutComponent";
 import Actions from "../../../../Actions";
@@ -39,6 +40,11 @@ const ObjectDetail: React.FC<{
   const [appliedModel, setAppliedModel] = useState<ModelType>();
   const [viewMode, setViewMode] = useState<"view" | "edit">("view");
   const [selectedField, setSelectedField] = useState<string>();
+  const [layout, setLayout] = useState<ModelLayoutType>();
+  const [availableProcesses, setAvailableProcesses] = useState<{
+    [key: string]: ProcessObjectType;
+  }>({});
+
   const save = useCallback(() => {
     const fieldsToUpdate: { [key: string]: any } = {};
     map(newObject, (value, key) => {
@@ -71,6 +77,37 @@ const ObjectDetail: React.FC<{
           ),
     [context.data.models, model, modelKey]
   );
+  useEffect(() => {
+    if (appliedModel) {
+      let newLayout: ModelLayoutType;
+
+      (layoutKey || ["default"]).map((lk) => {
+        if (appliedModel.layouts[lk] && !newLayout) {
+          newLayout = appliedModel.layouts[lk];
+        }
+      });
+      //@ts-ignore
+      setLayout(newLayout || appliedModel.layouts["default"]);
+
+      // Fetch the relevant processes
+      const processesToFetch: string[] = [];
+      //@ts-ignore
+      filter(newLayout.buttons, (o) => o.match("process_")).map((b) =>
+        processesToFetch.push((b as string).replace("process_", ""))
+      );
+      context.data.objects.get(
+        "process",
+        { _id: { $in: processesToFetch } },
+        (fetchedProcesses) => {
+          const newProcesses: { [key: string]: ProcessObjectType } = {};
+          fetchedProcesses.map((fp) => {
+            newProcesses[fp._id] = fp as ProcessObjectType;
+          });
+          setAvailableProcesses(newProcesses);
+        }
+      );
+    }
+  }, [appliedModel, context.data.objects, layoutKey]);
   // Pick Object
   useEffect(() => {
     if (object) {
@@ -138,16 +175,6 @@ const ObjectDetail: React.FC<{
   )
     return <context.UI.Loading />;
 
-  let layout: ModelLayoutType | undefined = undefined;
-  if (layoutKey) {
-    layoutKey.map((lk) => {
-      if (appliedModel.layouts[lk] && !layout) {
-        layout = appliedModel.layouts[lk];
-      }
-    });
-  }
-  if (!layout) layout = appliedModel.layouts["default"];
-
   if (!layout)
     return (
       <context.UI.Design.Animation.Animate>
@@ -181,29 +208,47 @@ const ObjectDetail: React.FC<{
               style={{ marginBottom: 5, border: "1px solid white" }}
             >
               {layout.buttons.slice(0, 3).map((button) => {
-                const action = Actions[button];
-                return (
-                  <Button
-                    key={button}
-                    onClick={() =>
-                      action
-                        .onClick(
-                          context,
-                          appliedObject as ObjectType,
-                          appliedModel
-                        )
-                        .then(
-                          () =>
-                            onAfterButtonPress &&
-                            onAfterButtonPress[button] &&
-                            onAfterButtonPress[button]()
-                        )
-                    }
-                    style={{ color: "white" }}
-                  >
-                    {button}
-                  </Button>
-                );
+                if (button.match("process_")) {
+                  const process =
+                    availableProcesses[button.replace("process_", "")];
+                  return (
+                    <Button
+                      style={{ color: "white" }}
+                      onClick={() => {
+                        context.data.actions.executeSingleAction(
+                          process._id,
+                          appliedObject as ObjectType
+                        );
+                      }}
+                    >
+                      {process?.name || "One sec..."}
+                    </Button>
+                  );
+                } else {
+                  const action = Actions[button];
+                  return (
+                    <Button
+                      key={button}
+                      onClick={() =>
+                        action
+                          .onClick(
+                            context,
+                            appliedObject as ObjectType,
+                            appliedModel
+                          )
+                          .then(
+                            () =>
+                              onAfterButtonPress &&
+                              onAfterButtonPress[button] &&
+                              onAfterButtonPress[button]()
+                          )
+                      }
+                      style={{ color: "white" }}
+                    >
+                      {button}
+                    </Button>
+                  );
+                }
               })}
             </ButtonGroup>
           </div>

@@ -25,13 +25,6 @@ import Icon from "../../../../Components/Design/Icon";
 import { modifyRecursive } from "../../../../Utils/Functions";
 import Actions from "../../../../Components/Actions/index";
 
-const actionOptions: SelectOptionType[] = [];
-map(Actions, (action, actionKey) => {
-  if (action.accepts.includes("None") || action.accepts.includes("One")) {
-    actionOptions.push({ label: action.label, value: actionKey });
-  }
-});
-
 const ModelLayoutDetail: React.FC<{
   context: AppContext;
   selectedKey: string;
@@ -50,7 +43,7 @@ const ModelLayoutDetail: React.FC<{
   // Vars
   const [layout, setLayout] = useState<ModelLayoutType>();
   const [hasChanged, setHasChanged] = useState<boolean>(false);
-
+  const [actionOptions, setActionOptions] = useState<SelectOptionType[]>([]);
   // Lifecycle
   useEffect(() => {
     setLayout(model.layouts[selectedKey]);
@@ -59,6 +52,48 @@ const ModelLayoutDetail: React.FC<{
   useEffect(() => {
     setHasChanged(!isEqual(model.layouts[selectedKey], layout));
   }, [model, selectedKey, layout]);
+  useEffect(() => {
+    // Processes
+    context.data.objects.get(
+      "process",
+      {
+        $or: [
+          {
+            "triggers.singleAction": {
+              $elemMatch: { modelKey: model.key },
+            },
+          },
+          {
+            "triggers.globalAction": {
+              $elemMatch: { modelKey: model.key },
+            },
+          },
+        ],
+      },
+      (processes) => {
+        const newActionOptions: SelectOptionType[] = [];
+        // Actions from code
+        map(Actions, (action, actionKey) => {
+          if (
+            action.accepts.includes("None") ||
+            action.accepts.includes("One")
+          ) {
+            newActionOptions.push({
+              label: action.label,
+              value: actionKey,
+            });
+          }
+        });
+        processes.map((process) =>
+          newActionOptions.push({
+            label: process.name,
+            value: `process_${process._id}`,
+          })
+        );
+        setActionOptions(newActionOptions);
+      }
+    );
+  }, [context.data.objects, model.key]);
 
   // UI
   if (!layout) return <context.UI.Loading />;

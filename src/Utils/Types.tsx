@@ -247,7 +247,7 @@ export interface ProcessObjectType extends ObjectType {
 export interface ProcesLogicStepItemType {
   id: string;
   type: string;
-  data: { type: string; label: string };
+  data: { type: string; label: string; formula?: {} };
   position: { x: number; y: number };
 }
 
@@ -267,6 +267,9 @@ export interface ProcessTriggerType {
   newObject?: string;
   output?: string;
   operations?: string[];
+
+  // Action
+  input?: string;
 }
 
 export interface ProcessTriggersType {
@@ -274,6 +277,6 @@ export interface ProcessTriggersType {
   afterChange?: ProcessTriggerType[];
   time?: ProcessTriggerType[];
   globalAction?: ProcessTriggerType[];
-  singleAction?: ProcessTriggerType;
+  singleAction?: ProcessTriggerType[];
   manyAction?: ProcessTriggerType[];
 }

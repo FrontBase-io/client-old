@@ -23,7 +23,7 @@ import ReactFlow, {
   Node,
 } from "react-flow-renderer";
 import { useEffect, useRef, useState } from "react";
-import { findIndex, isEqual } from "lodash";
+import { cloneDeep, findIndex, isEqual } from "lodash";
 import ProcessVariables from "./Variables";
 import ProcessComponents from "./Components";
 import uniqid from "uniqid";
@@ -82,7 +82,6 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
                             ...params,
                             //@ts-ignore
                             arrowHeadType: "arrowclosed",
-                            animated: true,
                             type: "step",
                           },
                           newObject.logic
@@ -100,6 +99,13 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
                         ),
                       })
                     }
+                    onNodeDragStop={(event, node) => {
+                      let logic = cloneDeep(newObject.logic);
+                      //@ts-ignore
+                      logic[findIndex(logic, (o) => o.id === node.id)] = node;
+
+                      setNewObject({ ...newObject, logic });
+                    }}
                     onDragOver={(event) => {
                       event.preventDefault();
                       event.dataTransfer.dropEffect = "move";
@@ -222,11 +228,12 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
                                 args: form.args,
                               },
                             };
-                            let logic = newObject.logic;
+                            let logic = cloneDeep(newObject.logic);
                             //@ts-ignore
                             logic[
                               findIndex(logic, (o) => o.id === newNode.id)
                             ] = newNode;
+                            console.log(logic);
 
                             setNewObject({ ...newObject, logic });
 
@@ -277,7 +284,10 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
                     () =>
                       context.canvas.interact.snackbar("Updated", "success"),
                     (reason) =>
-                      context.canvas.interact.snackbar(reason, "error")
+                      context.canvas.interact.snackbar(
+                        JSON.stringify(reason),
+                        "error"
+                      )
                   )
                 }
               >
