@@ -5,6 +5,109 @@ body {
   font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+}
+
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.text-center {
+  text-align: center;
+}
+
+.bg {
+  background-color: #1a46a6;
+  color: white;
+}
+
+.no-link,
+a {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.75);
+  transition: all 0.3s;
+  &:hover {
+    color: black;
+  }
+}
+
+.cursor {
+  cursor: default;
+}
+
+blockquote {
+  border-left: 5px solid #666;
+  padding-left: 25px;
+  margin-left: 0;
+  quotes: "\201C""\201D""\2018""\2019";
+}
+blockquote:before {
+  color: #ccc;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
+  vertical-align: -0.4em;
+}
+blockquote p {
+  display: inline;
+}
+
+::-webkit-scrollbar {
+  width: 4px; /* for vertical scrollbars */
+  height: 4px; /* for horizontal scrollbars */
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  transition: all 0.3s;
+  &:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  transition: all 0.3s;
+  &:hover {
+    background: rgba(0, 0, 0, 0.4);
+  }
+}
+.draggable {
+  cursor: grab;
+  &:active {
+    cursor: grabbing;
+  }
+}
+.scrollIndependently {
+  height: calc(100vh - 64px);
+  overflow: auto;
+
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.scrollHorizontal {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+a:hover {
+  text-decoration: none;
 }
 
 ::selection {

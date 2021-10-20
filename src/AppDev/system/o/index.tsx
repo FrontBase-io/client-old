@@ -37,7 +37,7 @@ const O: React.FC<{ id: string }> = ({ id }) => {
         });
       });
     });
-  }, [id]);
+  }, [history, id]);
 
   // UI
   return <Loading />;

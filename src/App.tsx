@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import CircularProgress from "@mui/material/CircularProgress";
+import { useEffect } from "react";
 import { useGlobal, useState } from "reactn";
 import "./App.css";
 import socket, { serverUrl } from "./Utils/Socket";
@@ -10,6 +9,7 @@ import Hidden from "@mui/material/Hidden";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import chroma from "chroma-js";
+import Loading from "./Components/Loading";
 
 const Onboard = asyncComponent(() => import("./Screens/Onboard"));
 const Login = asyncComponent(() => import("./Screens/LogIn"));
@@ -90,7 +90,7 @@ function App() {
   }, [setColors, setTheme, setUser]);
 
   // UI
-  if (mode === "loading") return <CircularProgress />;
+  if (mode === "loading") return <Loading />;
   return (
     <>
       {mode === "onboard" ? (
@@ -100,11 +100,11 @@ function App() {
       ) : (
         <ThemeProvider theme={createTheme(theme)}>
           <SnackbarProvider maxSnack={3}>
-            <Hidden xsDown>
+            <Hidden smDown>
               <Desktop utils={{ setPrimaryColor }} />
             </Hidden>
-            <Hidden smUp>
-              <Mobile />
+            <Hidden mdUp>
+              <Mobile utils={{ setPrimaryColor }} />
             </Hidden>
           </SnackbarProvider>
         </ThemeProvider>

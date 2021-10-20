@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { AppContext } from "../../..";
-import { ModelType, ObjectType } from "../../../../../Utils/Types";
+import {
+  ModelType,
+  ObjectType,
+  ProcessObjectType,
+} from "../../../../../Utils/Types";
 import Typography from "@mui/material/Typography";
 import Popover from "@mui/material/Popover";
 import List from "@mui/material/List";
@@ -17,7 +21,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { find, map } from "lodash";
+import { filter, find, map } from "lodash";
 import { useHistory } from "react-router";
 import FieldDisplay from "../../Data/FieldDisplay";
 import Actions from "../../../../Actions";
@@ -36,6 +40,9 @@ const ObjectList: React.FC<{
   const [manyActionAnchorEl, setManyActionAnchorEl] =
     useState<HTMLButtonElement | null>(null);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [availableProcesses, setAvailableProcesses] = useState<{
+    [key: string]: ProcessObjectType;
+  }>({});
 
   //- Lists
   const [selectedList, setSelectedList] = useState<string | undefined>();
@@ -64,6 +71,34 @@ const ObjectList: React.FC<{
       );
     }
   }, [model?.lists, selectedList, modelKey, model, context.data.objects]);
+  useEffect(() => {
+    if (model && selectedList) {
+      // Fetch the relevant processes
+      const processesToFetch: string[] = [];
+
+      filter(
+        [
+          ...(model.lists[selectedList].actions?.global || []),
+          ...(model.lists[selectedList].actions?.single || []),
+          ...(model.lists[selectedList].actions?.many || []),
+        ],
+        (o) => o.match("process_")
+      ).map((b) =>
+        processesToFetch.push((b as string).replace("process_", ""))
+      );
+      context.data.objects.get(
+        "process",
+        { _id: { $in: processesToFetch } },
+        (fetchedProcesses) => {
+          const newProcesses: { [key: string]: ProcessObjectType } = {};
+          fetchedProcesses.map((fp) => {
+            newProcesses[fp._id] = fp as ProcessObjectType;
+          });
+          setAvailableProcesses(newProcesses);
+        }
+      );
+    }
+  }, [model.lists, selectedList]);
 
   // UI
   if (!model) return <context.UI.Loading />;
@@ -117,27 +152,57 @@ const ObjectList: React.FC<{
                   <ListSubheader>Actions</ListSubheader>
                   {model.lists[selectedList].actions?.single.map(
                     (actionKey) => {
-                      const action = Actions[actionKey];
-                      return (
-                        <ListItem
-                          key={`singleAction-${actionKey}`}
-                          button
-                          onClick={() =>{
-                            action.onClick(
-                              context,
-                              find(
-                                objects!,
-                                (o) => o._id === selectedItems[0]
-                              ) as ObjectType,
-                              model
-                            );
-                          setSingleActionAnchorEl(null)
-                          }
-                          }
-                        >
-                          {action.label}
-                        </ListItem>
-                      );
+                      if (actionKey.match("process_")) {
+                        const process =
+                          availableProcesses[actionKey.replace("process_", "")];
+
+                        if (process) {
+                          return (
+                            <ListItem
+                              button
+                              onClick={() => {
+                                context.data.actions.executeSingleAction(
+                                  process._id,
+                                  find(
+                                    objects!,
+                                    (o) => o._id === selectedItems[0]
+                                  ) as ObjectType
+                                );
+                                setSingleActionAnchorEl(null);
+                              }}
+                            >
+                              <ListItemText>{process.name}</ListItemText>
+                            </ListItem>
+                          );
+                        } else {
+                          return (
+                            <ListItem>
+                              <ListItemText>...</ListItemText>
+                            </ListItem>
+                          );
+                        }
+                      } else {
+                        const action = Actions[actionKey];
+                        return (
+                          <ListItem
+                            key={`singleAction-${actionKey}`}
+                            button
+                            onClick={() => {
+                              action.onClick(
+                                context,
+                                find(
+                                  objects!,
+                                  (o) => o._id === selectedItems[0]
+                                ) as ObjectType,
+                                model
+                              );
+                              setSingleActionAnchorEl(null);
+                            }}
+                          >
+                            {action.label}
+                          </ListItem>
+                        );
+                      }
                     }
                   )}
                 </List>

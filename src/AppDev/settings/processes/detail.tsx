@@ -31,6 +31,7 @@ import Icon from "../../../Components/Design/Icon";
 import FourOhFour from "../../../Components/FourOhFour";
 import EditAssignValuesNode from "./EditNodes/AssignValues";
 import ProcessTriggers from "./Triggers";
+import EditUpdateObjectsNode from "./EditNodes/UpdateObjects";
 
 const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
   // Vars
@@ -210,7 +211,7 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
                             {
                               get_objects: FourOhFour,
                               create_objects: FourOhFour,
-                              update_objects: FourOhFour,
+                              update_objects: EditUpdateObjectsNode,
                               assign_values: EditAssignValuesNode,
                               conditions: FourOhFour,
                             }[selectedNode?.data.type as string] || FourOhFour,

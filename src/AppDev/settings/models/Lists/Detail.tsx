@@ -15,24 +15,10 @@ import {
   ModelType,
   ModelListType,
   SelectOptionType,
+  ProcessObjectType,
 } from "../../../../Utils/Types";
 import { useEffect, useState } from "react";
 import Actions from "../../../../Components/Actions";
-
-const globalActionOptions: SelectOptionType[] = [];
-const oneActionOptions: SelectOptionType[] = [];
-const manyActionOptions: SelectOptionType[] = [];
-map(Actions, (action, actionKey) => {
-  if (action.accepts.includes("None")) {
-    globalActionOptions.push({ label: action.label, value: actionKey });
-  }
-  if (action.accepts.includes("One")) {
-    oneActionOptions.push({ label: action.label, value: actionKey });
-  }
-  if (action.accepts.includes("Many")) {
-    manyActionOptions.push({ label: action.label, value: actionKey });
-  }
-});
 
 const ModelListDetail: React.FC<{
   context: AppContext;
@@ -53,11 +39,84 @@ const ModelListDetail: React.FC<{
   const [newList, setNewList] = useState<ModelListType>(
     model.lists[selectedKey]
   );
+  const [globalActionOptions, setGlobalActionOptions] = useState<
+    SelectOptionType[]
+  >([]);
+  const [oneActionOptions, setOneActionOptions] = useState<SelectOptionType[]>(
+    []
+  );
+  const [manyActionOptions, setManyActionOptions] = useState<
+    SelectOptionType[]
+  >([]);
 
   // Lifecycle
   useEffect(() => {
     setNewList(model.lists[selectedKey]);
-  }, [model, selectedKey]);
+    const newGlobalActionOptions: SelectOptionType[] = [];
+    const newOneActionOptions: SelectOptionType[] = [];
+    const newManyActionOptions: SelectOptionType[] = [];
+    // Add base actions
+    map(Actions, (action, actionKey) => {
+      if (action.accepts.includes("None")) {
+        newGlobalActionOptions.push({ label: action.label, value: actionKey });
+      }
+      if (action.accepts.includes("One")) {
+        newOneActionOptions.push({ label: action.label, value: actionKey });
+      }
+      if (action.accepts.includes("Many")) {
+        newManyActionOptions.push({ label: action.label, value: actionKey });
+      }
+    });
+
+    // Add processes
+    context.data.objects.get(
+      "process",
+      {
+        $or: [
+          {
+            "triggers.singleAction": {
+              $elemMatch: { modelKey: model.key },
+            },
+          },
+          {
+            "triggers.manyAction": {
+              $elemMatch: { modelKey: model.key },
+            },
+          },
+          {
+            "triggers.globalAction": {
+              $elemMatch: { modelKey: model.key },
+            },
+          },
+        ],
+      },
+      (processObjects) => {
+        (processObjects as ProcessObjectType[]).map((po) => {
+          if ((po.triggers?.singleAction || []).length > 0) {
+            newOneActionOptions.push({
+              label: po.name,
+              value: `process_${po._id}`,
+            });
+          }
+          if ((po.triggers?.globalAction || []).length > 0) {
+            newGlobalActionOptions.push({
+              label: po.name,
+              value: `process_${po._id}`,
+            });
+          }
+          if ((po.triggers?.manyAction || []).length > 0) {
+            newManyActionOptions.push({
+              label: po.name,
+              value: `process_${po._id}`,
+            });
+          }
+        });
+        setOneActionOptions(newOneActionOptions);
+        setGlobalActionOptions(newGlobalActionOptions);
+        setManyActionOptions(newManyActionOptions);
+      }
+    );
+  }, [context.data.objects, model, selectedKey]);
 
   // UI
   return (
