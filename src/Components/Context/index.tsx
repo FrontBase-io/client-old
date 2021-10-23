@@ -7,6 +7,7 @@ import Layouts from "./UI/Layouts";
 import Utils from "./Utils";
 import { VariantType } from "notistack";
 import UIData from "./UI/Data";
+import { AppUtilsType } from "../../App";
 
 interface CanvasType {
   navbar: {
@@ -45,8 +46,9 @@ export class AppContext {
   data = Data;
   utils = Utils;
 
-  constructor(appData: AppObjectType, canvas: CanvasType) {
+  constructor(appData: AppObjectType, canvas: CanvasType, utils: AppUtilsType) {
     this.appData = appData;
     this.canvas = canvas;
+    this.utils = { ...this.utils, ...utils };
   }
 }

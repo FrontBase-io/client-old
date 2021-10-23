@@ -88,7 +88,12 @@ export interface ModelFieldType {
 export interface ModelLayoutType {
   label: string;
   layout: LayoutItemType[];
-  factsbar?: string[];
+  factsbar?: {
+    title?: string;
+    color?: string;
+    image?: string;
+    fields?: string[];
+  };
   buttons?: string[];
 }
 

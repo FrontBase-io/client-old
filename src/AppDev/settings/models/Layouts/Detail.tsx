@@ -44,6 +44,11 @@ const ModelLayoutDetail: React.FC<{
   const [layout, setLayout] = useState<ModelLayoutType>();
   const [hasChanged, setHasChanged] = useState<boolean>(false);
   const [actionOptions, setActionOptions] = useState<SelectOptionType[]>([]);
+  const [allFields, setAllFields] = useState<SelectOptionType[]>([]);
+  const [titleFields, setTitleFields] = useState<SelectOptionType[]>([]);
+  const [imageFields, setImageFields] = useState<SelectOptionType[]>([]);
+  const [colorFields, setColorFields] = useState<SelectOptionType[]>([]);
+
   // Lifecycle
   useEffect(() => {
     setLayout(model.layouts[selectedKey]);
@@ -94,6 +99,28 @@ const ModelLayoutDetail: React.FC<{
       }
     );
   }, [context.data.objects, model.key]);
+  useEffect(() => {
+    const newAllFields: SelectOptionType[] = [];
+    const newTitleFields: SelectOptionType[] = [];
+    const newColorFields: SelectOptionType[] = [];
+    const newImageFields: SelectOptionType[] = [];
+    map(model.fields, (field, fieldKey) => {
+      const f = { label: field.label, value: fieldKey };
+      newAllFields.push(f);
+      (field.type === "text" ||
+        field.type === "options" ||
+        field.type === "relationship" ||
+        field.type === "relationship_m") &&
+        newTitleFields.push(f);
+      field.type === "color" && newColorFields.push(f);
+      field.type === "image" && newImageFields.push(f);
+    });
+
+    setAllFields(newAllFields);
+    setTitleFields(newTitleFields);
+    setColorFields(newColorFields);
+    setImageFields(newImageFields);
+  }, [model.fields]);
 
   // UI
   if (!layout) return <context.UI.Loading />;
@@ -120,7 +147,7 @@ const ModelLayoutDetail: React.FC<{
     >
       <Animation.Container>
         <Grid container>
-          <Grid item xs={9}>
+          <Grid item xs={9} className="scrollIndependently">
             <Animation.Item key="details">
               <Card
                 title="Facts"
@@ -134,10 +161,58 @@ const ModelLayoutDetail: React.FC<{
                 }
               >
                 <Grid container spacing={2}>
-                  <Grid item xs={6}>
+                  <Grid item xs={4}>
+                    <context.UI.Inputs.Select
+                      label="Title"
+                      value={layout.factsbar?.title}
+                      options={titleFields}
+                      onChange={(newValue) => {
+                        setLayout({
+                          ...layout,
+                          factsbar: {
+                            ...layout.factsbar,
+                            title: newValue as string,
+                          },
+                        });
+                      }}
+                    />
+                    {colorFields.length > 0 && (
+                      <context.UI.Inputs.Select
+                        label="Color"
+                        value={layout.factsbar?.color}
+                        options={colorFields}
+                        onChange={(newValue) => {
+                          setLayout({
+                            ...layout,
+                            factsbar: {
+                              ...layout.factsbar,
+                              color: newValue as string,
+                            },
+                          });
+                        }}
+                      />
+                    )}
+                    {imageFields.length > 0 && (
+                      <context.UI.Inputs.Select
+                        label="Image"
+                        value={layout.factsbar?.image}
+                        options={imageFields}
+                        onChange={(newValue) => {
+                          setLayout({
+                            ...layout,
+                            factsbar: {
+                              ...layout.factsbar,
+                              image: newValue as string,
+                            },
+                          });
+                        }}
+                      />
+                    )}
+                  </Grid>
+                  <Grid item xs={4}>
                     <context.UI.Inputs.Select
                       label="Displayed fields"
-                      value={layout.factsbar || []}
+                      value={layout.factsbar?.fields || []}
                       options={context.utils.listifyObjectForSelect(
                         model.fields,
                         "label"
@@ -146,12 +221,15 @@ const ModelLayoutDetail: React.FC<{
                       onChange={(newVal) =>
                         setLayout({
                           ...layout,
-                          factsbar: newVal as string[],
+                          factsbar: {
+                            ...(layout.factsbar || {}),
+                            fields: newVal as string[],
+                          },
                         })
                       }
                     />
                   </Grid>
-                  <Grid item xs={6}>
+                  <Grid item xs={4}>
                     <context.UI.Inputs.Select
                       label="Actions"
                       value={layout.buttons || []}
@@ -193,7 +271,7 @@ const ModelLayoutDetail: React.FC<{
               </Card>
             </Animation.Item>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={3} className="scrollIndependently">
             {hasChanged && (
               <Animation.Item key="savebutton">
                 <Button

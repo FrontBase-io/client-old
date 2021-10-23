@@ -1,11 +1,11 @@
 import { IconButton, Tooltip } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import React, { CSSProperties } from "react";
+import React, { CSSProperties, ReactElement } from "react";
 import Icon from "../Icon";
 import styles from "./styles.module.scss";
 
 const Card: React.FC<{
-  title?: string;
+  title?: string | ReactElement<any, any>;
   style?: CSSProperties;
   onTitleClick?: () => void;
   withShadow?: true;

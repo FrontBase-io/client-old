@@ -10,6 +10,7 @@ import parseISO from "date-fns/parseISO";
 import DisplayRelationship from "./Relationship";
 import { AppContext } from "../../..";
 import DisplayRelationshipM from "./Relationship_m";
+import DisplayColor from "./Color";
 
 const FieldDisplay: React.FC<{
   context: AppContext;
@@ -65,6 +66,13 @@ const FieldDisplay: React.FC<{
           (o: SelectOptionType) => o.value === objectField
           //@ts-ignore
         )?.label || "error"
+      ) : modelField.type === "color" ? (
+        <DisplayColor
+          context={context}
+          model={model}
+          object={object}
+          fieldKey={fieldKey}
+        />
       ) : (
         `Unknown type ${modelField.type}`
       )}

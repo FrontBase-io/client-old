@@ -103,21 +103,25 @@ const AppLayout: React.FC<{
       utils.setPrimaryColor(
         `rgb(${object?.color?.r},${object?.color?.g},${object?.color?.b})`
       );
-      const context = new AppContext(object, {
-        navbar: {
-          up: setUpLink,
-          name: (pageName?: string) => setPageName(pageName || object.name),
-          actions: {
-            add: addNavbarAction,
-            remove: removeNavbarAction,
+      const context = new AppContext(
+        object,
+        {
+          navbar: {
+            up: setUpLink,
+            name: (pageName?: string) => setPageName(pageName || object.name),
+            actions: {
+              add: addNavbarAction,
+              remove: removeNavbarAction,
+            },
+          },
+          interact: {
+            snackbar: (msg: string, variant?: VariantType) =>
+              enqueueSnackbar(msg, { variant }),
+            dialog: setDialog,
           },
         },
-        interact: {
-          snackbar: (msg: string, variant?: VariantType) =>
-            enqueueSnackbar(msg, { variant }),
-          dialog: setDialog,
-        },
-      });
+        utils
+      );
       setContext(context);
 
       const appCode =

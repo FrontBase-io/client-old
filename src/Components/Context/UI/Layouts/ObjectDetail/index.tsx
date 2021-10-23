@@ -168,7 +168,17 @@ const ObjectDetail: React.FC<{
   useEffect(() => {
     appliedObject._id ? setViewMode("view") : setViewMode("edit");
   }, [appliedObject]);
+  useEffect(() => {
+    if (layout?.factsbar?.color) {
+      //@ts-ignore
+      context.utils.setPrimaryColor(appliedObject[layout.factsbar.color]);
+    }
 
+    return () => {
+      //@ts-ignore
+      context.utils.setPrimaryColor(context.appData.color);
+    };
+  }, [appliedObject, context.appData.color, context.utils, layout]);
   // UI
   if (
     !appliedModel ||
@@ -257,15 +267,22 @@ const ObjectDetail: React.FC<{
         </div>
       )}
       {layout.factsbar && (
-        <context.UI.Design.Card>
+        <context.UI.Design.Card
+          title={layout.factsbar.title && appliedObject[layout.factsbar.title]}
+        >
           <Grid
             container
             direction="row"
             justifyContent="space-between"
             alignItems="center"
           >
-            {layout.factsbar.map((f) => (
-              <Grid item xs={2} key={`facts-${f}`}>
+            {layout.factsbar.fields?.map((f) => (
+              <Grid
+                item
+                //@ts-ignore
+                xs={12 / layout.factsbar.fields?.length || 1}
+                key={`facts-${f}`}
+              >
                 <context.UI.Data.FieldDisplay
                   context={context}
                   model={appliedModel}
