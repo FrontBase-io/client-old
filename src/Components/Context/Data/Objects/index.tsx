@@ -27,6 +27,19 @@ const trash = (modelKey: string, objectId: string) =>
     );
   });
 
+// Delete many objects
+const trashMany = (modelKey: string, objectIds: string[]) =>
+  new Promise((resolve, reject) => {
+    Socket.emit(
+      "deleteObjects",
+      modelKey,
+      objectIds,
+      (response: ResponseType) => {
+        response.success ? resolve(response.results) : reject(response.errors);
+      }
+    );
+  });
+
 // Get object
 const get = (
   modelKey: string,
@@ -72,6 +85,7 @@ const objectFunctions = {
   get,
   update,
   trash,
+  trashMany,
   turnObjectIdIntoModelKey,
 };
 

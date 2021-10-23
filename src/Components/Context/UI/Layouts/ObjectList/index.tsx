@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import Popover from "@mui/material/Popover";
 import List from "@mui/material/List";
 import {
+  AppBar,
   Button,
   ButtonGroup,
   Checkbox,
@@ -42,12 +43,7 @@ const ObjectList: React.FC<{
   const [objects, setObjects] = useState<ObjectType[]>();
   const [singleActionAnchorEl, setSingleActionAnchorEl] =
     useState<HTMLButtonElement | null>(null);
-  const [manyActionAnchorEl, setManyActionAnchorEl] =
-    useState<HTMLButtonElement | null>(null);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [availableProcesses, setAvailableProcesses] = useState<{
-    [key: string]: ProcessObjectType;
-  }>({});
 
   //- Lists
   const [selectedList, setSelectedList] = useState<string | undefined>();
@@ -76,54 +72,27 @@ const ObjectList: React.FC<{
       );
     }
   }, [model?.lists, selectedList, modelKey, model, context.data.objects]);
-  useEffect(() => {
-    if (model && selectedList) {
-      // Fetch the relevant processes
-      const processesToFetch: string[] = [];
-
-      filter(
-        [
-          ...(model.lists[selectedList].actions?.global || []),
-          ...(model.lists[selectedList].actions?.single || []),
-          ...(model.lists[selectedList].actions?.many || []),
-        ],
-        (o) => o.type === "process"
-      ).map((b) => processesToFetch.push(b.key));
-      context.data.objects.get(
-        "process",
-        { _id: { $in: processesToFetch } },
-        (fetchedProcesses) => {
-          const newProcesses: { [key: string]: ProcessObjectType } = {};
-          fetchedProcesses.map((fp) => {
-            newProcesses[fp._id] = fp as ProcessObjectType;
-          });
-          setAvailableProcesses(newProcesses);
-        }
-      );
-    }
-  }, [context.data.objects, model, model.lists, selectedList]);
 
   // UI
   if (!model) return <context.UI.Loading />;
   return (
     <context.UI.Design.Animation.Animate>
-      <context.UI.Design.Card>
+      <context.UI.Design.Card withoutPadding>
         {(selectedItems || []).length < 2 ? (
-          <>
-            {" "}
+          <div style={{ padding: "15px 15px 0 15px", boxSizing: "border-box" }}>
             {selectedList && model.lists[selectedList].actions && (
               <>
                 {model.lists[selectedList].actions?.global && (
                   <div style={{ float: "right", padding: 5 }}>
                     <ButtonGroup color="primary">
                       {model.lists[selectedList].actions?.global?.map(
-                        (button) => {
-                          const action = Actions[button.key];
+                        (action) => {
+                          const Action = Actions[action.key];
                           return (
                             <Button
-                              key={`button-${button}`}
+                              key={`button-${action.key}`}
                               onClick={() =>
-                                action.onClick(
+                                Action.onClick(
                                   context,
                                   find(
                                     objects!,
@@ -161,34 +130,27 @@ const ObjectList: React.FC<{
                       {model.lists[selectedList].actions?.single?.map(
                         (action) => {
                           if (action.type === "process") {
-                            const process = availableProcesses[action.key];
-
-                            if (process) {
-                              return (
-                                <ListItem
-                                  key={action.key}
-                                  button
-                                  onClick={() => {
-                                    context.data.actions.executeSingleAction(
-                                      process._id,
-                                      find(
-                                        objects!,
-                                        (o) => o._id === selectedItems[0]
-                                      ) as ObjectType
-                                    );
-                                    setSingleActionAnchorEl(null);
-                                  }}
-                                >
-                                  <ListItemText>{process.name}</ListItemText>
-                                </ListItem>
-                              );
-                            } else {
-                              return (
-                                <ListItem>
-                                  <ListItemText>...</ListItemText>
-                                </ListItem>
-                              );
-                            }
+                            return (
+                              <ListItem
+                                key={action.key}
+                                button
+                                onClick={() => {
+                                  context.data.actions.executeSingleAction(
+                                    action.key,
+                                    find(
+                                      objects!,
+                                      (o) => o._id === selectedItems[0]
+                                    ) as ObjectType
+                                  );
+                                  setSingleActionAnchorEl(null);
+                                }}
+                              >
+                                <ListItemIcon style={{ minWidth: 24 }}>
+                                  <Icon icon={action.icon} size={14} />
+                                </ListItemIcon>
+                                <ListItemText>{action.label}</ListItemText>
+                              </ListItem>
+                            );
                           } else {
                             const Action = Actions[action.key];
                             return (
@@ -237,49 +199,75 @@ const ObjectList: React.FC<{
                 </span>
               )}
             </Typography>
-          </>
+          </div>
         ) : (
-          <Toolbar color="primary">
-            <Typography style={{ flex: "1" }}>
-              {selectedItems?.length === objects?.length
-                ? "All"
-                : selectedItems?.length}{" "}
-              {selectedItems?.length === 1 ? model.label : model.label_plural}{" "}
-              selected
-            </Typography>
-            <div>
-              {model.lists[selectedList!].actions?.many?.map((action) => {
-                if (action.type === "process") {
-                  const process = availableProcesses[action.key];
-
-                  if (process) {
+          <AppBar enableColorOnDark={true} position="static">
+            <Toolbar variant="dense" color="primary">
+              <Typography style={{ flex: "1" }}>
+                <IconButton
+                  onClick={() => setSelectedItems([])}
+                  style={{ marginRight: 5, marginLeft: -15 }}
+                >
+                  <context.UI.Design.Icon icon="times" size={18} />
+                </IconButton>
+                {selectedItems?.length === objects?.length
+                  ? "All"
+                  : selectedItems?.length}{" "}
+                {selectedItems?.length === 1 ? model.label : model.label_plural}{" "}
+                selected
+              </Typography>
+              <div>
+                {model.lists[selectedList!].actions?.many?.map((action) => {
+                  if (action.type === "process") {
                     return (
-                      <IconButton key={action.key}>{process.name}</IconButton>
+                      <Tooltip
+                        key={action.key}
+                        title={action.label}
+                        placement="bottom"
+                      >
+                        <IconButton
+                          onClick={() => {
+                            context.data.actions.executeManyAction(
+                              action.key,
+                              filter(objects!, (o) =>
+                                selectedItems.includes(o._id)
+                              ) as ObjectType[]
+                            );
+                            setSingleActionAnchorEl(null);
+                          }}
+                        >
+                          <Icon icon={action.icon} size={18} />
+                        </IconButton>
+                      </Tooltip>
                     );
                   } else {
+                    const Action = Actions[action.key];
                     return (
-                      <IconButton key={action.key}>
-                        <Icon icon="question" />
-                      </IconButton>
+                      <Tooltip
+                        key={action.key}
+                        title={action.label}
+                        placement="bottom"
+                      >
+                        <IconButton
+                          onClick={() => {
+                            Action.onClick(
+                              context,
+                              filter(objects!, (o) =>
+                                selectedItems.includes(o._id)
+                              ) as ObjectType[],
+                              model
+                            ).then(() => setSelectedItems([]));
+                          }}
+                        >
+                          <Icon icon={action.icon} size={18} />
+                        </IconButton>
+                      </Tooltip>
                     );
                   }
-                } else {
-                  const Action = Actions[action.key];
-                  return (
-                    <Tooltip
-                      key={action.key}
-                      title={action.label}
-                      placement="left"
-                    >
-                      <IconButton>
-                        <Icon icon={action.icon} size={16} />
-                      </IconButton>
-                    </Tooltip>
-                  );
-                }
-              })}
-            </div>
-          </Toolbar>
+                })}
+              </div>
+            </Toolbar>
+          </AppBar>
         )}
         <Popover
           open={Boolean(listsAnchor)}
@@ -287,11 +275,11 @@ const ObjectList: React.FC<{
           onClose={() => setListsAnchor(null)}
           anchorOrigin={{
             vertical: "bottom",
-            horizontal: "left",
+            horizontal: "right",
           }}
           transformOrigin={{
             vertical: "top",
-            horizontal: "left",
+            horizontal: "center",
           }}
           style={{ padding: 15 }}
           PaperProps={{
@@ -301,7 +289,7 @@ const ObjectList: React.FC<{
         >
           <context.UI.Design.Card
             title="Lists"
-            style={{ minWidth: 150, marginTop: -35 }}
+            style={{ minWidth: 150 }}
             withoutPadding
           >
             <List disablePadding>
@@ -322,6 +310,9 @@ const ObjectList: React.FC<{
                 </ListItem>
               ))}
               <ListSubheader>My lists</ListSubheader>
+              <ListItem button>
+                <ListItemText>Create own list</ListItemText>
+              </ListItem>
             </List>
           </context.UI.Design.Card>
         </Popover>

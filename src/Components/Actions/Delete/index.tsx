@@ -1,4 +1,5 @@
 import { Typography } from "@mui/material";
+import { map, reject } from "lodash";
 import { ModelType, ObjectType } from "../../../Utils/Types";
 import { AppContext } from "../../Context";
 
@@ -28,9 +29,10 @@ const DeleteAction = {
           <>
             {Array.isArray(objects) ? (
               <>
-                {model.label_plural}{" "}
+                {model.label_plural} <i>{objects[0][model.primary]}</i> and{" "}
                 <i>
-                  {objects[0][model.primary]} and {objects.length} others
+                  {objects.length - 1} other
+                  {objects.length - 1 !== 1 && "s"}
                 </i>
               </>
             ) : (
@@ -55,11 +57,34 @@ const DeleteAction = {
             ),
             onClick: (_, close) => {
               if (Array.isArray(objects)) {
-                console.log("Todo: delete multiple entries at once");
+                context.data.objects
+                  .trashMany(
+                    model.key,
+                    map(objects!, (o) => o._id)
+                  )
+                  .then(
+                    () => resolve(),
+                    (errors) => {
+                      context.canvas.interact.snackbar(
+                        errors.join(", "),
+                        "error"
+                      );
+                      reject(errors);
+                    }
+                  );
               } else {
                 context.data.objects.trash(model.key, objects!._id).then(
-                  () => resolve(),
-                  (reason) => context.canvas.interact.snackbar(reason, "error")
+                  () => {
+                    context.canvas.interact.snackbar(
+                      `${(objects || []).length} objects deleted`,
+                      "success"
+                    );
+                    resolve();
+                  },
+                  (reason) => {
+                    context.canvas.interact.snackbar(reason, "error");
+                    reject(reason);
+                  }
                 );
               }
 
