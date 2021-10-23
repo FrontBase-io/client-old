@@ -95,9 +95,9 @@ export interface ModelListType {
   filter?: {};
   fields?: string[];
   actions?: {
-    global: ModelListActionType[];
-    single: ModelListActionType[];
-    many: ModelListActionType[];
+    global?: ModelListActionType[];
+    single?: ModelListActionType[];
+    many?: ModelListActionType[];
   };
 }
 export interface ModelListActionType {

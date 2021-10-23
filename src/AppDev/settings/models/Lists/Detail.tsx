@@ -1,6 +1,7 @@
 import {
   Button,
   Checkbox,
+  Divider,
   Grid,
   IconButton,
   List,
@@ -236,38 +237,89 @@ const ModelListDetail: React.FC<{
               withoutPadding
             >
               <List disablePadding>
-                {newList.actions?.global.map((gao) => (
-                  <ListItem key={gao.key} button>
+                {newList.actions?.global?.map((action, actionIndex) => (
+                  <ListItem
+                    key={action.key}
+                    button
+                    onClick={() =>
+                      context.canvas.interact.dialog({
+                        display: true,
+                        title: `Edit ${action.label}`,
+                        size: "xs",
+                        fields: {
+                          label: { label: "Label", value: action.label },
+                          icon: { label: "Icon", value: action.icon },
+                        },
+                        actions: [
+                          {
+                            label: "Update",
+                            onClick: (form, close) => {
+                              const newActions = newList.actions?.global || [];
+                              newActions[actionIndex] = {
+                                ...newActions[actionIndex],
+                                label: form.label,
+                                icon: form.icon,
+                              };
+                              setNewList({
+                                ...newList,
+                                actions: {
+                                  ...newList.actions,
+                                  global: newActions,
+                                },
+                              });
+                              close();
+                            },
+                          },
+                        ],
+                      })
+                    }
+                  >
                     <ListItemIcon style={{ minWidth: 48 }}>
-                      <Icon icon={gao.icon} />
+                      <Icon icon={action.icon} />
                     </ListItemIcon>
-                    <ListItemText>{gao.label}</ListItemText>
+                    <ListItemText>{action.label}</ListItemText>
                   </ListItem>
                 ))}
+                <Divider />
                 <ListItem
                   button
                   onClick={() =>
                     context.canvas.interact.dialog({
                       display: true,
-                      title: "Add global  action",
+                      title: "Add global action",
                       size: "xs",
                       withoutPadding: true,
                       content: (close) => (
                         <List disablePadding>
-                          {globalActionOptions.map((option) => (
-                            <ListItem
-                              button
-                              key={option.key}
-                              onClick={() => {
-                                close();
-                              }}
-                            >
-                              <ListItemIcon>
-                                <Icon icon={option.icon} />
-                              </ListItemIcon>
-                              <ListItemText>{option.label}</ListItemText>
-                            </ListItem>
-                          ))}
+                          {globalActionOptions.map(
+                            (option) =>
+                              !(newList.actions?.global || [])
+                                .map((o) => o.key)
+                                .includes(option.key) && (
+                                <ListItem
+                                  button
+                                  key={option.key}
+                                  onClick={() => {
+                                    setNewList({
+                                      ...newList,
+                                      actions: {
+                                        ...newList.actions,
+                                        global: [
+                                          ...(newList.actions?.global || []),
+                                          option,
+                                        ],
+                                      },
+                                    });
+                                    close();
+                                  }}
+                                >
+                                  <ListItemIcon>
+                                    <Icon icon={option.icon} />
+                                  </ListItemIcon>
+                                  <ListItemText>{option.label}</ListItemText>
+                                </ListItem>
+                              )
+                          )}
                         </List>
                       ),
                     })
@@ -282,7 +334,7 @@ const ModelListDetail: React.FC<{
         <Grid item xs={4}>
           <Animation.Item key="actionsSingle">
             <Card
-              title="Actions (one selected)"
+              title="Single actions"
               onExplanation={() =>
                 context.canvas.interact.dialog({
                   display: true,
@@ -291,23 +343,99 @@ const ModelListDetail: React.FC<{
                   size: "xs",
                 })
               }
+              withoutPadding
             >
               <List disablePadding>
-                {oneActionOptions.map((gao) => (
-                  <ListItem key={gao.key} button>
+                {newList.actions?.single?.map((action, actionIndex) => (
+                  <ListItem
+                    key={action.key}
+                    button
+                    onClick={() =>
+                      context.canvas.interact.dialog({
+                        display: true,
+                        title: `Edit ${action.label}`,
+                        size: "xs",
+                        fields: {
+                          label: { label: "Label", value: action.label },
+                          icon: { label: "Icon", value: action.icon },
+                        },
+                        actions: [
+                          {
+                            label: "Update",
+                            onClick: (form, close) => {
+                              const newActions = newList.actions?.single || [];
+                              newActions[actionIndex] = {
+                                ...newActions[actionIndex],
+                                label: form.label,
+                                icon: form.icon,
+                              };
+                              setNewList({
+                                ...newList,
+                                actions: {
+                                  ...newList.actions,
+                                  single: newActions,
+                                },
+                              });
+                              close();
+                            },
+                          },
+                        ],
+                      })
+                    }
+                  >
                     <ListItemIcon style={{ minWidth: 48 }}>
-                      <Icon icon={gao.icon} />
+                      <Icon icon={action.icon} />
                     </ListItemIcon>
-                    <ListItemText>{gao.label}</ListItemText>
-                    <ListItemSecondaryAction>
-                      <Checkbox
-                        value={model.lists[
-                          selectedKey
-                        ].actions?.single.includes(gao)}
-                      />
-                    </ListItemSecondaryAction>
+                    <ListItemText>{action.label}</ListItemText>
                   </ListItem>
                 ))}
+                <Divider />
+                <ListItem
+                  button
+                  onClick={() =>
+                    context.canvas.interact.dialog({
+                      display: true,
+                      title: "Add single action",
+                      size: "xs",
+                      withoutPadding: true,
+                      content: (close) => (
+                        <List disablePadding>
+                          {oneActionOptions.map(
+                            (option) =>
+                              !(newList.actions?.single || [])
+                                .map((o) => o.key)
+                                .includes(option.key) && (
+                                <ListItem
+                                  button
+                                  key={option.key}
+                                  onClick={() => {
+                                    setNewList({
+                                      ...newList,
+                                      actions: {
+                                        ...newList.actions,
+                                        single: [
+                                          ...(newList.actions?.single || []),
+                                          option,
+                                        ],
+                                      },
+                                    });
+                                    close();
+                                  }}
+                                >
+                                  <ListItemIcon>
+                                    <Icon icon={option.icon} />
+                                  </ListItemIcon>
+                                  <ListItemText>{option.label}</ListItemText>
+                                </ListItem>
+                              )
+                          )}
+                        </List>
+                      ),
+                    })
+                  }
+                >
+                  <ListItemText>Add action</ListItemText>
+                </ListItem>
               </List>
             </Card>
           </Animation.Item>
@@ -315,7 +443,7 @@ const ModelListDetail: React.FC<{
         <Grid item xs={4}>
           <Animation.Item key="actionsMultiple">
             <Card
-              title="Actions (multiple selected)"
+              title="Many actions"
               onExplanation={() =>
                 context.canvas.interact.dialog({
                   display: true,
@@ -324,24 +452,99 @@ const ModelListDetail: React.FC<{
                   size: "xs",
                 })
               }
+              withoutPadding
             >
               <List disablePadding>
-                {manyActionOptions.map((gao) => (
-                  <ListItem key={gao.key} button>
+                {newList.actions?.many?.map((action, actionIndex) => (
+                  <ListItem
+                    key={action.key}
+                    button
+                    onClick={() =>
+                      context.canvas.interact.dialog({
+                        display: true,
+                        title: `Edit ${action.label}`,
+                        size: "xs",
+                        fields: {
+                          label: { label: "Label", value: action.label },
+                          icon: { label: "Icon", value: action.icon },
+                        },
+                        actions: [
+                          {
+                            label: "Update",
+                            onClick: (form, close) => {
+                              const newActions = newList.actions?.many || [];
+                              newActions[actionIndex] = {
+                                ...newActions[actionIndex],
+                                label: form.label,
+                                icon: form.icon,
+                              };
+                              setNewList({
+                                ...newList,
+                                actions: {
+                                  ...newList.actions,
+                                  many: newActions,
+                                },
+                              });
+                              close();
+                            },
+                          },
+                        ],
+                      })
+                    }
+                  >
                     <ListItemIcon style={{ minWidth: 48 }}>
-                      <Icon icon={gao.icon} />
+                      <Icon icon={action.icon} />
                     </ListItemIcon>
-                    <ListItemText>{gao.label}</ListItemText>
-                    <ListItemSecondaryAction>
-                      <Checkbox
-                        value={model.lists[selectedKey].actions?.many.includes(
-                          gao
-                        )}
-                        onClick={() => {}}
-                      />
-                    </ListItemSecondaryAction>
+                    <ListItemText>{action.label}</ListItemText>
                   </ListItem>
                 ))}
+                <Divider />
+                <ListItem
+                  button
+                  onClick={() =>
+                    context.canvas.interact.dialog({
+                      display: true,
+                      title: "Add many action",
+                      size: "xs",
+                      withoutPadding: true,
+                      content: (close) => (
+                        <List disablePadding>
+                          {oneActionOptions.map(
+                            (option) =>
+                              !(newList.actions?.many || [])
+                                .map((o) => o.key)
+                                .includes(option.key) && (
+                                <ListItem
+                                  button
+                                  key={option.key}
+                                  onClick={() => {
+                                    setNewList({
+                                      ...newList,
+                                      actions: {
+                                        ...newList.actions,
+                                        many: [
+                                          ...(newList.actions?.many || []),
+                                          option,
+                                        ],
+                                      },
+                                    });
+                                    close();
+                                  }}
+                                >
+                                  <ListItemIcon>
+                                    <Icon icon={option.icon} />
+                                  </ListItemIcon>
+                                  <ListItemText>{option.label}</ListItemText>
+                                </ListItem>
+                              )
+                          )}
+                        </List>
+                      ),
+                    })
+                  }
+                >
+                  <ListItemText>Add action</ListItemText>
+                </ListItem>
               </List>
             </Card>
           </Animation.Item>

@@ -131,9 +131,30 @@ const createSampleModel: (form: {
         label: "Default",
         fields: [],
         actions: {
-          global: ["Create"],
-          single: ["Delete"],
-          many: ["Delete"],
+          global: [
+            {
+              key: "Create",
+              label: "Create",
+              icon: "plus-square",
+              type: "action",
+            },
+          ],
+          single: [
+            {
+              key: "Delete",
+              label: "Delete",
+              icon: "trash-alt",
+              type: "action",
+            },
+          ],
+          many: [
+            {
+              key: "Delete",
+              label: "Delete",
+              icon: "trash-alt",
+              type: "action",
+            },
+          ],
         },
       },
     },

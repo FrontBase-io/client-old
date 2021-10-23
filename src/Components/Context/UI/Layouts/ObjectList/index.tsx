@@ -116,7 +116,7 @@ const ObjectList: React.FC<{
                 {model.lists[selectedList].actions?.global && (
                   <div style={{ float: "right", padding: 5 }}>
                     <ButtonGroup color="primary">
-                      {model.lists[selectedList].actions?.global.map(
+                      {model.lists[selectedList].actions?.global?.map(
                         (button) => {
                           const action = Actions[button.key];
                           return (
@@ -158,7 +158,7 @@ const ObjectList: React.FC<{
                   >
                     <List disablePadding>
                       <ListSubheader>Actions</ListSubheader>
-                      {model.lists[selectedList].actions?.single.map(
+                      {model.lists[selectedList].actions?.single?.map(
                         (action) => {
                           if (action.type === "process") {
                             const process = availableProcesses[action.key];
@@ -248,7 +248,7 @@ const ObjectList: React.FC<{
               selected
             </Typography>
             <div>
-              {model.lists[selectedList!].actions?.many.map((action) => {
+              {model.lists[selectedList!].actions?.many?.map((action) => {
                 if (action.type === "process") {
                   const process = availableProcesses[action.key];
 
