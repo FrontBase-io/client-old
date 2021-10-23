@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { DropTargetMonitor } from "react-dnd";
 import { DropTarget, DropTargetConnector } from "react-dnd";
 import { LayoutItemType } from "../../../../Utils/Types";
@@ -13,10 +13,7 @@ const Dustbin: FC<{
   layout: LayoutItemType[];
   setLayout: (layout: LayoutItemType[]) => void;
 }> = ({ children, id, layout, setLayout }) => {
-  const [hasDropped, setHasDropped] = useState(false);
-  const [hasDroppedOnChild, setHasDroppedOnChild] = useState(false);
-
-  const [{ isOver, isOverCurrent }, drop] = useDrop(
+  const [{ isOverCurrent }, drop] = useDrop(
     () => ({
       accept: "component",
       async drop(item: unknown, monitor) {
@@ -33,7 +30,6 @@ const Dustbin: FC<{
 
         if (id === "root") {
           setLayout([...(layout || []), newLayoutItem]);
-          setHasDropped(false);
         } else {
           const newLayout = cloneDeep(layout);
           modifyRecursive(newLayout, id, (item) => {
@@ -44,15 +40,13 @@ const Dustbin: FC<{
           });
           setLayout(newLayout);
         }
-        setHasDropped(true);
-        setHasDroppedOnChild(didDrop);
       },
       collect: (monitor) => ({
         isOver: monitor.isOver(),
         isOverCurrent: monitor.isOver({ shallow: true }),
       }),
     }),
-    [setHasDropped, setHasDroppedOnChild, id, layout]
+    [id, layout]
   );
 
   return (

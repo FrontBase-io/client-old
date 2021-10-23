@@ -1,5 +1,5 @@
 import Socket from "../../../../../Utils/Socket";
-import { ModelType, ResponseType } from "../../../../../Utils/Types";
+import { ResponseType } from "../../../../../Utils/Types";
 
 const get = (key: string, respond: (response: ResponseType) => void) => {
   Socket.emit("getSystemSetting", key, (response: ResponseType) => {

@@ -27,7 +27,7 @@ const ProcessVariables: React.FC<{
         context.utils.listifyForSelect(models, "label_plural", "key")
       );
     });
-  }, []);
+  }, [context.data.models, context.utils]);
 
   // UI
   return (

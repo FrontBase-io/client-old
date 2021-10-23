@@ -81,6 +81,7 @@ const ObjectDetail: React.FC<{
     if (appliedModel) {
       let newLayout: ModelLayoutType;
 
+      // eslint-disable-next-line array-callback-return
       (layoutKey || ["default"]).map((lk) => {
         if (appliedModel.layouts[lk] && !newLayout) {
           newLayout = appliedModel.layouts[lk];
@@ -100,7 +101,8 @@ const ObjectDetail: React.FC<{
         { _id: { $in: processesToFetch } },
         (fetchedProcesses) => {
           const newProcesses: { [key: string]: ProcessObjectType } = {};
-          fetchedProcesses.map((fp) => {
+          // eslint-disable-next-line array-callback-return
+          fetchedProcesses?.map((fp) => {
             newProcesses[fp._id] = fp as ProcessObjectType;
           });
           setAvailableProcesses(newProcesses);

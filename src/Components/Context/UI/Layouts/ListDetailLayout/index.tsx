@@ -153,6 +153,8 @@ const DetailComponentWrapper: React.FC<{
 }) => {
   // Vars
   // Lifecycle
+  const item = find(items, (o) => o.key === selectedKey) as ListItemType;
+
   useEffect(() => {
     // Up
     context.canvas.navbar.up(baseUrl);
@@ -163,11 +165,10 @@ const DetailComponentWrapper: React.FC<{
       context.canvas.navbar.name();
       setSelectedItem();
     };
-  }, [selectedKey, context.canvas.navbar, baseUrl, setSelectedItem]);
+  }, [selectedKey, context.canvas.navbar, baseUrl, setSelectedItem, item]);
 
   // UI
   const Component = component;
-  const item = find(items, (o) => o.key === selectedKey) as ListItemType;
   return (
     <Component
       context={context}

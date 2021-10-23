@@ -44,14 +44,14 @@ const ModelFieldDetail: React.FC<{
           <context.UI.Design.Animation.Item key="Field">
             <context.UI.Design.Card title="Field">
               <Grid container spacing={1}>
-                <Grid item xs={6}>
+                <Grid item xs={10}>
                   <TextInput
                     label="Label"
                     value={field?.label || ""}
                     onChange={(label) => setField({ ...field, label })}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={2}>
                   <Typography variant="body1">Key:</Typography>{" "}
                   <small>{item.key}</small>
                 </Grid>
@@ -81,6 +81,9 @@ const ModelFieldDetail: React.FC<{
                       { label: "Relationship", value: "relationship" },
                       { label: "Relationship (many)", value: "relationship_m" },
                       { label: "Date", value: "date" },
+                      { label: "Color", value: "color" },
+                      { label: "Image", value: "image" },
+                      { label: "File", value: "file" },
                       { label: "Formula", value: "formula" },
                       { label: "Free data", value: "free-data" },
                     ]}

@@ -4,7 +4,7 @@ import { SystemTaskObjectType } from "../../../Utils/Types";
 
 const SettingsUpdate: React.FC<{ context: AppContext }> = ({ context }) => {
   // Vars
-  const [updateTask, setUpdateTask] = useState<SystemTaskObjectType>();
+  const [updateTask] = useState<SystemTaskObjectType>();
 
   // Lifecycle
   useEffect(() => {}, []);

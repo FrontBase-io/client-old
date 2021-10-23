@@ -1,7 +1,5 @@
-import { Button, Grid } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import { AppContext } from "../../../../Components/Context";
-import Icon from "../../../../Components/Design/Icon";
 import { ModelType } from "../../../../Utils/Types";
 import ModelListDetail from "./Detail";
 

@@ -28,6 +28,10 @@ const ModelLayoutFields: React.FC<{
             formula: "flask",
             options: "list",
             date: "calendar-alt",
+            color: "palette",
+            image: "image",
+            file: "paperclip",
+
             error: "exclamation-triangle",
           };
           const icon: string = map[field.type || "error"];

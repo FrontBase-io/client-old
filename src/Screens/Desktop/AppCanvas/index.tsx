@@ -145,6 +145,7 @@ const AppLayout: React.FC<{
     return () => {
       utils.setPrimaryColor();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appKey]);
   useEffect(() => {
     if (setHeaderIsIndented)
@@ -156,7 +157,7 @@ const AppLayout: React.FC<{
       setPageName("FrontBase");
       if (setHeaderIsIndented) setHeaderIsIndented(false);
     };
-  }, [flatPageMenu]);
+  }, [flatPageMenu, setHeaderIsIndented, setPageName]);
 
   // UI
   if (!app || !pageMenu) return <Loading />;
@@ -294,6 +295,7 @@ const AppLayout: React.FC<{
                   }
                   if (field.onlyDisplayWhen.or) {
                     let orTruesHit = 0;
+                    // eslint-disable-next-line array-callback-return
                     field.onlyDisplayWhen.or.map((orCondition) => {
                       map(orCondition, (value, key) => {
                         if (dialogFieldValues[key] !== value) {

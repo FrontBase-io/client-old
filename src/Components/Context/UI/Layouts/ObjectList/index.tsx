@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { AppContext } from "../../..";
-import {
-  ModelType,
-  ObjectType,
-  ProcessObjectType,
-} from "../../../../../Utils/Types";
+import { ModelType, ObjectType } from "../../../../../Utils/Types";
 import Typography from "@mui/material/Typography";
 import Popover from "@mui/material/Popover";
 import List from "@mui/material/List";

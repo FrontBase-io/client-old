@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import { useGlobal } from "reactn";
 import { AppContext } from "../../..";
-import { ModelType, ObjectType } from "../../../../../Utils/Types";
+import { ColorType, ModelType, ObjectType } from "../../../../../Utils/Types";
 
 const FieldEdit: React.FC<{
   selectedField?: string;
@@ -9,7 +9,7 @@ const FieldEdit: React.FC<{
   model: ModelType;
   object?: ObjectType;
   context: AppContext;
-  onChange: (newValue: string | Date) => void;
+  onChange: (newValue: string | Date | ColorType) => void;
   hasChanged?: boolean;
 }> = ({
   selectedField,
@@ -96,6 +96,13 @@ const FieldEdit: React.FC<{
           </Typography>
           {objectField}
         </>
+      ) : modelField.type === "color" ? (
+        <context.UI.Inputs.Color
+          label={modelField.label}
+          value={objectField}
+          autoFocus={selectedField === fieldKey}
+          onChange={onChange}
+        />
       ) : (
         `Unknown type ${modelField.type}`
       )}

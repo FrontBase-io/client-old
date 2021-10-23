@@ -14,7 +14,7 @@ const SettingsProcesses: React.FC<{ context: AppContext }> = ({ context }) => {
       setProcesses(objects as ProcessObjectType[]);
       setProcessList(context.utils.listify(objects, "name", "_id"));
     });
-  }, []);
+  }, [context.data.objects, context.utils]);
 
   // UI
   if (!processes || !processList) return <context.UI.Loading />;

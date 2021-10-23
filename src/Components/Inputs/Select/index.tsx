@@ -65,6 +65,7 @@ const SelectInput: React.FC<{
             if (Array.isArray(chosen)) {
               const val: string[] = [];
               const args: string[] = [];
+              // eslint-disable-next-line array-callback-return
               chosen.map((v) => {
                 val.push(v.value);
                 args.push(v.args);

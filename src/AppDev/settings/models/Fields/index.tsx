@@ -28,6 +28,9 @@ const ModelFields: React.FC<{ context: AppContext; model: ModelType }> = ({
             options: "list",
             date: "calendar-alt",
             "free-data": "code",
+            color: "palette",
+            image: "image",
+            file: "paperclip",
           };
           return map[icon];
         }}

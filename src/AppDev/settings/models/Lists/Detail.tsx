@@ -1,6 +1,5 @@
 import {
   Button,
-  Checkbox,
   Divider,
   Grid,
   IconButton,
@@ -109,6 +108,7 @@ const ModelListDetail: React.FC<{
         ],
       },
       (processObjects) => {
+        // eslint-disable-next-line array-callback-return
         (processObjects as ProcessObjectType[]).map((po) => {
           if ((po.triggers?.singleAction || []).length > 0) {
             newOneActionOptions.push({
@@ -509,7 +509,7 @@ const ModelListDetail: React.FC<{
                       withoutPadding: true,
                       content: (close) => (
                         <List disablePadding>
-                          {oneActionOptions.map(
+                          {manyActionOptions.map(
                             (option) =>
                               !(newList.actions?.many || [])
                                 .map((o) => o.key)

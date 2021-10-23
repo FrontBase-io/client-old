@@ -31,3 +31,21 @@
   align-content: stretch;
   align-items: stretch;
 }
+
+.navbarIconPlate {
+  width: calc(100% + 1px);
+  display: block;
+  padding: 10px;
+  z-index: 15px;
+  box-sizing: border-box;
+}
+
+.selected {
+  background-color: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  .selected {
+    background-color: #323232;
+  }
+}

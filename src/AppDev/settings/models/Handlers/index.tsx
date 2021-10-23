@@ -21,6 +21,7 @@ const ModelHandlers: React.FC<{
         [handlerKey: string]: { url: string; label: string };
       } = {};
       //@ts-ignore
+      // eslint-disable-next-line array-callback-return
       appObjects.map((appObject: AppObjectType) => {
         const app = apps[appObject.key];
         if (app) {
