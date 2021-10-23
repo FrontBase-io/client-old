@@ -1,10 +1,12 @@
 import {
   Button,
+  Checkbox,
   Grid,
   IconButton,
   List,
   ListItem,
   ListItemAvatar,
+  ListItemIcon,
   ListItemSecondaryAction,
   ListItemText,
 } from "@mui/material";
@@ -14,8 +16,8 @@ import {
   ListItemType,
   ModelType,
   ModelListType,
-  SelectOptionType,
   ProcessObjectType,
+  ModelListActionType,
 } from "../../../../Utils/Types";
 import { useEffect, useState } from "react";
 import Actions from "../../../../Components/Actions";
@@ -40,31 +42,46 @@ const ModelListDetail: React.FC<{
     model.lists[selectedKey]
   );
   const [globalActionOptions, setGlobalActionOptions] = useState<
-    SelectOptionType[]
+    ModelListActionType[]
   >([]);
-  const [oneActionOptions, setOneActionOptions] = useState<SelectOptionType[]>(
-    []
-  );
+  const [oneActionOptions, setOneActionOptions] = useState<
+    ModelListActionType[]
+  >([]);
   const [manyActionOptions, setManyActionOptions] = useState<
-    SelectOptionType[]
+    ModelListActionType[]
   >([]);
 
   // Lifecycle
   useEffect(() => {
     setNewList(model.lists[selectedKey]);
-    const newGlobalActionOptions: SelectOptionType[] = [];
-    const newOneActionOptions: SelectOptionType[] = [];
-    const newManyActionOptions: SelectOptionType[] = [];
+    const newGlobalActionOptions: ModelListActionType[] = [];
+    const newOneActionOptions: ModelListActionType[] = [];
+    const newManyActionOptions: ModelListActionType[] = [];
     // Add base actions
     map(Actions, (action, actionKey) => {
       if (action.accepts.includes("None")) {
-        newGlobalActionOptions.push({ label: action.label, value: actionKey });
+        newGlobalActionOptions.push({
+          key: actionKey,
+          label: action.label,
+          icon: action.icon,
+          type: "action",
+        });
       }
       if (action.accepts.includes("One")) {
-        newOneActionOptions.push({ label: action.label, value: actionKey });
+        newOneActionOptions.push({
+          key: actionKey,
+          label: action.label,
+          icon: action.icon,
+          type: "action",
+        });
       }
       if (action.accepts.includes("Many")) {
-        newManyActionOptions.push({ label: action.label, value: actionKey });
+        newManyActionOptions.push({
+          key: actionKey,
+          label: action.label,
+          icon: action.icon,
+          type: "action",
+        });
       }
     });
 
@@ -95,19 +112,25 @@ const ModelListDetail: React.FC<{
           if ((po.triggers?.singleAction || []).length > 0) {
             newOneActionOptions.push({
               label: po.name,
-              value: `process_${po._id}`,
+              key: po._id,
+              type: "process",
+              icon: "magic",
             });
           }
           if ((po.triggers?.globalAction || []).length > 0) {
             newGlobalActionOptions.push({
               label: po.name,
-              value: `process_${po._id}`,
+              key: po._id,
+              type: "process",
+              icon: "magic",
             });
           }
           if ((po.triggers?.manyAction || []).length > 0) {
             newManyActionOptions.push({
               label: po.name,
-              value: `process_${po._id}`,
+              key: po._id,
+              type: "process",
+              icon: "magic",
             });
           }
         });
@@ -146,7 +169,7 @@ const ModelListDetail: React.FC<{
                   model.fields,
                   (field, key) =>
                     !newList.fields?.includes(key) && (
-                      <ListItem key={key}>
+                      <ListItem key={key} disablePadding>
                         <ListItemText>{field.label}</ListItemText>
                         <ListItemSecondaryAction>
                           <IconButton
@@ -170,7 +193,7 @@ const ModelListDetail: React.FC<{
         <Grid item xs={6}>
           <Animation.Item key="selectedFields">
             <Card title="Selected">
-              <List>
+              <List disablePadding>
                 {map(
                   model.fields,
                   (field, key) =>
@@ -210,23 +233,49 @@ const ModelListDetail: React.FC<{
                   size: "xs",
                 })
               }
+              withoutPadding
             >
-              <context.UI.Inputs.Select
-                label="Global"
-                value={newList.actions?.global || []}
-                multi
-                options={globalActionOptions}
-                onChange={(newVal) =>
-                  setNewList({
-                    ...newList,
-                    //@ts-ignore
-                    actions: {
-                      ...(newList.actions || {}),
-                      global: newVal as string[],
-                    },
-                  })
-                }
-              />
+              <List disablePadding>
+                {newList.actions?.global.map((gao) => (
+                  <ListItem key={gao.key} button>
+                    <ListItemIcon style={{ minWidth: 48 }}>
+                      <Icon icon={gao.icon} />
+                    </ListItemIcon>
+                    <ListItemText>{gao.label}</ListItemText>
+                  </ListItem>
+                ))}
+                <ListItem
+                  button
+                  onClick={() =>
+                    context.canvas.interact.dialog({
+                      display: true,
+                      title: "Add global  action",
+                      size: "xs",
+                      withoutPadding: true,
+                      content: (close) => (
+                        <List disablePadding>
+                          {globalActionOptions.map((option) => (
+                            <ListItem
+                              button
+                              key={option.key}
+                              onClick={() => {
+                                close();
+                              }}
+                            >
+                              <ListItemIcon>
+                                <Icon icon={option.icon} />
+                              </ListItemIcon>
+                              <ListItemText>{option.label}</ListItemText>
+                            </ListItem>
+                          ))}
+                        </List>
+                      ),
+                    })
+                  }
+                >
+                  <ListItemText>Add action</ListItemText>
+                </ListItem>
+              </List>
             </Card>
           </Animation.Item>
         </Grid>
@@ -243,22 +292,23 @@ const ModelListDetail: React.FC<{
                 })
               }
             >
-              <context.UI.Inputs.Select
-                label="One"
-                value={newList.actions?.single || []}
-                multi
-                options={oneActionOptions}
-                onChange={(newVal) =>
-                  setNewList({
-                    ...newList,
-                    //@ts-ignore
-                    actions: {
-                      ...(newList.actions || {}),
-                      single: newVal as string[],
-                    },
-                  })
-                }
-              />
+              <List disablePadding>
+                {oneActionOptions.map((gao) => (
+                  <ListItem key={gao.key} button>
+                    <ListItemIcon style={{ minWidth: 48 }}>
+                      <Icon icon={gao.icon} />
+                    </ListItemIcon>
+                    <ListItemText>{gao.label}</ListItemText>
+                    <ListItemSecondaryAction>
+                      <Checkbox
+                        value={model.lists[
+                          selectedKey
+                        ].actions?.single.includes(gao)}
+                      />
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
             </Card>
           </Animation.Item>
         </Grid>
@@ -275,22 +325,24 @@ const ModelListDetail: React.FC<{
                 })
               }
             >
-              <context.UI.Inputs.Select
-                label="Many"
-                value={newList.actions?.many || []}
-                multi
-                options={manyActionOptions}
-                onChange={(newVal) =>
-                  setNewList({
-                    ...newList,
-                    //@ts-ignore
-                    actions: {
-                      ...(newList.actions || {}),
-                      many: newVal as string[],
-                    },
-                  })
-                }
-              />
+              <List disablePadding>
+                {manyActionOptions.map((gao) => (
+                  <ListItem key={gao.key} button>
+                    <ListItemIcon style={{ minWidth: 48 }}>
+                      <Icon icon={gao.icon} />
+                    </ListItemIcon>
+                    <ListItemText>{gao.label}</ListItemText>
+                    <ListItemSecondaryAction>
+                      <Checkbox
+                        value={model.lists[selectedKey].actions?.many.includes(
+                          gao
+                        )}
+                        onClick={() => {}}
+                      />
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
             </Card>
           </Animation.Item>
         </Grid>

@@ -87,10 +87,8 @@ const ObjectList: React.FC<{
           ...(model.lists[selectedList].actions?.single || []),
           ...(model.lists[selectedList].actions?.many || []),
         ],
-        (o) => o.match("process_")
-      ).map((b) =>
-        processesToFetch.push((b as string).replace("process_", ""))
-      );
+        (o) => o.type === "process"
+      ).map((b) => processesToFetch.push(b.key));
       context.data.objects.get(
         "process",
         { _id: { $in: processesToFetch } },
@@ -103,7 +101,7 @@ const ObjectList: React.FC<{
         }
       );
     }
-  }, [model.lists, selectedList]);
+  }, [context.data.objects, model, model.lists, selectedList]);
 
   // UI
   if (!model) return <context.UI.Loading />;
@@ -120,7 +118,7 @@ const ObjectList: React.FC<{
                     <ButtonGroup color="primary">
                       {model.lists[selectedList].actions?.global.map(
                         (button) => {
-                          const action = Actions[button];
+                          const action = Actions[button.key];
                           return (
                             <Button
                               key={`button-${button}`}
@@ -161,17 +159,14 @@ const ObjectList: React.FC<{
                     <List disablePadding>
                       <ListSubheader>Actions</ListSubheader>
                       {model.lists[selectedList].actions?.single.map(
-                        (actionKey) => {
-                          if (actionKey.match("process_")) {
-                            const process =
-                              availableProcesses[
-                                actionKey.replace("process_", "")
-                              ];
+                        (action) => {
+                          if (action.type === "process") {
+                            const process = availableProcesses[action.key];
 
                             if (process) {
                               return (
                                 <ListItem
-                                  key={actionKey}
+                                  key={action.key}
                                   button
                                   onClick={() => {
                                     context.data.actions.executeSingleAction(
@@ -195,13 +190,13 @@ const ObjectList: React.FC<{
                               );
                             }
                           } else {
-                            const action = Actions[actionKey];
+                            const Action = Actions[action.key];
                             return (
                               <ListItem
-                                key={`singleAction-${actionKey}`}
+                                key={`singleAction-${action.key}`}
                                 button
                                 onClick={() => {
-                                  action.onClick(
+                                  Action.onClick(
                                     context,
                                     find(
                                       objects!,
@@ -253,27 +248,26 @@ const ObjectList: React.FC<{
               selected
             </Typography>
             <div>
-              {model.lists[selectedList!].actions?.many.map((actionKey) => {
-                if (actionKey.match("process_")) {
-                  const process =
-                    availableProcesses[actionKey.replace("process_", "")];
+              {model.lists[selectedList!].actions?.many.map((action) => {
+                if (action.type === "process") {
+                  const process = availableProcesses[action.key];
 
                   if (process) {
                     return (
-                      <IconButton key={actionKey}>{process.name}</IconButton>
+                      <IconButton key={action.key}>{process.name}</IconButton>
                     );
                   } else {
                     return (
-                      <IconButton key={actionKey}>
+                      <IconButton key={action.key}>
                         <Icon icon="question" />
                       </IconButton>
                     );
                   }
                 } else {
-                  const action = Actions[actionKey];
+                  const Action = Actions[action.key];
                   return (
                     <Tooltip
-                      key={actionKey}
+                      key={action.key}
                       title={action.label}
                       placement="left"
                     >

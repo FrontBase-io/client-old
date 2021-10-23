@@ -28,7 +28,6 @@ import { groupBy, map } from "lodash";
 import { AppUtilsType } from "../../../App";
 import { useSnackbar, VariantType } from "notistack";
 import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
@@ -38,6 +37,7 @@ import NumberInput from "../../../Components/Inputs/Number";
 import slugify from "slugify";
 import SelectInput from "../../../Components/Inputs/Select";
 import BooleanInput from "../../../Components/Inputs/Boolean";
+import Card from "../../../Components/Design/Card";
 
 const container = {
   hidden: { opacity: 0, marginLeft: -64 },
@@ -261,17 +261,24 @@ const AppLayout: React.FC<{
         onClose={() => setDialog({ ...dialog, display: false })}
         maxWidth={dialog.size || "md"}
         fullWidth={true}
+        PaperComponent={Card}
+        PaperProps={{
+          //@ts-ignore
+          withoutPadding: true,
+          //@ts-ignore
+          withoutMargin: true,
+          title: dialog.title,
+        }}
       >
-        {dialog.title && (
-          <DialogTitle id="dialog-title">{dialog.title}</DialogTitle>
-        )}
-        <DialogContent>
+        <DialogContent style={{ padding: dialog.withoutPadding && 0 }}>
           {dialog.text && (
-            <DialogContentText id="dialog-content">
+            <DialogContentText style={{ margin: 0 }}>
               {dialog.text}
             </DialogContentText>
           )}
-          {dialog.content && dialog.content}
+          {dialog.content && typeof dialog.content === "function"
+            ? dialog.content(() => setDialog({ ...dialog, display: false }))
+            : dialog.content}
           {dialog.fields && (
             <Grid container spacing={2}>
               {map(dialog.fields, (field, key) => {

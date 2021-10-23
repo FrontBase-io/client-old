@@ -94,7 +94,17 @@ export interface ModelListType {
   label?: string;
   filter?: {};
   fields?: string[];
-  actions?: { global: string[]; single: string[]; many: string[] };
+  actions?: {
+    global: ModelListActionType[];
+    single: ModelListActionType[];
+    many: ModelListActionType[];
+  };
+}
+export interface ModelListActionType {
+  key: string;
+  label: string;
+  icon: string;
+  type: "process" | "action";
 }
 
 // Apps
@@ -164,13 +174,16 @@ export interface DialogType {
   display?: boolean;
   title?: string;
   text?: string | ReactElement<any, any>;
-  content?: ReactElement<any, any>;
+  content?: (
+    close: () => void
+  ) => ReactElement<any, any> | ReactElement<any, any>;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   fields?: {
     [key: string]: DialogFieldType;
   };
   actionValues?: { [key: string]: any };
   actions?: DialogActionType[];
+  withoutPadding?: true;
 }
 
 export interface DialogActionType {
