@@ -11,8 +11,10 @@ import List from "@mui/material/List";
 import {
   Button,
   ButtonGroup,
+  Checkbox,
   IconButton,
   ListItem,
+  ListItemIcon,
   ListItemText,
   ListSubheader,
   Table,
@@ -20,11 +22,14 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Toolbar,
+  Tooltip,
 } from "@mui/material";
 import { filter, find, map } from "lodash";
 import { useHistory } from "react-router";
 import FieldDisplay from "../../Data/FieldDisplay";
 import Actions from "../../../../Actions";
+import Icon from "../../../../Design/Icon";
 
 const ObjectList: React.FC<{
   context: AppContext;
@@ -105,127 +110,183 @@ const ObjectList: React.FC<{
   return (
     <context.UI.Design.Animation.Animate>
       <context.UI.Design.Card>
-        {selectedList && model.lists[selectedList].actions && (
+        {(selectedItems || []).length < 2 ? (
           <>
-            {model.lists[selectedList].actions?.global && (
-              <div style={{ float: "right", padding: 5 }}>
-                <ButtonGroup color="primary">
-                  {model.lists[selectedList].actions?.global.map((button) => {
-                    const action = Actions[button];
-                    return (
-                      <Button
-                        key={`button-${button}`}
-                        onClick={() =>
-                          action.onClick(
-                            context,
-                            find(
-                              objects!,
-                              (o) => o._id === selectedItems[0]
-                            ) as ObjectType,
-                            model
-                          )
-                        }
-                      >
-                        {action.label}
-                      </Button>
-                    );
-                  })}
-                </ButtonGroup>
-              </div>
-            )}
-            {model.lists[selectedList].actions?.single && (
-              <Popover
-                id="singleActions"
-                open={Boolean(singleActionAnchorEl)}
-                anchorEl={singleActionAnchorEl}
-                onClose={() => setSingleActionAnchorEl(null)}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "center",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "center",
-                }}
-              >
-                <List>
-                  <ListSubheader>Actions</ListSubheader>
-                  {model.lists[selectedList].actions?.single.map(
-                    (actionKey) => {
-                      if (actionKey.match("process_")) {
-                        const process =
-                          availableProcesses[actionKey.replace("process_", "")];
-
-                        if (process) {
+            {" "}
+            {selectedList && model.lists[selectedList].actions && (
+              <>
+                {model.lists[selectedList].actions?.global && (
+                  <div style={{ float: "right", padding: 5 }}>
+                    <ButtonGroup color="primary">
+                      {model.lists[selectedList].actions?.global.map(
+                        (button) => {
+                          const action = Actions[button];
                           return (
-                            <ListItem
-                              button
-                              onClick={() => {
-                                context.data.actions.executeSingleAction(
-                                  process._id,
+                            <Button
+                              key={`button-${button}`}
+                              onClick={() =>
+                                action.onClick(
+                                  context,
                                   find(
                                     objects!,
                                     (o) => o._id === selectedItems[0]
-                                  ) as ObjectType
-                                );
-                                setSingleActionAnchorEl(null);
-                              }}
+                                  ) as ObjectType,
+                                  model
+                                )
+                              }
                             >
-                              <ListItemText>{process.name}</ListItemText>
-                            </ListItem>
-                          );
-                        } else {
-                          return (
-                            <ListItem>
-                              <ListItemText>...</ListItemText>
-                            </ListItem>
+                              {action.label}
+                            </Button>
                           );
                         }
-                      } else {
-                        const action = Actions[actionKey];
-                        return (
-                          <ListItem
-                            key={`singleAction-${actionKey}`}
-                            button
-                            onClick={() => {
-                              action.onClick(
-                                context,
-                                find(
-                                  objects!,
-                                  (o) => o._id === selectedItems[0]
-                                ) as ObjectType,
-                                model
+                      )}
+                    </ButtonGroup>
+                  </div>
+                )}
+                {model.lists[selectedList].actions?.single && (
+                  <Popover
+                    id="singleActions"
+                    open={Boolean(singleActionAnchorEl)}
+                    anchorEl={singleActionAnchorEl}
+                    onClose={() => setSingleActionAnchorEl(null)}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "center",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "center",
+                    }}
+                  >
+                    <List disablePadding>
+                      <ListSubheader>Actions</ListSubheader>
+                      {model.lists[selectedList].actions?.single.map(
+                        (actionKey) => {
+                          if (actionKey.match("process_")) {
+                            const process =
+                              availableProcesses[
+                                actionKey.replace("process_", "")
+                              ];
+
+                            if (process) {
+                              return (
+                                <ListItem
+                                  key={actionKey}
+                                  button
+                                  onClick={() => {
+                                    context.data.actions.executeSingleAction(
+                                      process._id,
+                                      find(
+                                        objects!,
+                                        (o) => o._id === selectedItems[0]
+                                      ) as ObjectType
+                                    );
+                                    setSingleActionAnchorEl(null);
+                                  }}
+                                >
+                                  <ListItemText>{process.name}</ListItemText>
+                                </ListItem>
                               );
-                              setSingleActionAnchorEl(null);
-                            }}
-                          >
-                            {action.label}
-                          </ListItem>
-                        );
-                      }
-                    }
-                  )}
-                </List>
-              </Popover>
+                            } else {
+                              return (
+                                <ListItem>
+                                  <ListItemText>...</ListItemText>
+                                </ListItem>
+                              );
+                            }
+                          } else {
+                            const action = Actions[actionKey];
+                            return (
+                              <ListItem
+                                key={`singleAction-${actionKey}`}
+                                button
+                                onClick={() => {
+                                  action.onClick(
+                                    context,
+                                    find(
+                                      objects!,
+                                      (o) => o._id === selectedItems[0]
+                                    ) as ObjectType,
+                                    model
+                                  );
+                                  setSingleActionAnchorEl(null);
+                                }}
+                              >
+                                <ListItemIcon style={{ minWidth: 24 }}>
+                                  <Icon icon={action.icon} size={14} />
+                                </ListItemIcon>
+                                <ListItemText>{action.label}</ListItemText>
+                              </ListItem>
+                            );
+                          }
+                        }
+                      )}
+                    </List>
+                  </Popover>
+                )}
+              </>
             )}
+            <Typography variant="h6">{model.label_plural}</Typography>
+            <Typography variant="body2" style={{ cursor: "pointer" }}>
+              {model.lists && selectedList && (
+                <span
+                  onClick={(event: React.MouseEvent<HTMLElement>) =>
+                    setListsAnchor(listsAnchor ? null : event.currentTarget)
+                  }
+                >
+                  {model.lists[selectedList].label?.replace(
+                    "_name",
+                    model.label_plural
+                  )}{" "}
+                  <context.UI.Design.Icon icon="angle-down" size={12} />
+                </span>
+              )}
+            </Typography>
           </>
+        ) : (
+          <Toolbar color="primary">
+            <Typography style={{ flex: "1" }}>
+              {selectedItems?.length === objects?.length
+                ? "All"
+                : selectedItems?.length}{" "}
+              {selectedItems?.length === 1 ? model.label : model.label_plural}{" "}
+              selected
+            </Typography>
+            <div>
+              {model.lists[selectedList!].actions?.many.map((actionKey) => {
+                if (actionKey.match("process_")) {
+                  const process =
+                    availableProcesses[actionKey.replace("process_", "")];
+
+                  if (process) {
+                    return (
+                      <IconButton key={actionKey}>{process.name}</IconButton>
+                    );
+                  } else {
+                    return (
+                      <IconButton key={actionKey}>
+                        <Icon icon="question" />
+                      </IconButton>
+                    );
+                  }
+                } else {
+                  const action = Actions[actionKey];
+                  return (
+                    <Tooltip
+                      key={actionKey}
+                      title={action.label}
+                      placement="left"
+                    >
+                      <IconButton>
+                        <Icon icon={action.icon} size={16} />
+                      </IconButton>
+                    </Tooltip>
+                  );
+                }
+              })}
+            </div>
+          </Toolbar>
         )}
-        <Typography variant="h6">{model.label_plural}</Typography>
-        <Typography variant="body2" style={{ cursor: "pointer" }}>
-          {model.lists && selectedList && (
-            <span
-              onClick={(event: React.MouseEvent<HTMLElement>) =>
-                setListsAnchor(listsAnchor ? null : event.currentTarget)
-              }
-            >
-              {model.lists[selectedList].label?.replace(
-                "_name",
-                model.label_plural
-              )}{" "}
-              <context.UI.Design.Icon icon="angle-down" size={12} />
-            </span>
-          )}
-        </Typography>
         <Popover
           open={Boolean(listsAnchor)}
           anchorEl={listsAnchor}
@@ -274,6 +335,28 @@ const ObjectList: React.FC<{
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    color="primary"
+                    indeterminate={
+                      selectedItems.length > 0 &&
+                      selectedItems.length < (objects || []).length
+                    }
+                    checked={
+                      selectedItems.length > 0 &&
+                      selectedItems.length === (objects || []).length
+                    }
+                    onChange={(event) => {
+                      if (event.currentTarget.checked) {
+                        const newSelectedItems: string[] = [];
+                        objects?.map((o) => newSelectedItems.push(o._id));
+                        setSelectedItems(newSelectedItems);
+                      } else {
+                        setSelectedItems([]);
+                      }
+                    }}
+                  />
+                </TableCell>
                 {model.lists[selectedList].fields?.map((fieldKey) => {
                   const field = model.fields[fieldKey];
                   return (
@@ -288,7 +371,27 @@ const ObjectList: React.FC<{
             <TableBody>
               {objects ? (
                 objects.map((object, rowIndex) => (
-                  <TableRow key={object._id} hover>
+                  <TableRow
+                    key={object._id}
+                    hover
+                    selected={(selectedItems || []).includes(object._id)}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        color="primary"
+                        checked={(selectedItems || []).includes(object._id)}
+                        onChange={(event) => {
+                          if ((selectedItems || []).includes(object._id)) {
+                            setSelectedItems(
+                              filter(selectedItems, (o) => o !== object._id)
+                            );
+                          } else {
+                            setSelectedItems([...selectedItems, object._id]);
+                          }
+                        }}
+                      />
+                    </TableCell>
+
                     {model.lists[selectedList].fields?.map((fieldKey) => (
                       <TableCell
                         key={`row-${rowIndex}field-${fieldKey}`}
@@ -311,7 +414,7 @@ const ObjectList: React.FC<{
                         onClick={(
                           event: React.MouseEvent<HTMLButtonElement>
                         ) => {
-                          setSelectedItems([object._id]);
+                          if (selectedItems) setSelectedItems([object._id]);
                           setSingleActionAnchorEl(event.currentTarget);
                         }}
                       >

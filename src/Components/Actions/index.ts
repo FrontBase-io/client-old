@@ -10,6 +10,7 @@ import Delete from "./Delete";
 interface ActionType {
   accepts: ("None" | "One" | "Many")[];
   label: string;
+  icon: string;
   onClick: (
     context: AppContext,
     objects: ObjectType | ObjectType[] | null,
