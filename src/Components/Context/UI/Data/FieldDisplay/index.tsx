@@ -11,6 +11,8 @@ import DisplayRelationship from "./Relationship";
 import { AppContext } from "../../..";
 import DisplayRelationshipM from "./Relationship_m";
 import DisplayColor from "./Color";
+import DisplayImage from "./Image";
+import { serverUrl } from "../../../../../Utils/Socket";
 
 const FieldDisplay: React.FC<{
   context: AppContext;
@@ -72,6 +74,11 @@ const FieldDisplay: React.FC<{
           model={model}
           object={object}
           fieldKey={fieldKey}
+        />
+      ) : modelField.type === "image" ? (
+        <DisplayImage
+          src={`${serverUrl}${objectField}`}
+          alt={modelField.label}
         />
       ) : (
         `Unknown type ${modelField.type}`

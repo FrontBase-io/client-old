@@ -190,6 +190,7 @@ const AppLayout: React.FC<{
                   variant="h6"
                   className={styles.appName}
                   style={{ color: `${colors.primary.hex()}`, height: 42 }}
+                  noWrap
                 >
                   {app.name}
                 </Typography>

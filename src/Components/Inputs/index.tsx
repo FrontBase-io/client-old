@@ -6,6 +6,7 @@ import Relationship from "./Relationship";
 import Options from "./Options";
 import Number from "./Number";
 import Color from "./Color";
+import Image from "./Image";
 
 const Inputs = {
   Text,
@@ -16,6 +17,7 @@ const Inputs = {
   Relationship,
   Options,
   Color,
+  Image,
 };
 
 export default Inputs;

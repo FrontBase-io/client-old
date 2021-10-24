@@ -174,11 +174,11 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
         anchorEl={userMenuElement}
         onClose={() => setUserMenuElement(undefined)}
         anchorOrigin={{
-          vertical: "center",
+          vertical: "top",
           horizontal: "right",
         }}
         transformOrigin={{
-          vertical: "center",
+          vertical: "top",
           horizontal: "left",
         }}
       >

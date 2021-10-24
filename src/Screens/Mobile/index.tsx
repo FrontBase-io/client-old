@@ -184,7 +184,7 @@ const Mobile: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
           color: "white",
         }}
       >
-        <Toolbar style={{ width: "calc(100% - 280px)" }}>
+        <Toolbar>
           <IconButton
             size="large"
             edge="start"
@@ -199,7 +199,7 @@ const Mobile: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
               />
             </Tooltip>
           </IconButton>
-          <Typography variant="h6" style={{ flex: 1 }}>
+          <Typography variant="h6" style={{ flex: 1 }} noWrap>
             {pageName}
           </Typography>
         </Toolbar>

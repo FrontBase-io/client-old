@@ -103,6 +103,17 @@ const FieldEdit: React.FC<{
           autoFocus={selectedField === fieldKey}
           onChange={onChange}
         />
+      ) : modelField.type === "image" ? (
+        <context.UI.Inputs.Image
+          label={modelField.label}
+          value={objectField}
+          autoFocus={selectedField === fieldKey}
+          onChange={(newVal) => {
+            console.log(newVal);
+            onChange(newVal);
+          }}
+          objectId={object?._id!}
+        />
       ) : (
         `Unknown type ${modelField.type}`
       )}
