@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import { find } from "lodash";
+import { find, map } from "lodash";
 import React, { useEffect, useState } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
 import { useGlobal } from "reactn";
@@ -202,6 +202,15 @@ const Mobile: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
           <Typography variant="h6" style={{ flex: 1 }} noWrap>
             {pageName}
           </Typography>
+          <div style={{ flex: 1, textAlign: "right" }}>
+            {map(navBarActions, (action, key) => (
+              <Tooltip key={key} title={action.label} placement="bottom">
+                <IconButton onClick={action.onClick}>
+                  <Icon icon={action.icon} />
+                </IconButton>
+              </Tooltip>
+            ))}
+          </div>
         </Toolbar>
       </AppBar>
       <div className={styles.appCanvas}>

@@ -157,16 +157,25 @@ const ObjectDetail: React.FC<{
   useEffect(() => {
     if (isEqual(appliedObject, newObject)) {
       context.canvas.navbar.actions.remove("update");
+      if (viewMode === "view") {
+        context.canvas.navbar.actions.add("edit", {
+          label: "Edit",
+          icon: "edit",
+          onClick: () => setViewMode("edit"),
+        });
+      } else {
+        context.canvas.navbar.actions.remove("edit");
+      }
     } else {
       context.canvas.navbar.actions.add("update", {
-        label: "update",
+        label: "Update",
         icon: "save",
         onClick: save,
       });
     }
 
     return () => context.canvas.navbar.actions.remove("update");
-  }, [appliedObject, context.canvas.navbar.actions, newObject, save]);
+  }, [appliedObject, context.canvas.navbar.actions, newObject, save, viewMode]);
   useEffect(() => {
     appliedObject._id ? setViewMode("view") : setViewMode("edit");
   }, [appliedObject]);
