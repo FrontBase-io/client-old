@@ -9,6 +9,7 @@ import {
 import find from "lodash/find";
 import React, { useEffect, useState } from "react";
 import { Switch, useHistory, Route } from "react-router-dom";
+import { useGlobal } from "reactn";
 import { AppContext } from "../../..";
 import { ListItemType } from "../../../../../Utils/Types";
 import Icon from "../../../../Design/Icon";
@@ -42,7 +43,10 @@ const ListDetailLayout: React.FC<{
 }) => {
   // Vars
   const history = useHistory();
-  const [selectedItem, setSelectedItem] = useState<string>();
+  let selectedItem = window.location.href.split(`${baseUrl}/`)[1];
+  if ((selectedItem || "").match("/"))
+    selectedItem = selectedItem.split("/")[0];
+  const [isMobile] = useGlobal<any>("isMobile");
 
   // Lifecycle
 
@@ -50,61 +54,64 @@ const ListDetailLayout: React.FC<{
   return (
     <context.UI.Design.Animation.Container>
       <Grid container style={{ height: "100%" }}>
-        <Grid item xs={navWidth || 2} style={{ height: "100%" }}>
-          <context.UI.Design.Animation.Item key="menu">
-            <context.UI.Design.Card title={title} withoutPadding>
-              <List disablePadding>
-                <context.UI.Design.Animation.Container>
-                  {(items || []).map((menuItem) => (
-                    <context.UI.Design.Animation.Item key={menuItem.key}>
-                      <ListItem
-                        button
-                        onClick={() =>
-                          history.push(`${baseUrl}/${menuItem.key}`)
-                        }
-                        selected={menuItem.key === selectedItem}
-                        style={{ paddingLeft: withoutPadding && 0 }}
-                      >
-                        {menuItem.icon && (
-                          <ListItemIcon style={{ minWidth: 48 }}>
-                            <Icon
-                              icon={
-                                transformIcon
-                                  ? transformIcon(menuItem.icon)
-                                  : menuItem.icon
-                              }
-                              size={18}
-                            />
-                          </ListItemIcon>
-                        )}
-                        <ListItemText
-                          primary={menuItem.label}
-                          secondary={menuItem.secondary}
-                        />
-                      </ListItem>
-                    </context.UI.Design.Animation.Item>
-                  ))}
-                  {create && (
-                    <>
-                      <Divider />
-                      <context.UI.Design.Animation.Item key="create">
-                        <ListItem button onClick={create.onClick}>
-                          <ListItemText>
-                            {create.label || "Create"}
-                          </ListItemText>
+        {((isMobile && !selectedItem) || !isMobile) && (
+          <Grid item xs={12} md={navWidth || 2} style={{ height: "100%" }}>
+            <context.UI.Design.Animation.Item key="menu">
+              <context.UI.Design.Card title={title} withoutPadding>
+                <List disablePadding>
+                  <context.UI.Design.Animation.Container>
+                    {(items || []).map((menuItem) => (
+                      <context.UI.Design.Animation.Item key={menuItem.key}>
+                        <ListItem
+                          button
+                          onClick={() =>
+                            history.push(`${baseUrl}/${menuItem.key}`)
+                          }
+                          selected={menuItem.key === selectedItem}
+                          style={{ paddingLeft: withoutPadding && 0 }}
+                        >
+                          {menuItem.icon && (
+                            <ListItemIcon style={{ minWidth: 48 }}>
+                              <Icon
+                                icon={
+                                  transformIcon
+                                    ? transformIcon(menuItem.icon)
+                                    : menuItem.icon
+                                }
+                                size={18}
+                              />
+                            </ListItemIcon>
+                          )}
+                          <ListItemText
+                            primary={menuItem.label}
+                            secondary={menuItem.secondary}
+                          />
                         </ListItem>
                       </context.UI.Design.Animation.Item>
-                    </>
-                  )}
-                </context.UI.Design.Animation.Container>
-              </List>
-            </context.UI.Design.Card>
-          </context.UI.Design.Animation.Item>
-        </Grid>
+                    ))}
+                    {create && (
+                      <>
+                        <Divider />
+                        <context.UI.Design.Animation.Item key="create">
+                          <ListItem button onClick={create.onClick}>
+                            <ListItemText>
+                              {create.label || "Create"}
+                            </ListItemText>
+                          </ListItem>
+                        </context.UI.Design.Animation.Item>
+                      </>
+                    )}
+                  </context.UI.Design.Animation.Container>
+                </List>
+              </context.UI.Design.Card>
+            </context.UI.Design.Animation.Item>
+          </Grid>
+        )}
         <Grid
           item
+          xs={12}
           //@ts-ignore
-          xs={navWidth ? 12 - navWidth : 10}
+          md={navWidth ? 12 - navWidth : 10}
         >
           <Switch>
             <Route
@@ -117,7 +124,6 @@ const ListDetailLayout: React.FC<{
                   baseUrl={baseUrl}
                   title={title}
                   items={items}
-                  setSelectedItem={setSelectedItem}
                   detailComponentProps={detailComponentProps}
                 />
               )}
@@ -140,7 +146,6 @@ const DetailComponentWrapper: React.FC<{
   baseUrl: string;
   title?: string;
   items: ListItemType[];
-  setSelectedItem: (key?: string) => void;
   detailComponentProps?: { [key: string]: any };
 }> = ({
   context,
@@ -148,7 +153,6 @@ const DetailComponentWrapper: React.FC<{
   selectedKey,
   baseUrl,
   items,
-  setSelectedItem,
   detailComponentProps,
 }) => {
   // Vars
@@ -159,13 +163,11 @@ const DetailComponentWrapper: React.FC<{
     // Up
     context.canvas.navbar.up(baseUrl);
     if (item) context.canvas.navbar.name(item.label);
-    if (item) setSelectedItem(item.key);
     return () => {
       context.canvas.navbar.up(undefined);
       context.canvas.navbar.name();
-      setSelectedItem();
     };
-  }, [selectedKey, context.canvas.navbar, baseUrl, setSelectedItem, item]);
+  }, [selectedKey, context.canvas.navbar, baseUrl, item]);
 
   // UI
   const Component = component;

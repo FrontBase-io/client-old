@@ -43,6 +43,7 @@ const Mobile: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
   const [theme] = useGlobal<any>("theme");
   const [favoriteList, setFavoriteList] = useState<string[]>([]);
   const [showAllApps, setShowAllApps] = useState<boolean>(false);
+  const [, setIsMobile] = useGlobal<any>("isMobile");
 
   // Lifecycle
   useEffect(() => {
@@ -60,6 +61,7 @@ const Mobile: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
       //@ts-ignore
       Socket.on(`receive ${response.key}`, onReceive);
     });
+    setIsMobile(true);
   }, []);
 
   // UI

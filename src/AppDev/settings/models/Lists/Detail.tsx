@@ -162,7 +162,7 @@ const ModelListDetail: React.FC<{
             </Card>
           </Grid>
         )}
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <Animation.Item key="availableFields">
             <Card title="Available">
               <List>
@@ -191,7 +191,7 @@ const ModelListDetail: React.FC<{
             </Card>
           </Animation.Item>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <Animation.Item key="selectedFields">
             <Card title="Selected">
               <List disablePadding>
@@ -222,7 +222,7 @@ const ModelListDetail: React.FC<{
             </Card>
           </Animation.Item>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={12} md={4}>
           <Animation.Item key="actionsGlobal">
             <Card
               title="Global actions"
@@ -331,7 +331,7 @@ const ModelListDetail: React.FC<{
             </Card>
           </Animation.Item>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={12} md={4}>
           <Animation.Item key="actionsSingle">
             <Card
               title="Single actions"
@@ -440,7 +440,7 @@ const ModelListDetail: React.FC<{
             </Card>
           </Animation.Item>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={12} md={4}>
           <Animation.Item key="actionsMultiple">
             <Card
               title="Many actions"

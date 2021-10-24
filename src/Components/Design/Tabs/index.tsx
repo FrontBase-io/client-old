@@ -43,7 +43,7 @@ const Tabs: React.FC<{
           }
         }}
         classes={white && classes}
-        variant="standard"
+        variant="scrollable"
         color="primary"
         indicatorColor="primary"
         aria-label="Tabs"

@@ -35,7 +35,7 @@ const ModelPermissions: React.FC<{
   return (
     <context.UI.Design.Animation.Container>
       <Grid container>
-        <Grid item xs={3}>
+        <Grid item xs={6} md={3}>
           <context.UI.Design.Animation.Item key="permission-read">
             <context.UI.Design.Card
               title="Read"
@@ -67,7 +67,7 @@ const ModelPermissions: React.FC<{
             </context.UI.Design.Card>
           </context.UI.Design.Animation.Item>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={6} md={3}>
           <context.UI.Design.Animation.Item key="permission-read-own">
             <context.UI.Design.Card
               title="Read (own)"
@@ -99,7 +99,7 @@ const ModelPermissions: React.FC<{
             </context.UI.Design.Card>
           </context.UI.Design.Animation.Item>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={6} md={3}>
           <context.UI.Design.Animation.Item key="permission-create">
             <context.UI.Design.Card
               title="Create"
@@ -131,7 +131,7 @@ const ModelPermissions: React.FC<{
             </context.UI.Design.Card>
           </context.UI.Design.Animation.Item>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={6} md={3}>
           <context.UI.Design.Animation.Item key="permission-update">
             <context.UI.Design.Card
               title="Update"
@@ -163,7 +163,7 @@ const ModelPermissions: React.FC<{
             </context.UI.Design.Card>
           </context.UI.Design.Animation.Item>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={6} md={3}>
           <context.UI.Design.Animation.Item key="permission-update-own">
             <context.UI.Design.Card
               title="Update"
@@ -195,7 +195,7 @@ const ModelPermissions: React.FC<{
             </context.UI.Design.Card>
           </context.UI.Design.Animation.Item>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={6} md={3}>
           <context.UI.Design.Animation.Item key="permission-delete">
             <context.UI.Design.Card
               title="Delete"
@@ -227,7 +227,7 @@ const ModelPermissions: React.FC<{
             </context.UI.Design.Card>
           </context.UI.Design.Animation.Item>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={6} md={3}>
           <context.UI.Design.Animation.Item key="permission-delete-own">
             <context.UI.Design.Card
               title="Delete (own)"

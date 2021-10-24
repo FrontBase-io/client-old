@@ -17,7 +17,7 @@ const ModelGeneral: React.FC<{
   // UI
   return (
     <context.UI.Design.Animation.Animate>
-      <context.UI.Design.Card title="General" withoutMargin style={{ top: 15 }}>
+      <context.UI.Design.Card title="General">
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <context.UI.Inputs.Text
@@ -44,10 +44,10 @@ const ModelGeneral: React.FC<{
           </Grid>
           <Grid item xs={6}>
             <Grid container>
-              <Grid item xs={1}>
+              <Grid item xs={2} md={1}>
                 <Icon icon={newModel.icon} style={{ padding: "20px 5px" }} />
               </Grid>
-              <Grid item xs={11}>
+              <Grid item xs={10} md={11}>
                 <context.UI.Inputs.Text
                   label="Icon"
                   value={newModel.icon}

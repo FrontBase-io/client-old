@@ -25,6 +25,7 @@ import {
   DialogType,
   NavBarButtonType,
 } from "../../../Utils/Types";
+import styles from "./styles.module.scss";
 
 const AppCanvas: React.FC<{
   appKey: string;
@@ -130,38 +131,45 @@ const AppCanvas: React.FC<{
   }, [appKey]);
   return (
     <>
-      <Switch>
-        {map(flatPageMenu, (page: AppPageType) => {
-          return (
-            <Route
-              path={
-                page.altKeys
-                  ? `/${appKey}/(${page.key}${page.altKeys?.map(
-                      (altKey) => `|${altKey}`
-                    )})`
-                  : `/${appKey}/${page.key}`
-              }
-              render={(args) => {
-                setSelectedPage(page.key);
-                const Component = page.component;
-                return context ? (
-                  <Component
-                    context={context}
-                    page={page}
-                    selectedPageKey={
-                      //@ts-ignore
-                      args.match.params[0]
-                    }
-                  />
-                ) : (
-                  <Loading />
-                );
-              }}
-            />
-          );
-        })}
-        <Route component={FourOhFour} />
-      </Switch>
+      <div
+        className={styles.canvas}
+        style={{
+          paddingBottom: 64,
+        }}
+      >
+        <Switch>
+          {map(flatPageMenu, (page: AppPageType) => {
+            return (
+              <Route
+                path={
+                  page.altKeys
+                    ? `/${appKey}/(${page.key}${page.altKeys?.map(
+                        (altKey) => `|${altKey}`
+                      )})`
+                    : `/${appKey}/${page.key}`
+                }
+                render={(args) => {
+                  setSelectedPage(page.key);
+                  const Component = page.component;
+                  return context ? (
+                    <Component
+                      context={context}
+                      page={page}
+                      selectedPageKey={
+                        //@ts-ignore
+                        args.match.params[0]
+                      }
+                    />
+                  ) : (
+                    <Loading />
+                  );
+                }}
+              />
+            );
+          })}
+          <Route component={FourOhFour} />
+        </Switch>
+      </div>
       {appConfig.mobile?.pages === "bottom" && (
         <>
           <BottomNavigation
@@ -178,7 +186,12 @@ const AppCanvas: React.FC<{
                 history.push(`/${appKey}/${newValue}`);
               }
             }}
-            style={{ position: "absolute", bottom: 0, width: "100vw" }}
+            style={{
+              position: "absolute",
+              bottom: 0,
+              width: "100vw",
+              zIndex: 50,
+            }}
           >
             {flatPageMenu?.slice(0, 4).map((page) => (
               <BottomNavigationAction

@@ -181,12 +181,15 @@ const AppLayout: React.FC<{
               <Link
                 to={`/${app.key}`}
                 className="no-link"
-                style={{ textDecoration: "none", cursor: "pointer" }}
+                style={{
+                  textDecoration: "none",
+                  cursor: "pointer",
+                }}
               >
                 <Typography
                   variant="h6"
                   className={styles.appName}
-                  style={{ color: `${colors.primary.hex()}` }}
+                  style={{ color: `${colors.primary.hex()}`, height: 42 }}
                 >
                   {app.name}
                 </Typography>

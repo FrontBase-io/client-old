@@ -23,6 +23,7 @@ import styles from "./styles.module.scss";
 import { map } from "lodash";
 import Tooltip from "@mui/material/Tooltip";
 import O from "../../AppDev/system/o";
+import { useGlobal } from "reactn";
 
 const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
   // Vars
@@ -37,6 +38,7 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
   const [navBarActions, setNavBarActions] = useState<{
     [key: string]: NavBarButtonType;
   }>({});
+  const [, setIsMobile] = useGlobal<any>("isMobile");
 
   // Lifecycle
   useEffect(() => {
@@ -47,6 +49,7 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
       onReceive(response.objects);
       Socket.on(`receive ${response.key}`, onReceive);
     });
+    setIsMobile(false);
   }, []);
 
   // UI

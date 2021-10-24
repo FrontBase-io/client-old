@@ -24,6 +24,7 @@ import { cloneDeep, isEqual, map } from "lodash";
 import Icon from "../../../../Components/Design/Icon";
 import { modifyRecursive } from "../../../../Utils/Functions";
 import Actions from "../../../../Components/Actions/index";
+import { useGlobal } from "reactn";
 
 const ModelLayoutDetail: React.FC<{
   context: AppContext;
@@ -48,6 +49,7 @@ const ModelLayoutDetail: React.FC<{
   const [titleFields, setTitleFields] = useState<SelectOptionType[]>([]);
   const [imageFields, setImageFields] = useState<SelectOptionType[]>([]);
   const [colorFields, setColorFields] = useState<SelectOptionType[]>([]);
+  const [isMobile] = useGlobal<any>("isMobile");
 
   // Lifecycle
   useEffect(() => {
@@ -147,7 +149,12 @@ const ModelLayoutDetail: React.FC<{
     >
       <Animation.Container>
         <Grid container>
-          <Grid item xs={9} className="scrollIndependently">
+          <Grid
+            item
+            xs={12}
+            md={9}
+            className={!isMobile ? "scrollIndependently" : ""}
+          >
             <Animation.Item key="details">
               <Card
                 title="Facts"
@@ -271,14 +278,23 @@ const ModelLayoutDetail: React.FC<{
               </Card>
             </Animation.Item>
           </Grid>
-          <Grid item xs={3} className="scrollIndependently">
+          <Grid
+            item
+            xs={12}
+            md={3}
+            className={!isMobile ? "scrollIndependently" : ""}
+          >
             {hasChanged && (
               <Animation.Item key="savebutton">
                 <Button
                   color="primary"
                   variant="outlined"
                   fullWidth
-                  style={{ margin: "0px 15px", color: "white" }}
+                  style={{
+                    margin: "0px 15px",
+                    color: "white",
+                    border: "1px solid white",
+                  }}
                   onClick={() => {
                     const newModel = {
                       ...model,
