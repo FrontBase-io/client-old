@@ -1,8 +1,13 @@
+import { CSSProperties } from "react";
 import styles from "./Image.module.scss";
 
-const DisplayImage: React.FC<{ src: string; alt: string }> = ({ src, alt }) => {
+const DisplayImage: React.FC<{
+  src: string;
+  alt: string;
+  style?: CSSProperties;
+}> = ({ src, alt, style }) => {
   return (
-    <div className={styles.ambilight}>
+    <div className={styles.ambilight} style={style}>
       <div className={styles.imgcon}>
         <img src={src} alt={alt} className="image" />
       </div>

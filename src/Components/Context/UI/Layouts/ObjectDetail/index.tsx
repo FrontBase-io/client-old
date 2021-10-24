@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Grid } from "@mui/material";
+import { Button, ButtonGroup, Grid, Typography } from "@mui/material";
 import { filter, map } from "lodash";
 import isEqual from "lodash/isEqual";
 import { useCallback, useEffect, useState } from "react";
@@ -12,6 +12,8 @@ import {
 } from "../../../../../Utils/Types";
 import LayoutComponent from "./LayoutComponent";
 import Actions from "../../../../Actions";
+import DisplayImage from "../../Data/FieldDisplay/Image";
+import { serverUrl } from "../../../../../Utils/Socket";
 
 const ObjectDetail: React.FC<{
   context: AppContext;
@@ -267,32 +269,47 @@ const ObjectDetail: React.FC<{
         </div>
       )}
       {layout.factsbar && (
-        <context.UI.Design.Card
-          title={layout.factsbar.title && appliedObject[layout.factsbar.title]}
-        >
-          <Grid
-            container
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            {layout.factsbar.fields?.map((f) => (
+        <Grid container>
+          {layout.factsbar.image && (
+            <Grid item xs={1}>
+              <DisplayImage
+                alt={appliedModel.fields[layout.factsbar.image].label}
+                src={serverUrl + appliedObject[layout.factsbar.image]}
+                style={{ position: "relative", top: 25, left: 10 }}
+              />
+            </Grid>
+          )}
+          <Grid item xs={layout.factsbar.image ? 11 : 12}>
+            <context.UI.Design.Card
+              title={
+                layout.factsbar.title && appliedObject[layout.factsbar.title]
+              }
+            >
               <Grid
-                item
-                //@ts-ignore
-                xs={12 / layout.factsbar.fields?.length || 1}
-                key={`facts-${f}`}
+                container
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
               >
-                <context.UI.Data.FieldDisplay
-                  context={context}
-                  model={appliedModel}
-                  object={appliedObject as ObjectType}
-                  fieldKey={f}
-                />
+                {layout.factsbar.fields?.map((f) => (
+                  <Grid
+                    item
+                    //@ts-ignore
+                    xs={12 / layout.factsbar.fields?.length || 1}
+                    key={`facts-${f}`}
+                  >
+                    <context.UI.Data.FieldDisplay
+                      context={context}
+                      model={appliedModel}
+                      object={appliedObject as ObjectType}
+                      fieldKey={f}
+                    />
+                  </Grid>
+                ))}
               </Grid>
-            ))}
+            </context.UI.Design.Card>
           </Grid>
-        </context.UI.Design.Card>
+        </Grid>
       )}
       {layout.layout.map((layoutItem, layoutItemIndex) => (
         <LayoutComponent
