@@ -8,7 +8,7 @@ const TextInput: React.FC<{
   value?: string;
   onChange?: (newValue: string) => void;
   password?: true;
-  type?: "date";
+  type?: "date" | "url";
   disabled?: true | boolean;
   keyMode?: true | boolean;
   mode?: "text" | "textarea";

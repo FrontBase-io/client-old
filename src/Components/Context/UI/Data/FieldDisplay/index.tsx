@@ -13,6 +13,7 @@ import DisplayRelationshipM from "./Relationship_m";
 import DisplayColor from "./Color";
 import DisplayImage from "./Image";
 import { serverUrl } from "../../../../../Utils/Socket";
+import Icon from "../../../../Design/Icon";
 
 const FieldDisplay: React.FC<{
   context: AppContext;
@@ -41,7 +42,18 @@ const FieldDisplay: React.FC<{
       {modelField.type === "text" ||
       modelField.type === "formula" ||
       modelField.type === "number" ? (
-        <Typography variant="body1">{objectField}</Typography>
+        modelField.displayType === "url" ? (
+          <a href={objectField} target="_blank" rel="noopener noreferrer">
+            <Icon
+              icon="external-link-alt"
+              size={10}
+              style={{ color: "white", marginRight: 5 }}
+            />
+            {objectField}
+          </a>
+        ) : (
+          <Typography variant="body1">{objectField}</Typography>
+        )
       ) : modelField.type === "relationship" ? (
         <DisplayRelationship
           context={context}

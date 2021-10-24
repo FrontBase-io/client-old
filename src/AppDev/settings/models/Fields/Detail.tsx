@@ -138,6 +138,7 @@ const ModelFieldDetail: React.FC<{
                         { label: "Textarea", value: "textarea" },
                         { label: "Rich text", value: "html" },
                         { label: "Markdown", value: "markdown" },
+                        { label: "URL", value: "url" },
                       ]}
                       onChange={(displayType) =>
                         setField({
