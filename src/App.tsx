@@ -35,6 +35,8 @@ function App() {
       },
     });
     setColors({ ...colors, primary: color });
+    var metaThemeColor = document.querySelector("meta[name=theme-color]")!;
+    metaThemeColor.setAttribute("content", color.hex());
   };
 
   // Lifecycle
