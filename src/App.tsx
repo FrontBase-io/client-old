@@ -9,7 +9,7 @@ import Hidden from "@mui/material/Hidden";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import chroma from "chroma-js";
-import Loading from "./Components/Loading";
+import FrontBaseLoader from "./Components/Loading/FrontBaseLoader";
 
 const Onboard = asyncComponent(() => import("./Screens/Onboard"));
 const Login = asyncComponent(() => import("./Screens/LogIn"));
@@ -92,7 +92,7 @@ function App() {
   }, [setColors, setTheme, setUser]);
 
   // UI
-  if (mode === "loading") return <Loading />;
+  if (mode === "loading") return <FrontBaseLoader />;
   return (
     <>
       {mode === "onboard" ? (

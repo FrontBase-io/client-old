@@ -24,6 +24,7 @@ import { map } from "lodash";
 import Tooltip from "@mui/material/Tooltip";
 import O from "../../AppDev/system/o";
 import { useGlobal } from "reactn";
+import FrontBaseLoader from "../../Components/Loading/FrontBaseLoader";
 
 const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
   // Vars
@@ -53,7 +54,7 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
   }, []);
 
   // UI
-  if (!apps) return <Loading />;
+  if (!apps) return <FrontBaseLoader />;
   return (
     <>
       <div style={{ display: "flex" }}>

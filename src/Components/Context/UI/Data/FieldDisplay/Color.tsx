@@ -18,9 +18,11 @@ const DisplayColor: React.FC<{
       style={{
         border: "1px solid black",
         cursor: "pointer",
-        backgroundColor: `rgb(${object![fieldKey].r},${object![fieldKey].g},${
-          object![fieldKey].b
-        })`,
+        backgroundColor:
+          object![fieldKey] &&
+          `rgb(${object![fieldKey].r},${object![fieldKey].g},${
+            object![fieldKey].b
+          })`,
       }}
       className={styles.colorPreview}
     />

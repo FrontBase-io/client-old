@@ -30,6 +30,13 @@ const app = {
           group: "Apps",
         },
         {
+          label: "Interfaces",
+          key: "interfaces",
+          icon: "desktop",
+          component: SettingsProcesses,
+          group: "Apps",
+        },
+        {
           label: "Settings",
           key: "settings",
           icon: "cogs",
