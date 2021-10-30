@@ -27,9 +27,10 @@ const ModelFields: React.FC<{ context: AppContext; model: ModelType }> = ({
             formula: "flask",
             options: "list",
             date: "calendar-alt",
-            "free-data": "code",
+            "free-data": "table",
             color: "palette",
             image: "image",
+            boolean: "check-square",
             file: "paperclip",
           };
           return map[icon];

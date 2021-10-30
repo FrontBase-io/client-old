@@ -198,7 +198,7 @@ const ObjectList: React.FC<{
           </div>
         ) : (
           <AppBar enableColorOnDark={true} position="static">
-            <Toolbar variant="dense" color="primary">
+            <Toolbar color="primary">
               <Typography style={{ flex: "1" }}>
                 <IconButton
                   onClick={() => setSelectedItems([])}
@@ -232,7 +232,7 @@ const ObjectList: React.FC<{
                             setSingleActionAnchorEl(null);
                           }}
                         >
-                          <Icon icon={action.icon} size={18} />
+                          <Icon icon={action.icon} size={18} color="white" />
                         </IconButton>
                       </Tooltip>
                     );
@@ -255,7 +255,7 @@ const ObjectList: React.FC<{
                             ).then(() => setSelectedItems([]));
                           }}
                         >
-                          <Icon icon={action.icon} size={18} />
+                          <Icon icon={action.icon} size={18} color="white" />
                         </IconButton>
                       </Tooltip>
                     );

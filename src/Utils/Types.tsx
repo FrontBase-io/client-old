@@ -253,7 +253,10 @@ export interface PermissionObjectType extends ObjectType {
   description: string;
 }
 export interface SystemTaskObjectType extends ObjectType {
-  name: string;
+  description: string;
+  type: "system-update";
+  done: boolean;
+  progress: number;
 }
 
 // Processes

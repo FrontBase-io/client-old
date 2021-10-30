@@ -8,7 +8,8 @@ const Icon: React.FC<{
   className?: string;
   size?: number;
   primary?: true | boolean;
-}> = ({ icon, style, className, size, primary }) => {
+  color?: string;
+}> = ({ icon, style, className, size, primary, color }) => {
   // Vars
   const [colors] = useGlobal<any>("colors");
 
@@ -20,6 +21,7 @@ const Icon: React.FC<{
       style={{
         ...style,
         fontSize: size || 24,
+        color: color && color,
         ...(primary ? { color: colors.primary.hex() } : {}),
       }}
     ></i>

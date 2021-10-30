@@ -31,7 +31,8 @@ const ModelLayoutFields: React.FC<{
             color: "palette",
             image: "image",
             file: "paperclip",
-
+            boolean: "check-square",
+            "free-data": "table",
             error: "exclamation-triangle",
           };
           const icon: string = map[field.type || "error"];

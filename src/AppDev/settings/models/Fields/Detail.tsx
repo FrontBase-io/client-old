@@ -77,6 +77,7 @@ const ModelFieldDetail: React.FC<{
                     options={[
                       { label: "Text", value: "text" },
                       { label: "Number", value: "number" },
+                      { label: "Boolean", value: "boolean" },
                       { label: "Options", value: "options" },
                       { label: "Relationship", value: "relationship" },
                       { label: "Relationship (many)", value: "relationship_m" },

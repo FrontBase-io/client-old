@@ -60,6 +60,15 @@ const get = (
   );
 };
 
+// Get one (convenience function to get a single object)
+const getOne = (
+  modelKey: string,
+  filter: {},
+  respond: (object: ObjectType) => void
+) => {
+  get(modelKey, filter, (objects) => respond(objects[0]));
+};
+
 // Update object
 const update = (_id: string, newObject: { [key: string]: any }) =>
   new Promise((resolve, reject) => {
@@ -83,6 +92,7 @@ const turnObjectIdIntoModelKey = (_id: string) =>
 const objectFunctions = {
   create,
   get,
+  getOne,
   update,
   trash,
   trashMany,

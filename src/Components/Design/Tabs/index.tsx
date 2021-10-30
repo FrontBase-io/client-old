@@ -47,6 +47,7 @@ const Tabs: React.FC<{
         color="primary"
         indicatorColor="primary"
         aria-label="Tabs"
+        scrollButtons={false}
       >
         {tabs.map((tab) => (
           <Tab
