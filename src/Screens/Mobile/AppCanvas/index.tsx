@@ -201,7 +201,7 @@ const AppCanvas: React.FC<{
                 key={page.key}
               />
             ))}
-            {(flatPageMenu || []).length > 5 && (
+            {(flatPageMenu || []).length > 4 && (
               <BottomNavigationAction
                 label="More"
                 icon={<Icon icon="ellipsis-v" />}
