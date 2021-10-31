@@ -2,7 +2,7 @@ import { AppPageType } from "../../Utils/Types";
 import PageModels from "./models";
 import SettingsProcesses from "./processes";
 import PageSettings from "./settings";
-import SettingsUpdate from "./Update";
+import SettingsUpdate from "./update";
 
 const app = {
   // Settings
