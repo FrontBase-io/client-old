@@ -49,7 +49,7 @@ const ScreenLogIn: React.FC = () => {
                   // Save the username and token for future logging in
                   localStorage.setItem("username", up.username);
                   localStorage.setItem("token", response.token);
-
+                  window.location.reload();
                   // Now attempt a token based login
                   Socket.emit(
                     "logIn",

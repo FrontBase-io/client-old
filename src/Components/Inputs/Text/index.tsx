@@ -13,7 +13,17 @@ const TextInput: React.FC<{
   keyMode?: true | boolean;
   mode?: "text" | "textarea";
   autoFocus?: boolean;
-}> = ({ label, value, onChange, disabled, keyMode, mode, autoFocus, type }) => {
+}> = ({
+  label,
+  value,
+  onChange,
+  disabled,
+  keyMode,
+  mode,
+  autoFocus,
+  type,
+  password,
+}) => {
   // Vars
 
   // Lifecycle
@@ -26,7 +36,7 @@ const TextInput: React.FC<{
           className={styles.input}
           autoFocus={autoFocus}
           value={value}
-          type={type || "text"}
+          type={password ? "password" : type || "text"}
           onChange={(e) => {
             onChange &&
               onChange(
