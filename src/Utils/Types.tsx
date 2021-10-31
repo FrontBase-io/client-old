@@ -66,7 +66,8 @@ export interface ModelFieldType {
     | "color"
     | "image"
     | "file"
-    | "free-data";
+    | "free-data"
+    | "boolean";
   required?: boolean;
   unique?: boolean;
   // Text
@@ -294,6 +295,10 @@ export interface ProcessTriggerType {
 
   // Action
   input?: string;
+
+  // Time
+  trigger?: string;
+  customTrigger?: string;
 }
 
 export interface ProcessTriggersType {

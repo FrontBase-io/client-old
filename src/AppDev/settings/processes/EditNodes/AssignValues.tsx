@@ -198,6 +198,23 @@ const AssignValuesToObject: React.FC<{
                               onChange({ ...value, [optionKey]: newValue })
                             }
                           />
+                        ) : field.type === "options" ? (
+                          <context.UI.Inputs.Select
+                            label="Value"
+                            options={field.options!}
+                            value={fieldValue}
+                            onChange={(newValue) =>
+                              onChange({ ...value, [optionKey]: newValue })
+                            }
+                          />
+                        ) : field.type === "boolean" ? (
+                          <context.UI.Inputs.Boolean
+                            label={field.label}
+                            value={fieldValue}
+                            onChange={(newValue) =>
+                              onChange({ ...value, [optionKey]: newValue })
+                            }
+                          />
                         ) : (
                           <>Unknown field type {field.type}</>
                         )}

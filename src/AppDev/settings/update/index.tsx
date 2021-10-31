@@ -33,7 +33,7 @@ const SettingsUpdate: React.FC<{ context: AppContext }> = ({ context }) => {
       { done: false, type: "system-update" },
       (object) => setUpdateTask((object as SystemTaskObjectType) || null)
     );
-    context.data.objects.getOne(
+    context.data.objects.getLast(
       "system-task",
       { done: true, type: "system-update" },
       (object) =>

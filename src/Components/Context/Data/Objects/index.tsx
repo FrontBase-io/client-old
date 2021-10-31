@@ -69,6 +69,14 @@ const getOne = (
   get(modelKey, filter, (objects) => respond(objects[0]));
 };
 
+const getLast = (
+  modelKey: string,
+  filter: {},
+  respond: (object: ObjectType) => void
+) => {
+  get(modelKey, filter, (objects) => respond(objects[objects.length - 1]));
+};
+
 // Update object
 const update = (_id: string, newObject: { [key: string]: any }) =>
   new Promise((resolve, reject) => {
@@ -95,6 +103,7 @@ const objectFunctions = {
   getOne,
   update,
   trash,
+  getLast,
   trashMany,
   turnObjectIdIntoModelKey,
 };
