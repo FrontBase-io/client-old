@@ -89,7 +89,8 @@ const SettingsUpdate: React.FC<{ context: AppContext }> = ({ context }) => {
                 </Box>
               </Box>
               <div style={{ textAlign: "center", marginTop: 35 }}>
-                {(updateTask.log || [])[(updateTask.log || []).length - 1]}
+                {(updateTask.log || [])[(updateTask.log || []).length - 1]
+                  .label || ""}
               </div>
             </>
           ) : (

@@ -1,6 +1,12 @@
 import {
   BottomNavigation,
   BottomNavigationAction,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Grid,
   List,
   ListItem,
   ListItemIcon,
@@ -12,11 +18,16 @@ import { useSnackbar, VariantType } from "notistack";
 import { useEffect, useState } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
 import { useGlobal } from "reactn";
+import slugify from "slugify";
 import { AppUtilsType } from "../../../App";
 import { AppContext } from "../../../Components/Context";
 import Card from "../../../Components/Design/Card";
 import Icon from "../../../Components/Design/Icon";
 import FourOhFour from "../../../Components/FourOhFour";
+import BooleanInput from "../../../Components/Inputs/Boolean";
+import NumberInput from "../../../Components/Inputs/Number";
+import SelectInput from "../../../Components/Inputs/Select";
+import TextInput from "../../../Components/Inputs/Text";
 import Loading from "../../../Components/Loading";
 import Socket from "../../../Utils/Socket";
 import {
@@ -170,6 +181,196 @@ const AppCanvas: React.FC<{
           <Route component={FourOhFour} />
         </Switch>
       </div>
+      <Dialog
+        open={dialog.display || false}
+        onClose={() => setDialog({ ...dialog, display: false })}
+        maxWidth={dialog.size || "md"}
+        fullWidth={true}
+        PaperComponent={Card}
+        PaperProps={{
+          //@ts-ignore
+          withoutPadding: true,
+          //@ts-ignore
+          withoutMargin: true,
+          title: dialog.title,
+        }}
+      >
+        <DialogContent style={{ padding: dialog.withoutPadding && 0 }}>
+          {dialog.text && (
+            <DialogContentText style={{ margin: 0 }}>
+              {dialog.text}
+            </DialogContentText>
+          )}
+          {dialog.content && typeof dialog.content === "function"
+            ? dialog.content(() => setDialog({ ...dialog, display: false }))
+            : dialog.content}
+          {dialog.fields && (
+            <Grid container spacing={2}>
+              {map(dialog.fields, (field, key) => {
+                let displays = true;
+                // If onlyDisplaysWhen is active we need to process the criteria and set displays to false if they don't meet
+                if (field.onlyDisplayWhen) {
+                  if (field.onlyDisplayWhen.and) {
+                    map(field.onlyDisplayWhen.and, (val, key) => {
+                      if (dialogFieldValues[key] !== val) {
+                        displays = false; // One 'and' statement is false -> hide
+                      }
+                    });
+                  }
+                  if (field.onlyDisplayWhen.or) {
+                    let orTruesHit = 0;
+                    // eslint-disable-next-line array-callback-return
+                    field.onlyDisplayWhen.or.map((orCondition) => {
+                      map(orCondition, (value, key) => {
+                        if (dialogFieldValues[key] !== value) {
+                          orTruesHit++;
+                        }
+                      });
+
+                      if (orTruesHit === field.onlyDisplayWhen?.or?.length) {
+                        displays = false; // All 'or' statements are false -> hide
+                      }
+                    });
+                  }
+                }
+                if (displays) {
+                  return (
+                    <Grid item key={key} xs={field.width || 12}>
+                      {(!field.type ||
+                        field.type === "text" ||
+                        field.type === "key") && (
+                        <TextInput
+                          label={field.label}
+                          value={
+                            dialogFieldValues[key] ||
+                            field.value ||
+                            (dialog.actionValues || {})[key] ||
+                            ""
+                          }
+                          keyMode={field.type === "key"}
+                          onChange={(value) =>
+                            setDialogFieldValues({
+                              ...dialogFieldValues,
+                              [key]: value,
+                              ...(field.linkToKeyField
+                                ? {
+                                    [field.linkToKeyField]:
+                                      slugify(value).toLowerCase(),
+                                  }
+                                : {}), // If we're linked to a key field, set the key as well
+                            })
+                          }
+                        />
+                      )}
+                      {field.type === "number" && (
+                        <NumberInput
+                          label={field.label}
+                          value={
+                            dialogFieldValues[key] ||
+                            field.value ||
+                            (dialog.actionValues || {})[key] ||
+                            ""
+                          }
+                          onChange={(value) =>
+                            setDialogFieldValues({
+                              ...dialogFieldValues,
+                              [key]: field.valueModifier
+                                ? field.valueModifier(value)
+                                : value,
+                            })
+                          }
+                        />
+                      )}
+                      {field.type === "options" && (
+                        <SelectInput
+                          options={field.options || []}
+                          label={field.label}
+                          value={
+                            dialogFieldValues[key] ||
+                            field.value ||
+                            (dialog.actionValues || {})[key] ||
+                            ""
+                          }
+                          onChange={(value) =>
+                            setDialogFieldValues({
+                              ...dialogFieldValues,
+                              [key]: field.valueModifier
+                                ? field.valueModifier(value as string)
+                                : value,
+                            })
+                          }
+                        />
+                      )}
+                      {field.type === "boolean" && (
+                        <BooleanInput
+                          label={field.label}
+                          value={
+                            dialogFieldValues[key] ||
+                            field.value ||
+                            (dialog.actionValues || {})[key] ||
+                            ""
+                          }
+                          onChange={(value) =>
+                            setDialogFieldValues({
+                              ...dialogFieldValues,
+                              [key]: field.valueModifier
+                                ? field.valueModifier(value)
+                                : value,
+                            })
+                          }
+                          explanation={field.explanation}
+                        />
+                      )}
+                      {field.type === "custom" && (
+                        //@ts-ignore
+                        <field.component
+                          context={context}
+                          value={
+                            dialogFieldValues[key] ||
+                            field.value ||
+                            (dialog.actionValues || {})[key] ||
+                            ""
+                          }
+                          onChange={(value: any) =>
+                            setDialogFieldValues({
+                              ...dialogFieldValues,
+                              [key]: value,
+                            })
+                          }
+                          {...field.componentProps}
+                        />
+                      )}
+                    </Grid>
+                  );
+                }
+              })}
+            </Grid>
+          )}
+        </DialogContent>
+        {dialog.actions && (
+          <DialogActions>
+            {dialog.actions.map((action) => (
+              <Button
+                onClick={() => {
+                  map(dialog.fields, (field, key) => {
+                    if (!dialogFieldValues[key] && field.value) {
+                      dialogFieldValues[key] = field.value;
+                    }
+                  });
+                  action.onClick &&
+                    action.onClick(dialogFieldValues, () =>
+                      setDialog({ ...dialog, display: false })
+                    );
+                  setDialogFieldValues({});
+                }}
+                color="primary"
+              >
+                {action.label}
+              </Button>
+            ))}
+          </DialogActions>
+        )}
+      </Dialog>
       {appConfig.mobile?.pages === "bottom" && (
         <>
           <BottomNavigation
