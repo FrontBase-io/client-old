@@ -1,32 +1,32 @@
 {
-    "theme_color": "#0283ff",
-    "background_color": "#0283ff",
-    "display": "standalone",
-    "scope": "/",
-    "start_url": "/",
-    "name": "FrontBase.io",
-    "short_name": "FrontBase",
-    "description": "Your FrontBase.io instance.",
-    "icons": [
-        {
-            "src": "/icon-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "/icon-256x256.png",
-            "sizes": "256x256",
-            "type": "image/png"
-        },
-        {
-            "src": "/icon-384x384.png",
-            "sizes": "384x384",
-            "type": "image/png"
-        },
-        {
-            "src": "/icon-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-        }
-    ]
+  "theme_color": "#0283ff",
+  "background_color": "#0283ff",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "name": "FrontBase.io",
+  "short_name": "FrontBase",
+  "description": "Flow through business.",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
