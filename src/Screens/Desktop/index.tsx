@@ -5,7 +5,6 @@ import {
   NavBarButtonType,
   ResponseType,
 } from "../../Utils/Types";
-import Loading from "../../Components/Loading";
 import NavBar from "./NavBar";
 import Popover from "@mui/material/Popover";
 import AppMenu from "./AppMenu";

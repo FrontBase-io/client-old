@@ -34,7 +34,10 @@ const ProcessComponents: React.FC<{
         <ListItemIcon>
           <Icon icon="cubes" />
         </ListItemIcon>
-        <ListItemText>Get object</ListItemText>
+        <ListItemText
+          primary="Get objects"
+          secondary="Fetch objects from the database."
+        />
       </ListItem>
       <ListItem
         className={styles.component}
@@ -47,7 +50,10 @@ const ProcessComponents: React.FC<{
         <ListItemIcon>
           <Icon icon="plus-square" />
         </ListItemIcon>
-        <ListItemText>Create object</ListItemText>
+        <ListItemText
+          primary="Create object"
+          secondary="Turn object variables into a new object in the database."
+        />
       </ListItem>
       <ListItem
         className={styles.component}
@@ -60,7 +66,26 @@ const ProcessComponents: React.FC<{
         <ListItemIcon>
           <Icon icon="exchange-alt" />
         </ListItemIcon>
-        <ListItemText>Update object</ListItemText>
+        <ListItemText
+          primary="Update objects"
+          secondary="Save object variables to the database"
+        />
+      </ListItem>
+      <ListItem
+        className={styles.component}
+        onDragStart={(event: React.DragEvent<HTMLDivElement>) =>
+          onDragStart(event, "delete_objects")
+        }
+        component="div"
+        draggable
+      >
+        <ListItemIcon>
+          <Icon icon="trash" />
+        </ListItemIcon>
+        <ListItemText
+          primary="Delete objects"
+          secondary="Delete objects from the database"
+        />
       </ListItem>
       <ListItem
         className={styles.component}
@@ -73,9 +98,12 @@ const ProcessComponents: React.FC<{
         <ListItemIcon>
           <Icon icon="equals" />
         </ListItemIcon>
-        <ListItemText>Assign values</ListItemText>
+        <ListItemText
+          primary="Assign values"
+          secondary="Assign values to variables."
+        />
       </ListItem>
-      <ListSubheader>Logic</ListSubheader>{" "}
+      <ListSubheader>Logic</ListSubheader>
       <ListItem
         className={styles.component}
         onDragStart={(event: React.DragEvent<HTMLDivElement>) =>
@@ -87,7 +115,26 @@ const ProcessComponents: React.FC<{
         <ListItemIcon>
           <Icon icon="bezier-curve" />
         </ListItemIcon>
-        <ListItemText>Conditions</ListItemText>
+        <ListItemText
+          primary="Conditions"
+          secondary="Set multiple conditions and only evaluate the one that's truthy."
+        />
+      </ListItem>
+      <ListItem
+        className={styles.component}
+        onDragStart={(event: React.DragEvent<HTMLDivElement>) =>
+          onDragStart(event, "await")
+        }
+        component="div"
+        draggable
+      >
+        <ListItemIcon>
+          <Icon icon="history" />
+        </ListItemIcon>
+        <ListItemText
+          primary="Await state"
+          secondary="Awaits an object's state and proceeds once it's achieved."
+        />
       </ListItem>
     </List>
   );

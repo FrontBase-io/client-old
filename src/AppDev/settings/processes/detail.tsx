@@ -33,6 +33,8 @@ import EditAssignValuesNode from "./EditNodes/AssignValues";
 import ProcessTriggers from "./Triggers";
 import EditUpdateObjectsNode from "./EditNodes/UpdateObjects";
 import EditCreateObjectsNode from "./EditNodes/CreateObjects";
+import { useGlobal } from "reactn";
+import EditAwaitStateNode from "./EditNodes/AwaitState";
 
 const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
   // Vars
@@ -43,6 +45,7 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
     useState<HTMLDivElement | null>(null);
   const [selectedNode, setSelectedNode] = useState<Node | null>();
   const [models, setModels] = useState<ModelType[]>();
+  const [isMobile] = useGlobal<any>("isMobile");
 
   // Lifecycle
   useEffect(() => {
@@ -54,17 +57,22 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
 
   // UI
   if (!newObject) return <context.UI.Loading />;
-
   return (
     <context.UI.Design.Animation.Container>
       <Grid container style={{ height: "100%" }}>
-        <Grid item xs={9} style={{ height: "100%" }}>
+        <Grid
+          item
+          xs={12}
+          md={9}
+          style={{ height: "100%" }}
+          className="scrollIndependently"
+        >
           <context.UI.Design.Animation.Item
             key="process-canvas"
             style={{ height: "100%" }}
           >
             <context.UI.Design.Card
-              style={{ height: "calc(100% - 120px)", marginBottom: 100 }}
+              style={{ height: "calc(100% - 150px)" }}
               withoutPadding
             >
               <ReactFlowProvider>
@@ -137,7 +145,9 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
                               create_objects: "Create objects",
                               update_objects: "Update objects",
                               assign_values: "Assign values",
+                              delete_objects: "Delete objects",
                               conditions: "Conditions",
+                              await: "Await state",
                             }[type] || "Unknown type",
                         },
                       };
@@ -214,6 +224,7 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
                               create_objects: EditCreateObjectsNode,
                               update_objects: EditUpdateObjectsNode,
                               assign_values: EditAssignValuesNode,
+                              await: EditAwaitStateNode,
                               conditions: FourOhFour,
                             }[selectedNode?.data.type as string] || FourOhFour,
                           componentProps: { process: newObject, models },
@@ -235,7 +246,6 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
                             logic[
                               findIndex(logic, (o) => o.id === newNode.id)
                             ] = newNode;
-                            console.log(logic);
 
                             setNewObject({ ...newObject, logic });
 
@@ -274,7 +284,7 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
             </Popover>
           </context.UI.Design.Animation.Item>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12} md={3} className="scrollIndependently">
           {!isEqual(newObject, item.object) && (
             <context.UI.Design.Animation.Item key="save">
               <Button
@@ -297,6 +307,19 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
               </Button>
             </context.UI.Design.Animation.Item>
           )}
+          <context.UI.Design.Animation.Item key="process-triggers">
+            <context.UI.Design.Card withoutPadding title="Triggers">
+              <ProcessTriggers
+                context={context}
+                process={newObject}
+                models={models!}
+                onChange={(triggers) =>
+                  setNewObject({ ...newObject, triggers })
+                }
+              />
+            </context.UI.Design.Card>
+          </context.UI.Design.Animation.Item>
+
           <context.UI.Design.Animation.Item key="process-variables">
             <context.UI.Design.Card title="Variables" withoutPadding>
               <ProcessVariables
@@ -308,21 +331,10 @@ const ProcessDetail: React.FC<ListDetailType> = ({ context, item }) => {
               />
             </context.UI.Design.Card>
           </context.UI.Design.Animation.Item>
+
           <context.UI.Design.Animation.Item key="process-components">
             <context.UI.Design.Card title="Components" withoutPadding>
               <ProcessComponents context={context} />
-            </context.UI.Design.Card>
-          </context.UI.Design.Animation.Item>
-          <context.UI.Design.Animation.Item key="process-triggers">
-            <context.UI.Design.Card withoutPadding title="Triggers">
-              <ProcessTriggers
-                context={context}
-                process={newObject}
-                models={models!}
-                onChange={(triggers) =>
-                  setNewObject({ ...newObject, triggers })
-                }
-              />
             </context.UI.Design.Card>
           </context.UI.Design.Animation.Item>
         </Grid>

@@ -25,7 +25,7 @@ function App() {
   const [colors, setColors] = useGlobal<any>("colors");
   const [theme, setTheme] = useGlobal<any>("theme");
   const setPrimaryColor = (colorString?: string) => {
-    if (!colorString) colorString = "#0283ff";
+    if (!colorString) colorString = "#1b8dd2";
     const color = chroma(colorString);
     setTheme({
       ...theme,
@@ -79,10 +79,10 @@ function App() {
     });
 
     // Colors
-    setColors({ primary: chroma("#0283ff") });
+    setColors({ primary: chroma("#1b8dd2") });
     setTheme({
       palette: {
-        primary: { main: "#0283ff" },
+        primary: { main: "#1b8dd2" },
         mode:
           window.matchMedia &&
           window.matchMedia("(prefers-color-scheme: dark)").matches
