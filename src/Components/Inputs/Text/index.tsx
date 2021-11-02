@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./styles.module.scss";
 import Typography from "@mui/material/Typography";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
+import slugify from "slugify";
 
 const TextInput: React.FC<{
   label?: string;
@@ -41,7 +42,7 @@ const TextInput: React.FC<{
             onChange &&
               onChange(
                 keyMode
-                  ? e.currentTarget.value.replace(/\W/g, "").toLowerCase()
+                  ? slugify(e.currentTarget.value).toLowerCase()
                   : e.currentTarget.value
               );
           }}

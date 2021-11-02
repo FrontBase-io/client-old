@@ -1,4 +1,5 @@
 import { AppPageType } from "../../Utils/Types";
+import PageInterfaces from "./interfaces";
 import PageModels from "./models";
 import SettingsProcesses from "./processes";
 import PageSettings from "./settings";
@@ -33,7 +34,7 @@ const app = {
           label: "Interfaces",
           key: "interfaces",
           icon: "desktop",
-          component: SettingsProcesses,
+          component: PageInterfaces,
           group: "Apps",
         },
         {

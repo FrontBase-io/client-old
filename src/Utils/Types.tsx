@@ -309,3 +309,16 @@ export interface ProcessTriggersType {
   singleAction?: ProcessTriggerType[];
   manyAction?: ProcessTriggerType[];
 }
+
+// Interfaces
+export interface InterfaceObjectType extends ObjectType {
+  name: string;
+  key: string;
+  description: string;
+  variables?: { [key: string]: InterfaceobjectVariableType };
+}
+
+export interface InterfaceobjectVariableType {
+  label: string;
+  type?: "objects";
+}
