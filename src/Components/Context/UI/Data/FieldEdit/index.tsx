@@ -9,7 +9,7 @@ const FieldEdit: React.FC<{
   model: ModelType;
   object?: ObjectType;
   context: AppContext;
-  onChange: (newValue: string | Date | ColorType) => void;
+  onChange: (newValue: string | Date | ColorType | boolean) => void;
   hasChanged?: boolean;
 }> = ({
   selectedField,
@@ -113,6 +113,12 @@ const FieldEdit: React.FC<{
             onChange(newVal);
           }}
           objectId={object?._id!}
+        />
+      ) : modelField.type === "boolean" ? (
+        <context.UI.Inputs.Boolean
+          label={modelField.label}
+          value={objectField}
+          onChange={(newVal) => onChange(newVal)}
         />
       ) : (
         `Unknown type ${modelField.type}`

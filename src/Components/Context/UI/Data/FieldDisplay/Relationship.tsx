@@ -39,12 +39,14 @@ const DisplayRelationship: React.FC<{
   ]);
   // UI
   if (!targetObject || !targetModel) return <context.UI.Loading />;
-  return (
+  return object[fieldKey] ? (
     <Link to={`/o/${targetObject._id}`}>
       <Typography color="primary">
         {targetObject && targetObject[targetModel.primary]}
       </Typography>
     </Link>
+  ) : (
+    <></>
   );
 };
 

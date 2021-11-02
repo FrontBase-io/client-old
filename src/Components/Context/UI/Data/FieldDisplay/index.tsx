@@ -92,6 +92,12 @@ const FieldDisplay: React.FC<{
           src={`${serverUrl}${objectField}`}
           alt={modelField.label}
         />
+      ) : modelField.type === "boolean" ? (
+        <context.UI.Inputs.Boolean
+          label={modelField.label}
+          disabled
+          value={objectField}
+        />
       ) : (
         `Unknown type ${modelField.type}`
       )}
