@@ -62,6 +62,10 @@ const Card: React.FC<{
           style={{
             cursor: onTitleClick ? "pointer" : "default",
             padding: withoutPadding && "10px 10px 0 10px",
+            ...(window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? { color: "#fff" }
+              : {}),
           }}
         >
           {title}

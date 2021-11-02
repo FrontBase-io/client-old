@@ -189,7 +189,14 @@ const AppLayout: React.FC<{
                 <Typography
                   variant="h6"
                   className={styles.appName}
-                  style={{ color: `${colors.primary.hex()}`, height: 42 }}
+                  style={{
+                    color:
+                      window.matchMedia &&
+                      window.matchMedia("(prefers-color-scheme: dark)").matches
+                        ? "#fff"
+                        : `${colors.primary.hex()}`,
+                    height: 48,
+                  }}
                   noWrap
                 >
                   {app.name}
@@ -216,7 +223,14 @@ const AppLayout: React.FC<{
                             <Icon
                               icon={page.icon}
                               className={styles.pageMenuIcon}
-                              primary={page.key === selectedPage}
+                              color={
+                                window.matchMedia &&
+                                window.matchMedia(
+                                  "(prefers-color-scheme: dark)"
+                                ).matches
+                                  ? "white"
+                                  : colors.primary.hex()
+                              }
                             />
                           </ListItemIcon>
                           <ListItemText className={styles.pageMenuText}>
