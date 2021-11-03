@@ -1,0 +1,58 @@
+.dragItem {
+  cursor: move;
+}
+
+.dropTarget {
+  width: 100%;
+  border: 1px solid #a0a0a0;
+  background-color: #eaeaea;
+  min-height: 2rem;
+  transition: all 0.3s;
+  border-radius: 8px;
+  padding: 5px;
+  box-sizing: border-box;
+
+  &.hovered {
+    border: 1px solid #a0a0a0;
+    background-color: #efefef;
+    opacity: 0.8;
+  }
+}
+.layoutItem {
+  background-color: #dadada;
+  padding: 5px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.layoutItemHeader {
+  & .deleteIcon {
+    display: none;
+  }
+  &:hover {
+    & .deleteIcon {
+      display: inline;
+    }
+  }
+}
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  .dropTarget {
+    border: 1px solid #3a3a3a;
+    background-color: #1a1a1a;
+    color: white;
+    &.hovered {
+      border: 1px solid #3a3a3a;
+      background-color: #111;
+      opacity: 0.8;
+    }
+  }
+
+  .layoutItem {
+    background-color: #3a3a3a;
+    padding: 5px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+}

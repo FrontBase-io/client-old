@@ -1,9 +1,11 @@
 import { Divider, List, ListItem, ListItemText } from "@mui/material";
 import { map } from "lodash";
+import { useEffect, useState } from "react";
 import { AppContext } from "../../../Components/Context";
 import {
   InterfaceObjectType,
   InterfaceobjectVariableType,
+  SelectOptionType,
 } from "../../../Utils/Types";
 
 const InterfaceVariables: React.FC<{
@@ -11,6 +13,20 @@ const InterfaceVariables: React.FC<{
   interfaceObject: InterfaceObjectType;
   onChange: (newVs: { [key: string]: InterfaceobjectVariableType }) => void;
 }> = ({ context, interfaceObject, onChange }) => {
+  // Vars
+  const [modelList, setModelList] = useState<SelectOptionType[]>([]);
+
+  // Lifecycle
+  useEffect(() => {
+    context.data.models.getAll((models) => {
+      setModelList(
+        models.map((o) => {
+          return { label: o.label, value: o.key };
+        })
+      );
+    });
+  }, [context.data.models]);
+
   // UI
   return (
     <List disablePadding>
@@ -32,7 +48,21 @@ const InterfaceVariables: React.FC<{
               type: {
                 label: "Type",
                 type: "options",
-                options: [{ label: "Objects", value: "objects" }],
+                options: [
+                  { label: "Text", value: "text" },
+                  { label: "Number", value: "number" },
+                  { label: "Boolean", value: "boolean" },
+                  { label: "Object", value: "object" },
+                  { label: "Objects", value: "objects" },
+                ],
+              },
+              model: {
+                label: "Model",
+                type: "options",
+                options: modelList,
+                onlyDisplayWhen: {
+                  or: [{ type: "object" }, { type: "objects" }],
+                },
               },
             },
             actions: [

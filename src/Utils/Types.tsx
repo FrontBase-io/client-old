@@ -316,9 +316,11 @@ export interface InterfaceObjectType extends ObjectType {
   key: string;
   description: string;
   variables?: { [key: string]: InterfaceobjectVariableType };
+  layout?: LayoutItemType[];
 }
 
 export interface InterfaceobjectVariableType {
   label: string;
-  type?: "objects";
+  type?: "objects" | "object" | "text" | "number";
+  model?: string;
 }

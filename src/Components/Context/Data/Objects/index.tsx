@@ -60,6 +60,23 @@ const get = (
   );
 };
 
+// Get once
+const getOnce = (
+  modelKey: string,
+  filter: {},
+  respond: (objects: ObjectType[]) => void
+) =>
+  new Promise((resolve, reject) => {
+    Socket.emit(
+      "getObjects",
+      modelKey,
+      filter || {},
+      (response: ResponseType) => {
+        resolve(response.objects);
+      }
+    );
+  });
+
 // Get one (convenience function to get a single object)
 const getOne = (
   modelKey: string,
@@ -106,6 +123,7 @@ const objectFunctions = {
   getLast,
   trashMany,
   turnObjectIdIntoModelKey,
+  getOnce,
 };
 
 export default objectFunctions;
