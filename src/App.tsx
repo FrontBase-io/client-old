@@ -48,9 +48,12 @@ function App() {
   const history = useHistory();
   history.listen(() => {
     //@ts-ignore
-    window.swUpdateReady = false;
-    window.stop();
-    window.location.reload();
+    if (window.swUpdateReady) {
+      //@ts-ignore
+      window.swUpdateReady = false;
+      window.stop();
+      window.location.reload();
+    }
   });
   // Lifecycle
   useEffect(() => {
