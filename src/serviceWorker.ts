@@ -60,17 +60,23 @@ export function register(config?: Config) {
 }
 
 function registerValidSW(swUrl: string, config?: Config) {
-  navigator.serviceWorker.getRegistration(swUrl).then((swReg) => {
-    if (swReg) {
-      navigator.serviceWorker.addEventListener("controllerchange", () => {
-        window.swUpdateReady = true;
-      });
-    }
-  });
-
   navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {
+      // Check for updates on app start
+      registration.update();
+
+      // Check for updates once every hour
+      setInterval(() => {
+        registration.update();
+        console.debug("Checking for app updates.");
+      }, 1000 * 60); //3600000);
+
+      registration.addEventListener("controllerchange", () => {
+        //@ts-ignore
+        window.swUpdateReady = true;
+      });
+
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
         if (installingWorker == null) {
@@ -82,10 +88,10 @@ function registerValidSW(swUrl: string, config?: Config) {
               // At this point, the updated precached content has been fetched,
               // but the previous service worker will still serve the older
               // content until all client tabs are closed.
-              console.log(
-                "New content is available and will be used when all " +
-                  "tabs for this page are closed. See https://bit.ly/CRA-PWA."
-              );
+              console.log("PWA has found new content. Reloading");
+              //@ts-ignore
+              window.swUpdateReady = true;
+
               window.location.reload();
               // Execute callback
               if (config && config.onUpdate) {

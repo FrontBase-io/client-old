@@ -10,6 +10,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import chroma from "chroma-js";
 import FrontBaseLoader from "./Components/Loading/FrontBaseLoader";
+import { useHistory } from "react-router";
 
 const Onboard = asyncComponent(() => import("./Screens/Onboard"));
 const Login = asyncComponent(() => import("./Screens/LogIn"));
@@ -44,7 +45,13 @@ function App() {
         : color.hex()
     );
   };
-
+  const history = useHistory();
+  history.listen(() => {
+    //@ts-ignore
+    window.swUpdateReady = false;
+    window.stop();
+    window.location.reload();
+  });
   // Lifecycle
   useEffect(() => {
     // Basic interactions

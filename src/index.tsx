@@ -20,14 +20,12 @@ ReactDOM.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
-window.location.href.match("localhost")
-  ? serviceWorker.unregister()
-  : serviceWorker.register({
-      onUpdate: (registration) => {
-        console.log("New client version ready to use!");
-        if (registration && registration.waiting) {
-          registration.waiting.postMessage({ type: "SKIP_WAITING" });
-        }
-        window.location.reload();
-      },
-    });
+serviceWorker.register({
+  onUpdate: (registration) => {
+    console.log("New client version ready to use!");
+    if (registration && registration.waiting) {
+      registration.waiting.postMessage({ type: "SKIP_WAITING" });
+    }
+    window.location.reload();
+  },
+});
