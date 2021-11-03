@@ -65,12 +65,13 @@ function registerValidSW(swUrl: string, config?: Config) {
     .then((registration) => {
       // Check for updates on app start
       registration.update();
+      console.debug("Checking for app updates.");
 
       // Check for updates once every hour
       setInterval(() => {
         registration.update();
         console.debug("Checking for app updates.");
-      }, 1000 * 60); //3600000);
+      }, 3600000);
 
       registration.addEventListener("controllerchange", () => {
         //@ts-ignore
