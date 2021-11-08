@@ -124,11 +124,12 @@ const AppLayout: React.FC<{
       );
       setContext(context);
 
-      const appCode =
-        require(`../../../AppDev/${object.key}/index.tsx`).default;
+      const appCode = require(`../../../AppDev/${
+        object.type === "collection" ? "collection" : object.key
+      }/index.tsx`).default;
 
       // Get app pages (and sort them in groups)
-      appCode.getPages(context).then((result: AppPageType[]) => {
+      appCode.getPages(context, object).then((result: AppPageType[]) => {
         setPageMenu(groupBy(result, (o) => o.group));
         setFlatPageMenu(result);
       });
@@ -268,6 +269,7 @@ const AppLayout: React.FC<{
                           //@ts-ignore
                           args.match.params[0]
                         }
+                        {...(page.props || {})}
                       />
                     ) : (
                       <Loading />

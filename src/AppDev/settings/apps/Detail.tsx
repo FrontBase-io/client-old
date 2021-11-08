@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { AppContext } from "../../../Components/Context";
-import FourOhFour from "../../../Components/FourOhFour";
 import { AppObjectType, ListItemType } from "../../../Utils/Types";
 import TabGeneral from "./General";
+import TabPages from "./Pages";
 
 const AppDetail: React.FC<{
   context: AppContext;
@@ -28,9 +28,9 @@ const AppDetail: React.FC<{
           key: "general",
         },
         {
-          label: "Collection",
-          component: <FourOhFour />,
-          key: "collection",
+          label: "Pages",
+          component: <TabPages context={context} app={app} />,
+          key: "pages",
           disabled: app.type !== "collection",
         },
       ]}

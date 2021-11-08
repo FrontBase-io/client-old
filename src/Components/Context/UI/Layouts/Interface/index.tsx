@@ -6,35 +6,51 @@ import InterfaceLayoutItem from "./LayoutItems";
 
 const RenderInterface: React.FC<{
   context: AppContext;
-  interfaceObject: InterfaceObjectType;
+  interfaceObject?: InterfaceObjectType;
+  interfaceObjectKey?: string;
   baseUrl: string;
-}> = ({ context, interfaceObject, baseUrl }) => {
+}> = ({ context, interfaceObject, interfaceObjectKey, baseUrl }) => {
   // Vars
   const [vars, setVars] = useState<{ [key: string]: any }>({});
+  const [appliedInterfaceObject, setAppliedInterfaceObject] =
+    useState<InterfaceObjectType>();
 
   // Lifecycle
   useEffect(() => {
-    map(interfaceObject.variables, (varInfo, varKey) => {
-      if (!vars[varKey]) {
-        context.data.objects.get(varInfo.model!, {}, (data) => {
-          setVars({ ...vars, [varKey]: data });
-        });
-      }
-    });
-  }, [interfaceObject, vars]);
+    if (interfaceObject) {
+      setAppliedInterfaceObject(interfaceObject);
+    } else {
+      context.data.objects.getOne(
+        "interface",
+        { key: interfaceObjectKey },
+        (io) => setAppliedInterfaceObject(io as InterfaceObjectType)
+      );
+    }
+  }, [context.data.objects, interfaceObject, interfaceObjectKey]);
+  useEffect(() => {
+    if (appliedInterfaceObject) {
+      map(appliedInterfaceObject!.variables, (varInfo, varKey) => {
+        if (!vars[varKey]) {
+          context.data.objects.get(varInfo.model!, {}, (data) => {
+            setVars({ ...vars, [varKey]: data });
+          });
+        }
+      });
+    }
+  }, [appliedInterfaceObject, context.data.objects, vars]);
 
   // UI
-
+  if (!appliedInterfaceObject) return <context.UI.Loading />;
   return (
     <>
-      {(interfaceObject.layout || []).map((layoutItem) => (
+      {(appliedInterfaceObject.layout || []).map((layoutItem) => (
         <InterfaceLayoutItem
           context={context}
           layoutItem={layoutItem}
-          layout={interfaceObject.layout!}
+          layout={appliedInterfaceObject.layout!}
           vars={vars}
           baseUrl={baseUrl}
-          interfaceObject={interfaceObject}
+          interfaceObject={appliedInterfaceObject}
         />
       ))}
     </>

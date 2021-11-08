@@ -123,6 +123,18 @@ export interface AppObjectType extends ObjectType {
   key: string;
   color: ColorType;
   type: "collection" | "code";
+  pages: {
+    key: string;
+    label: string;
+    icon: string;
+    content: {
+      type: "model" | "interface";
+      // Interface
+      interfaceKey?: string;
+      // Model
+      model?: string;
+    };
+  }[];
 }
 
 export interface AppPageType {
