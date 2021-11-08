@@ -4922,7 +4922,7 @@ data-urls@^2.0.0:
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
 
-date-fns@^2.24.0:
+date-fns@^2.24.0, date-fns@^2.25.0:
   version "2.25.0"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.25.0.tgz#8c5c8f1d958be3809a9a03f4b742eba894fc5680"
   integrity sha512-ovYRFnTrbGPD4nqaEqescPEv1mNwvt+UTqI3Ay9SzNtey9NZnYu6E2qCcBBgJ6/2VF1zGGygpyTDITqpQQ5e+w==
@@ -6267,6 +6267,15 @@ from2@^2.1.0:
   dependencies:
     inherits "^2.0.1"
     readable-stream "^2.0.0"
+
+frontbase-formulas@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/frontbase-formulas/-/frontbase-formulas-0.0.4.tgz#26b59e2a18c6b7e723f3b2ca65d5f54be177bb81"
+  integrity sha512-w/hpHSKGxCMt8DW7Vt+TlPGtukENyzjMO804QYL4H4plHUVCkMPB/BHD7W3QowbozgNEWINQ3qZFl3FhABPbLQ==
+  dependencies:
+    date-fns "^2.25.0"
+    lodash "^4.17.20"
+    uniqid "^5.2.0"
 
 fs-extra@^7.0.0:
   version "7.0.1"
@@ -12848,7 +12857,7 @@ uniq@^1.0.1:
   resolved "https://registry.yarnpkg.com/uniq/-/uniq-1.0.1.tgz#b31c5ae8254844a3a8281541ce2b04b865a734ff"
   integrity sha1-sxxa6CVIRKOoKBVBzisEuGWnNP8=
 
-uniqid@^5.4.0:
+uniqid@^5.2.0, uniqid@^5.4.0:
   version "5.4.0"
   resolved "https://registry.yarnpkg.com/uniqid/-/uniqid-5.4.0.tgz#4e17bfcab66dfe33563411ae0c801f46ef964e66"
   integrity sha512-38JRbJ4Fj94VmnC7G/J/5n5SC7Ab46OM5iNtSstB/ko3l1b5g7ALt4qzHFgGciFkyiRNtDXtLNb+VsxtMSE77A==

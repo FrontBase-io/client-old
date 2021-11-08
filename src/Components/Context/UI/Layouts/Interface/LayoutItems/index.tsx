@@ -1,10 +1,12 @@
 import { FunctionComponent } from "react";
 import { AppContext } from "../../../..";
 import {
+  InterfaceObjectType,
   InterfaceobjectVariableType,
   LayoutItemType,
 } from "../../../../../../Utils/Types";
 import FourOhFour from "../../../../../FourOhFour";
+import InterfaceList from "./List";
 import InterfaceListDetailLayout from "./ListDetailLayout";
 
 const Components: {
@@ -14,9 +16,11 @@ const Components: {
     layout: LayoutItemType[];
     vars: { [key: string]: InterfaceobjectVariableType };
     baseUrl: string;
+    interfaceObject: InterfaceObjectType;
   }>;
 } = {
   ListDetailLayout: InterfaceListDetailLayout,
+  List: InterfaceList,
 };
 
 const InterfaceLayoutItem: React.FC<{
@@ -25,7 +29,8 @@ const InterfaceLayoutItem: React.FC<{
   layout: LayoutItemType[];
   vars: { [key: string]: InterfaceobjectVariableType };
   baseUrl: string;
-}> = ({ layoutItem, context, layout, vars, baseUrl }) => {
+  interfaceObject: InterfaceObjectType;
+}> = ({ layoutItem, context, layout, vars, baseUrl, interfaceObject }) => {
   // Vars
   const Component = Components[layoutItem.type]
     ? Components[layoutItem.type]
@@ -39,6 +44,7 @@ const InterfaceLayoutItem: React.FC<{
       layout={layout}
       vars={vars}
       baseUrl={baseUrl}
+      interfaceObject={interfaceObject}
     />
   );
 };

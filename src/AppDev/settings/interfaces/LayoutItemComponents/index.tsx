@@ -4,6 +4,7 @@ import FourOhFour from "../../../../Components/FourOhFour";
 import {
   InterfaceobjectVariableType,
   LayoutItemType,
+  ModelType,
 } from "../../../../Utils/Types";
 import ComponentListPreview from "./List";
 import ComponentPreviewListDetailLayout from "./ListDetailLayout";
@@ -15,6 +16,7 @@ const Components: {
     layout: LayoutItemType[];
     setLayout: (layout: LayoutItemType[]) => void;
     variables: { [key: string]: InterfaceobjectVariableType };
+    modelList: ModelType[];
   }>;
 } = {
   ListDetailLayout: ComponentPreviewListDetailLayout,
@@ -27,7 +29,8 @@ const LayoutItemComponent: React.FC<{
   layout: LayoutItemType[];
   setLayout: (layout: LayoutItemType[]) => void;
   variables: { [key: string]: InterfaceobjectVariableType };
-}> = ({ layoutItem, context, layout, setLayout, variables }) => {
+  modelList: ModelType[];
+}> = ({ layoutItem, context, layout, setLayout, variables, modelList }) => {
   const Component = Components[layoutItem.type]
     ? Components[layoutItem.type]
     : FourOhFour;
@@ -38,6 +41,7 @@ const LayoutItemComponent: React.FC<{
       layout={layout}
       setLayout={setLayout}
       variables={variables}
+      modelList={modelList}
     />
   );
 };

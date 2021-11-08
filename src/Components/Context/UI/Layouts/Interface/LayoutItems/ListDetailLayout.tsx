@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import InterfaceLayoutItem from ".";
 import { AppContext } from "../../../..";
 import {
+  InterfaceObjectType,
   LayoutItemType,
   ListItemType,
   ObjectType,
@@ -12,26 +14,30 @@ const InterfaceListDetailLayout: React.FC<{
   layout: LayoutItemType[];
   vars: { [key: string]: any };
   baseUrl: string;
-}> = ({ vars, layoutItem, context, baseUrl }) => {
+  interfaceObject: InterfaceObjectType;
+}> = ({ vars, layoutItem, context, baseUrl, interfaceObject }) => {
   // Vars
-  const [items, setItems] = useState<ListItemType[]>([]);
+  const [items, setItems] = useState<ListItemType[]>();
 
   // Lifecycle
   useEffect(() => {
     setItems(
       (vars[layoutItem.args?.listItems] || []).map((o: ObjectType) => {
-        return { label: o.name, key: o._id };
+        return { label: o[layoutItem.args?.labelField], key: o._id };
       })
     );
   }, [layoutItem, vars]);
 
   // UI
+  if (!items) return <context.UI.Loading />;
   return (
     <context.UI.Layouts.ListDetailLayout
       context={context}
       items={items}
+      //@ts-ignore
       detailComponent={DetailComponent}
       baseUrl={baseUrl}
+      detailComponentProps={{ layoutItem, vars, baseUrl, interfaceObject }}
     />
   );
 };
@@ -42,6 +48,41 @@ const DetailComponent: React.FC<{
   context: AppContext;
   selectedKey: string;
   item: ListItemType;
-}> = ({ context, selectedKey, item }) => {
-  return <>Detail component for {item.label}</>;
+  layoutItem: LayoutItemType;
+  vars: { [key: string]: any };
+  baseUrl: string;
+  interfaceObject: InterfaceObjectType;
+}> = ({
+  context,
+  selectedKey,
+  item,
+  layoutItem,
+  vars,
+  baseUrl,
+  interfaceObject,
+}) => {
+  return (
+    <>
+      {(layoutItem.items || []).map((childLayoutItem) => (
+        <InterfaceLayoutItem
+          context={context}
+          layoutItem={childLayoutItem}
+          layout={interfaceObject.layout!}
+          vars={{
+            ...vars,
+            [`selected${
+              layoutItem.args?.listItems.charAt(0).toUpperCase() +
+              layoutItem.args?.listItems.slice(1)
+            }Item`]: item,
+            [`selected${
+              layoutItem.args?.listItems.charAt(0).toUpperCase() +
+              layoutItem.args?.listItems.slice(1)
+            }Key`]: selectedKey,
+          }}
+          baseUrl={baseUrl}
+          interfaceObject={interfaceObject}
+        />
+      ))}
+    </>
+  );
 };

@@ -15,6 +15,7 @@
     "chroma-js": "^2.1.2",
     "date-fns": "^2.24.0",
     "framer-motion": "^4.1.17",
+    "frontbase-formulas": "^0.0.4",
     "lodash": "^4.17.21",
     "node-sass": "4.14.1",
     "notistack": "^1.0.10",

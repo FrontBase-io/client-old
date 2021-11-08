@@ -34,6 +34,7 @@ const RenderInterface: React.FC<{
           layout={interfaceObject.layout!}
           vars={vars}
           baseUrl={baseUrl}
+          interfaceObject={interfaceObject}
         />
       ))}
     </>

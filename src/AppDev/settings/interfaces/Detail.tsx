@@ -2,7 +2,11 @@ import { Button, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import { AppContext } from "../../../Components/Context";
 import FourOhFour from "../../../Components/FourOhFour";
-import { InterfaceObjectType, ListItemType } from "../../../Utils/Types";
+import {
+  InterfaceObjectType,
+  ListItemType,
+  ModelType,
+} from "../../../Utils/Types";
 import DropTarget from "./DropTarget";
 import InterfaceVariables from "./Variables";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -23,14 +27,18 @@ const InterfaceDetail: React.FC<{
 }> = ({ context, item }) => {
   // Vars
   const [interfaceObject, setInterfaceObject] = useState<InterfaceObjectType>();
+  const [modelList, setModelList] = useState<ModelType[]>();
 
   // Lifecycle
   useEffect(() => {
     item && setInterfaceObject(item.object);
   }, [item]);
+  useEffect(() => {
+    context.data.models.getAll((ms) => setModelList(ms));
+  }, []);
 
   // UI
-  if (!interfaceObject) return <context.UI.Loading />;
+  if (!interfaceObject || !modelList) return <context.UI.Loading />;
   return (
     <DndProvider
       options={{
@@ -75,6 +83,7 @@ const InterfaceDetail: React.FC<{
                           setInterfaceObject({ ...interfaceObject, layout })
                         }
                         variables={interfaceObject.variables || {}}
+                        modelList={modelList}
                       />
                     )
                   )}

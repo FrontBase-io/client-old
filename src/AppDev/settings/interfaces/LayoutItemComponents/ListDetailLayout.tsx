@@ -1,11 +1,12 @@
 import { Grid, List, ListItem, ListItemText } from "@mui/material";
-import { cloneDeep } from "lodash";
+import { cloneDeep, find } from "lodash";
 import { useEffect, useState } from "react";
 import { AppContext } from "../../../../Components/Context";
 import { modifyRecursive } from "../../../../Utils/Functions";
 import {
   InterfaceobjectVariableType,
   LayoutItemType,
+  ModelType,
   SelectOptionType,
 } from "../../../../Utils/Types";
 import DropTarget from "../DropTarget";
@@ -17,7 +18,8 @@ const ComponentPreviewListDetailLayout: React.FC<{
   layout: LayoutItemType[];
   setLayout: (layout: LayoutItemType[]) => void;
   variables: { [key: string]: InterfaceobjectVariableType };
-}> = ({ context, layoutItem, layout, setLayout, variables }) => {
+  modelList: ModelType[];
+}> = ({ context, layoutItem, layout, setLayout, variables, modelList }) => {
   // Vars
   const [variableList, setVariableList] = useState<SelectOptionType[]>([]);
 
@@ -85,6 +87,35 @@ const ComponentPreviewListDetailLayout: React.FC<{
                   setLayout(newLayout);
                 }}
               />
+              <context.UI.Inputs.Select
+                label="Label field"
+                options={
+                  layoutItem.args?.listItems
+                    ? context.utils.listifyObjectForSelect(
+                        find(
+                          modelList,
+                          (o) =>
+                            o.key_plural ===
+                            variables[layoutItem.args?.listItems].model
+                        )?.fields || {},
+                        "label"
+                      )
+                    : []
+                }
+                value={layoutItem.args?.labelField}
+                onChange={async (labelField) => {
+                  const newLayout = cloneDeep(layout);
+                  modifyRecursive(newLayout, layoutItem.key!, (item) => {
+                    const newItem = item;
+                    newItem!.args = {
+                      ...(item!.args || {}),
+                      labelField,
+                    };
+                    return newItem;
+                  });
+                  setLayout(newLayout);
+                }}
+              />
             </context.UI.Design.Card>
           </context.UI.Design.Animation.Item>
         </Grid>
@@ -105,6 +136,7 @@ const ComponentPreviewListDetailLayout: React.FC<{
                         key={`layoutItem-${layoutItemIndex}`}
                         layout={layout || []}
                         setLayout={setLayout}
+                        modelList={modelList}
                         variables={{
                           ...variables,
                           [`selected${layoutItem.args?.listItems}`]: {
