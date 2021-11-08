@@ -8,6 +8,7 @@ import {
 import FourOhFour from "../../../../../FourOhFour";
 import InterfaceList from "./List";
 import InterfaceListDetailLayout from "./ListDetailLayout";
+import InterfaceObjectLayout from "./ObjectLayout";
 
 const Components: {
   [key: string]: FunctionComponent<{
@@ -21,6 +22,7 @@ const Components: {
 } = {
   ListDetailLayout: InterfaceListDetailLayout,
   List: InterfaceList,
+  ObjectLayout: InterfaceObjectLayout,
 };
 
 const InterfaceLayoutItem: React.FC<{

@@ -1,7 +1,7 @@
 import { Button, ButtonGroup, Grid, Typography } from "@mui/material";
 import { filter, map } from "lodash";
 import isEqual from "lodash/isEqual";
-import { useCallback, useEffect, useState } from "react";
+import { CSSProperties, useCallback, useEffect, useState } from "react";
 import { AppContext } from "../../..";
 import {
   ModelLayoutType,
@@ -27,6 +27,7 @@ const ObjectDetail: React.FC<{
   onAfterButtonPress?: { [key: string]: () => void };
   withInlineSaveButton?: true;
   onSave?: () => void;
+  style?: CSSProperties;
 }> = ({
   objectId,
   modelKey,
@@ -39,6 +40,7 @@ const ObjectDetail: React.FC<{
   onAfterButtonPress,
   withInlineSaveButton,
   onSave,
+  style,
 }) => {
   // Vars
   const [appliedObject, setAppliedObject] = useState<PreObjectType>({});
@@ -227,7 +229,7 @@ const ObjectDetail: React.FC<{
 
   return (
     <div
-      style={{ height: "100%" }}
+      style={{ height: "100%", ...style }}
       onKeyDown={(event) => {
         if (
           viewMode === "edit" &&

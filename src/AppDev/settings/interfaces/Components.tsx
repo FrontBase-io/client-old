@@ -97,6 +97,16 @@ const InterfaceComponents: React.FC<{
             label="List"
           />
         </Animation.Item>
+        <Animation.Item key="Objects">
+          <ListSubheader>Objects</ListSubheader>
+        </Animation.Item>
+        <Animation.Item key="component-ObjectLayout">
+          <DragItem
+            layoutItem={{ label: "Object Layout", type: "ObjectLayout" }}
+            icon="object-group"
+            label="Object Layout"
+          />
+        </Animation.Item>
       </Animation.Container>
     </List>
   );

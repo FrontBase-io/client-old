@@ -31,7 +31,7 @@ const ComponentListPreview: React.FC<{
         context.utils.listifyObjectForSelect(
           find(
             modelList,
-            (o) => o.key_plural === variables[layoutItem.args?.listItems].model
+            (o) => o.key === variables[layoutItem.args?.listItems].model
           )?.fields || {},
           "label"
         )
@@ -39,7 +39,7 @@ const ComponentListPreview: React.FC<{
   }, [layoutItem.args]);
   // UI
   return (
-    <>
+    <context.UI.Design.Card title="List">
       <context.UI.Inputs.Select
         label="List items"
         options={variableList}
@@ -74,29 +74,31 @@ const ComponentListPreview: React.FC<{
           setLayout(newLayout);
         }}
       />
-      <context.UI.Objects.Designer
-        context={context}
-        model={
-          find(
-            modelList,
-            (o) => o.key_plural === variables[layoutItem.args?.listItems].model
-          )!
-        }
-        withFormula
-        value={layoutItem.args?.filter || {}}
-        onChange={(filter) => {
-          const newLayout = cloneDeep(layout);
-          modifyRecursive(newLayout, layoutItem.key!, (item) => {
-            const newItem = item;
-            newItem!.args = {
-              ...(item!.args || {}),
-              filter,
-            };
-            return newItem;
-          });
-          setLayout(newLayout);
-        }}
-      />
+      {layoutItem.args?.listItems && (
+        <context.UI.Objects.Designer
+          context={context}
+          model={
+            find(
+              modelList,
+              (o) => o.key === variables[layoutItem.args?.listItems].model
+            )!
+          }
+          withFormula
+          value={layoutItem.args?.filter || {}}
+          onChange={(filter) => {
+            const newLayout = cloneDeep(layout);
+            modifyRecursive(newLayout, layoutItem.key!, (item) => {
+              const newItem = item;
+              newItem!.args = {
+                ...(item!.args || {}),
+                filter,
+              };
+              return newItem;
+            });
+            setLayout(newLayout);
+          }}
+        />
+      )}
       {layoutItem.args?.listItems && (
         <List>
           <ListItem button>
@@ -116,7 +118,7 @@ const ComponentListPreview: React.FC<{
           </ListItem>
         </List>
       )}
-    </>
+    </context.UI.Design.Card>
   );
 };
 

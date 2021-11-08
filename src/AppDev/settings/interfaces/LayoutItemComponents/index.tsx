@@ -8,6 +8,7 @@ import {
 } from "../../../../Utils/Types";
 import ComponentListPreview from "./List";
 import ComponentPreviewListDetailLayout from "./ListDetailLayout";
+import ComponentPreviewObjectLayout from "./ObjectLayout";
 
 const Components: {
   [key: string]: FunctionComponent<{
@@ -21,6 +22,7 @@ const Components: {
 } = {
   ListDetailLayout: ComponentPreviewListDetailLayout,
   List: ComponentListPreview,
+  ObjectLayout: ComponentPreviewObjectLayout,
 };
 
 const LayoutItemComponent: React.FC<{

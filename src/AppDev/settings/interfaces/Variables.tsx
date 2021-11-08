@@ -75,6 +75,7 @@ const InterfaceVariables: React.FC<{
                       label: form.label,
                       key: form.key,
                       type: form.type,
+                      model: form.model,
                     },
                   });
                   close();

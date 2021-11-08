@@ -87,35 +87,37 @@ const ComponentPreviewListDetailLayout: React.FC<{
                   setLayout(newLayout);
                 }}
               />
-              <context.UI.Inputs.Select
-                label="Label field"
-                options={
-                  layoutItem.args?.listItems
-                    ? context.utils.listifyObjectForSelect(
-                        find(
-                          modelList,
-                          (o) =>
-                            o.key_plural ===
-                            variables[layoutItem.args?.listItems].model
-                        )?.fields || {},
-                        "label"
-                      )
-                    : []
-                }
-                value={layoutItem.args?.labelField}
-                onChange={async (labelField) => {
-                  const newLayout = cloneDeep(layout);
-                  modifyRecursive(newLayout, layoutItem.key!, (item) => {
-                    const newItem = item;
-                    newItem!.args = {
-                      ...(item!.args || {}),
-                      labelField,
-                    };
-                    return newItem;
-                  });
-                  setLayout(newLayout);
-                }}
-              />
+              {layoutItem.args?.listItems && (
+                <context.UI.Inputs.Select
+                  label="Label field"
+                  options={
+                    layoutItem.args?.listItems
+                      ? context.utils.listifyObjectForSelect(
+                          find(
+                            modelList,
+                            (o) =>
+                              o.key ===
+                              variables[layoutItem.args?.listItems].model
+                          )?.fields || {},
+                          "label"
+                        )
+                      : []
+                  }
+                  value={layoutItem.args?.labelField}
+                  onChange={async (labelField) => {
+                    const newLayout = cloneDeep(layout);
+                    modifyRecursive(newLayout, layoutItem.key!, (item) => {
+                      const newItem = item;
+                      newItem!.args = {
+                        ...(item!.args || {}),
+                        labelField,
+                      };
+                      return newItem;
+                    });
+                    setLayout(newLayout);
+                  }}
+                />
+              )}
             </context.UI.Design.Card>
           </context.UI.Design.Animation.Item>
         </Grid>

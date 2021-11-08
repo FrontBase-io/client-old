@@ -38,6 +38,7 @@ const InterfaceListDetailLayout: React.FC<{
       detailComponent={DetailComponent}
       baseUrl={baseUrl}
       detailComponentProps={{ layoutItem, vars, baseUrl, interfaceObject }}
+      title={layoutItem.args?.title}
     />
   );
 };

@@ -20,7 +20,8 @@ const ObjectDesigner: React.FC<{
   modelKey?: string;
   value: { [key: string]: any };
   onChange: (value: {}) => void;
-}> = ({ model, modelKey, context, value, onChange }) => {
+  title?: string;
+}> = ({ model, modelKey, context, value, onChange, title }) => {
   // Vars
   const [appliedModel, setAppliedModel] = useState<ModelType>();
   const [fieldOptions, setFieldOptions] = useState<SelectOptionType[]>([]);
@@ -45,7 +46,7 @@ const ObjectDesigner: React.FC<{
   // UI
   if (!appliedModel) return <context.UI.Loading />;
   return (
-    <context.UI.Design.Card title="Filter">
+    <context.UI.Design.Card title={title}>
       <Table>
         <TableHead>
           <TableRow>
