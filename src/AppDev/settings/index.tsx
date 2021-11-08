@@ -1,4 +1,5 @@
 import { AppPageType } from "../../Utils/Types";
+import PageApps from "./apps";
 import PageInterfaces from "./interfaces";
 import PageModels from "./models";
 import SettingsProcesses from "./processes";
@@ -17,12 +18,20 @@ const app = {
     new Promise<AppPageType[]>((resolve) =>
       resolve([
         {
+          label: "Apps",
+          key: "apps",
+          icon: "mobile",
+          component: PageApps,
+          group: "Apps",
+        },
+        {
           label: "Models",
           key: "models",
           icon: "sitemap",
           component: PageModels,
           group: "Apps",
         },
+
         {
           label: "Processes",
           key: "processes",

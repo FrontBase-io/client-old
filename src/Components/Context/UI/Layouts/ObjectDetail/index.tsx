@@ -25,6 +25,8 @@ const ObjectDetail: React.FC<{
   layoutKey?: string[];
   onChange?: (newObject: PreObjectType) => void;
   onAfterButtonPress?: { [key: string]: () => void };
+  withInlineSaveButton?: true;
+  onSave?: () => void;
 }> = ({
   objectId,
   modelKey,
@@ -35,6 +37,8 @@ const ObjectDetail: React.FC<{
   object,
   onChange,
   onAfterButtonPress,
+  withInlineSaveButton,
+  onSave,
 }) => {
   // Vars
   const [appliedObject, setAppliedObject] = useState<PreObjectType>({});
@@ -60,11 +64,27 @@ const ObjectDetail: React.FC<{
     if (appliedObject._id) {
       // Update
       context.data.objects.update(appliedObject!._id, fieldsToUpdate).then(
-        (result) => setViewMode("view"),
-        (reason) => context.canvas.interact.snackbar(reason, "error")
+        (result) => {
+          setViewMode("view");
+          onSave && onSave();
+        },
+        (reason) => {
+          context.canvas.interact.snackbar(reason, "error");
+          onSave && onSave();
+        }
       );
     } else {
       // Create
+      context.data.objects.create(appliedModel!.key, fieldsToUpdate).then(
+        (result) => {
+          setViewMode("view");
+          onSave && onSave();
+        },
+        (reason) => {
+          context.canvas.interact.snackbar(reason, "error");
+          onSave && onSave();
+        }
+      );
     }
   }, [appliedObject, context.canvas.interact, context.data.objects, newObject]);
 
@@ -340,6 +360,11 @@ const ObjectDetail: React.FC<{
           }}
         />
       ))}
+      {withInlineSaveButton && (
+        <Button fullWidth variant="outlined" onClick={save}>
+          Save
+        </Button>
+      )}
     </div>
   );
 };

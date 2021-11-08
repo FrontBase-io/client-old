@@ -15,8 +15,8 @@ const FrontBaseLoader: React.FC = () => (
     }}
   >
     <motion.div
-      animate={{ scale: 1.05 }}
-      transition={{ duration: 2, repeat: Infinity, repeatType: "mirror" }}
+      animate={{ scale: 1.15 }}
+      transition={{ duration: 1, repeat: Infinity, repeatType: "mirror" }}
     >
       {window.matchMedia &&
       window.matchMedia("(prefers-color-scheme: dark)").matches ? (

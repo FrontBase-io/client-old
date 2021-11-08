@@ -122,6 +122,7 @@ export interface AppObjectType extends ObjectType {
   name: string;
   key: string;
   color: ColorType;
+  type: "collection" | "code";
 }
 
 export interface AppPageType {

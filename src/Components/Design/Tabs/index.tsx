@@ -10,6 +10,7 @@ interface TabType {
   label: string;
   key: string;
   component: ReactElement<any, any>;
+  disabled?: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -55,12 +56,15 @@ const Tabs: React.FC<{
             key={tab.key}
             value={tab.key}
             style={
-              white
+              tab.disabled
+                ? { color: "#9a9a9a" }
+                : white
                 ? selectedTab !== tab.key
                   ? { color: "white" }
                   : { color: "#aeaeae" }
                 : {}
             }
+            disabled={tab.disabled}
           />
         ))}
       </TabsMUI>
