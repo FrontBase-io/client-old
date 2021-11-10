@@ -49,7 +49,7 @@ const filterListItems = (
 
       // Now apply the filters
       const newList: ListItemType[] = [];
-      vars[itemKey].map((o: ObjectType) => {
+      vars[itemKey]?.map((o: ObjectType) => {
         let passedFilters = true;
         filterSteps.map((filter) => {
           if (o[filter.key] !== filter.value) {

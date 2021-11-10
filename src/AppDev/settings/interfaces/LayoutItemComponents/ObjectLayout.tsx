@@ -25,7 +25,7 @@ const ComponentPreviewObjectLayout: React.FC<{
     setModelOptions(
       context.utils.listifyForSelect(modelList, "label_plural", "key")
     );
-  }, [modelList]);
+  }, [context.utils, modelList]);
   useEffect(() => {
     if (layoutItem.args?.model) {
       const model = find(
@@ -36,11 +36,9 @@ const ComponentPreviewObjectLayout: React.FC<{
         context.utils.listifyObjectForSelect(model?.layouts, "label")
       );
     }
-  }, [context.utils, layoutItem.args?.model, modelOptions]);
+  }, [context.utils, layoutItem.args?.model, modelList, modelOptions]);
 
   // UI
-  console.log(layoutOptions);
-
   return (
     <context.UI.Design.Card title="Layout">
       <context.UI.Inputs.Select
@@ -79,10 +77,11 @@ const ComponentPreviewObjectLayout: React.FC<{
               });
               setLayout(newLayout);
             }}
-          />{" "}
+          />
           <context.UI.Objects.Designer
             title="Add defaults"
             context={context}
+            mode="create"
             model={find(modelList, (o) => o.key === layoutItem.args?.model)}
             withFormula
             value={layoutItem.args?.defaults || {}}

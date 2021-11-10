@@ -28,6 +28,7 @@ const ObjectDetail: React.FC<{
   withInlineSaveButton?: true;
   onSave?: () => void;
   style?: CSSProperties;
+  defaults?: { [key: string]: any };
 }> = ({
   objectId,
   modelKey,
@@ -41,6 +42,7 @@ const ObjectDetail: React.FC<{
   withInlineSaveButton,
   onSave,
   style,
+  defaults,
 }) => {
   // Vars
   const [appliedObject, setAppliedObject] = useState<PreObjectType>({});
@@ -54,7 +56,7 @@ const ObjectDetail: React.FC<{
   }>({});
 
   const save = useCallback(() => {
-    const fieldsToUpdate: { [key: string]: any } = {};
+    const fieldsToUpdate: { [key: string]: any } = defaults || {};
     map(newObject, (value, key) => {
       if (
         JSON.stringify(appliedObject![key]) !== JSON.stringify(newObject![key])
