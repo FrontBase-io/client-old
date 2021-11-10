@@ -71,7 +71,11 @@ const InterfaceDetail: React.FC<{
                   setLayout={(layout) =>
                     setInterfaceObject({ ...interfaceObject, layout })
                   }
-                  dropHint="Drop top level components here"
+                  dropHint={
+                    interfaceObject.layout
+                      ? "More top level components"
+                      : "Top level components"
+                  }
                 >
                   {(interfaceObject.layout || []).map(
                     (layoutItem, layoutItemIndex) => (

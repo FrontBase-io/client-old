@@ -50,9 +50,19 @@ const ComponentPreviewListDetailLayout: React.FC<{
               withoutPadding
               title={layoutItem.args?.title}
               titleSecondary={
-                <Tooltip placement="bottom" title="Edit settings">
+                <Tooltip
+                  placement="bottom"
+                  title={
+                    settingsOpen
+                      ? "Close layout settings"
+                      : "Edit layout settings"
+                  }
+                >
                   <IconButton onClick={() => setSettingsOpen(!settingsOpen)}>
-                    <context.UI.Design.Icon icon="wrench" size={18} />
+                    <context.UI.Design.Icon
+                      icon={settingsOpen ? "times-circle" : "wrench"}
+                      size={18}
+                    />
                   </IconButton>
                 </Tooltip>
               }
@@ -160,6 +170,11 @@ const ComponentPreviewListDetailLayout: React.FC<{
                   id={layoutItem.key!}
                   layout={layout}
                   setLayout={setLayout}
+                  dropHint={
+                    layoutItem.items
+                      ? "More detail page components"
+                      : "Detail page components"
+                  }
                 >
                   {(layoutItem.items || []).map(
                     (subLayoutItem, layoutItemIndex) => (

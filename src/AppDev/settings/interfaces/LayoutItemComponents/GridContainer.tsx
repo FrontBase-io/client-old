@@ -30,9 +30,15 @@ const ComponentPreviewGridContainer: React.FC<{
   return (
     <>
       <span style={{ float: "right" }}>
-        <Tooltip placement="bottom" title="Edit grid settings">
+        <Tooltip
+          placement="bottom"
+          title={settingsOpen ? "Close grid settings" : "Edit grid settings"}
+        >
           <IconButton onClick={() => setSettingsOpen(!settingsOpen)}>
-            <context.UI.Design.Icon icon="wrench" size={15} />
+            <context.UI.Design.Icon
+              icon={settingsOpen ? "times-circle" : "wrench"}
+              size={15}
+            />
           </IconButton>
         </Tooltip>
       </span>
@@ -89,19 +95,64 @@ const ComponentPreviewGridContainer: React.FC<{
               }}
             />
           </Grid>
+          <Grid item xs={6}>
+            <context.UI.Inputs.Select
+              label="Align"
+              value={layoutItem.args?.align || "center"}
+              options={[
+                { label: "Flex (start)", value: "flex-start" },
+                { label: "Center", value: "center" },
+                { label: "Flex (end)", value: "flex-end" },
+                { label: "Strecht", value: "stretch" },
+                { label: "Baseline", value: "baseline" },
+              ]}
+              onChange={async (align) => {
+                const newLayout = cloneDeep(layout);
+                modifyRecursive(newLayout, layoutItem.key!, (item) => {
+                  const newItem = item;
+                  newItem!.args = {
+                    ...(item!.args || {}),
+                    align,
+                  };
+                  return newItem;
+                });
+                setLayout(newLayout);
+              }}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <context.UI.Inputs.Number
+              label="Spacing"
+              value={layoutItem.args?.spacing || 0}
+              onChange={async (spacing) => {
+                const newLayout = cloneDeep(layout);
+                modifyRecursive(newLayout, layoutItem.key!, (item) => {
+                  const newItem = item;
+                  newItem!.args = {
+                    ...(item!.args || {}),
+                    spacing,
+                  };
+                  return newItem;
+                });
+                setLayout(newLayout);
+              }}
+            />
+          </Grid>
         </Grid>
       </Collapse>
       <Grid
         container
         direction={layoutItem.args?.direction || "row"}
-        justifyContent="center"
-        alignItems="center"
+        justifyContent={layoutItem.args?.justify || "center"}
+        alignItems={layoutItem.args?.align || "center"}
+        spacing={layoutItem.args?.spacing || 0}
+        style={{ width: "100%" }}
       >
         <DropTarget
           id={layoutItem.key!}
           layout={layout}
           setLayout={setLayout}
-          dropHint="Grid items go here"
+          dropHint={layoutItem.items ? "More Grid Items" : "Grid Items"}
           accepts={["GridItem"]}
         >
           {(layoutItem.items || []).map((subLayoutItem, layoutItemIndex) => (

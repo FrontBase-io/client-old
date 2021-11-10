@@ -56,16 +56,17 @@ const Target: FC<{
   );
 
   return (
-    <div
-      ref={drop}
-      role={id}
-      className={`${styles.dropTarget} ${isOverCurrent && styles.hovered}`}
-    >
+    <>
+      {" "}
       {children}
-      <div style={{ textAlign: "center" }}>
+      <div
+        ref={drop}
+        role={id}
+        className={`${styles.dropTarget} ${isOverCurrent && styles.hovered}`}
+      >
         {isOverCurrent ? "Drop here" : dropHint || "Drop components here"}
       </div>
-    </div>
+    </>
   );
 };
 
