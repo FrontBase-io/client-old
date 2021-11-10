@@ -130,7 +130,11 @@ const AppLayout: React.FC<{
 
       // Get app pages (and sort them in groups)
       appCode.getPages(context, object).then((result: AppPageType[]) => {
-        setPageMenu(groupBy(result, (o) => o.group));
+        setPageMenu(
+          appCode.settings?.pages?.groups?.enabled
+            ? groupBy(result, (o) => o.group)
+            : result
+        );
         setFlatPageMenu(result);
       });
     };
@@ -205,44 +209,76 @@ const AppLayout: React.FC<{
               </Link>
             </motion.div>
             <List>
-              {map(pageMenu, (pages: AppPageType[], groupKey: string) => (
+              {Array.isArray(pageMenu) ? (
                 <>
-                  <motion.li key={`group-${groupKey}`} variants={item}>
-                    <ListSubheader>{groupKey}</ListSubheader>
-                  </motion.li>
-                  {pages.map((page: AppPageType) => {
-                    return (
-                      <motion.li key={page.key} variants={item}>
-                        <ListItem
-                          button
-                          onClick={() =>
-                            history.push(`/${app.key}/${page.key}`)
-                          }
-                          selected={page.key === selectedPage}
-                        >
-                          <ListItemIcon style={{ minWidth: 40 }}>
-                            <Icon
-                              icon={page.icon}
-                              className={styles.pageMenuIcon}
-                              color={
-                                window.matchMedia &&
-                                window.matchMedia(
-                                  "(prefers-color-scheme: dark)"
-                                ).matches
-                                  ? "white"
-                                  : colors.primary.hex()
-                              }
-                            />
-                          </ListItemIcon>
-                          <ListItemText className={styles.pageMenuText}>
-                            {page.label}
-                          </ListItemText>
-                        </ListItem>
-                      </motion.li>
-                    );
-                  })}
+                  {pageMenu.map((page: AppPageType) => (
+                    <motion.li key={page.key} variants={item}>
+                      <ListItem
+                        button
+                        onClick={() => history.push(`/${app.key}/${page.key}`)}
+                        selected={page.key === selectedPage}
+                      >
+                        <ListItemIcon style={{ minWidth: 40 }}>
+                          <Icon
+                            icon={page.icon}
+                            className={styles.pageMenuIcon}
+                            color={
+                              window.matchMedia &&
+                              window.matchMedia("(prefers-color-scheme: dark)")
+                                .matches
+                                ? "white"
+                                : colors.primary.hex()
+                            }
+                          />
+                        </ListItemIcon>
+                        <ListItemText className={styles.pageMenuText}>
+                          {page.label}
+                        </ListItemText>
+                      </ListItem>
+                    </motion.li>
+                  ))}
                 </>
-              ))}
+              ) : (
+                map(pageMenu, (pages: AppPageType[], groupKey: string) => (
+                  <>
+                    <motion.li key={`group-${groupKey}`} variants={item}>
+                      <ListSubheader>{groupKey}</ListSubheader>
+                    </motion.li>
+
+                    {pages.map((page: AppPageType) => {
+                      return (
+                        <motion.li key={page.key} variants={item}>
+                          <ListItem
+                            button
+                            onClick={() =>
+                              history.push(`/${app.key}/${page.key}`)
+                            }
+                            selected={page.key === selectedPage}
+                          >
+                            <ListItemIcon style={{ minWidth: 40 }}>
+                              <Icon
+                                icon={page.icon}
+                                className={styles.pageMenuIcon}
+                                color={
+                                  window.matchMedia &&
+                                  window.matchMedia(
+                                    "(prefers-color-scheme: dark)"
+                                  ).matches
+                                    ? "white"
+                                    : colors.primary.hex()
+                                }
+                              />
+                            </ListItemIcon>
+                            <ListItemText className={styles.pageMenuText}>
+                              {page.label}
+                            </ListItemText>
+                          </ListItem>
+                        </motion.li>
+                      );
+                    })}
+                  </>
+                ))
+              )}
             </List>
           </motion.div>
         )}

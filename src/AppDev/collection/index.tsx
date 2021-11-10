@@ -1,5 +1,4 @@
 import { AppContext } from "../../Components/Context";
-import FourOhFour from "../../Components/FourOhFour";
 import { AppObjectType, AppPageType } from "../../Utils/Types";
 import Interface from "./Interface";
 
