@@ -12,7 +12,9 @@ const Target: FC<{
   id: string;
   layout: LayoutItemType[];
   setLayout: (layout: LayoutItemType[]) => void;
-}> = ({ children, id, layout, setLayout }) => {
+  dropHint?: string;
+  accepts?: string[];
+}> = ({ children, id, layout, setLayout, dropHint, accepts }) => {
   const [{ isOverCurrent }, drop] = useDrop(
     () => ({
       accept: "component",
@@ -22,23 +24,27 @@ const Target: FC<{
           return;
         }
 
-        const newLayoutItem: LayoutItemType = {
-          //@ts-ignore
-          ...monitor.getItem().layoutItem,
-          key: uniqid(),
-        };
+        //This line checks if the received objects is accepted
+        // @ts-ignore
+        if (!accepts || accepts?.includes(monitor.getItem().layoutItem.type)) {
+          const newLayoutItem: LayoutItemType = {
+            //@ts-ignore
+            ...monitor.getItem().layoutItem,
+            key: uniqid(),
+          };
 
-        if (id === "root") {
-          setLayout([...(layout || []), newLayoutItem]);
-        } else {
-          const newLayout = cloneDeep(layout);
-          modifyRecursive(newLayout, id, (item) => {
-            const newItems = item!.items || [];
-            newItems.push(newLayoutItem);
-            item!.items = newItems;
-            return item;
-          });
-          setLayout(newLayout);
+          if (id === "root") {
+            setLayout([...(layout || []), newLayoutItem]);
+          } else {
+            const newLayout = cloneDeep(layout);
+            modifyRecursive(newLayout, id, (item) => {
+              const newItems = item!.items || [];
+              newItems.push(newLayoutItem);
+              item!.items = newItems;
+              return item;
+            });
+            setLayout(newLayout);
+          }
         }
       },
       collect: (monitor) => ({
@@ -57,7 +63,7 @@ const Target: FC<{
     >
       {children}
       <div style={{ textAlign: "center" }}>
-        {isOverCurrent ? "Drop here" : "Components go here"}
+        {isOverCurrent ? "Drop here" : dropHint || "Drop components here"}
       </div>
     </div>
   );

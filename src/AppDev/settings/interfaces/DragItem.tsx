@@ -11,7 +11,7 @@ export interface BoxProps {
   layoutItem: LayoutItemType;
   icon: string;
   label: string;
-
+  description?: string;
   // Collected Props
   isDragging: boolean;
   connectDragSource: ConnectDragSource;
@@ -22,6 +22,7 @@ const Box: FC<BoxProps> = ({
   label,
   isDragging,
   connectDragSource,
+  description,
 }) => {
   const opacity = isDragging ? 0.4 : 1;
   return (
@@ -34,7 +35,7 @@ const Box: FC<BoxProps> = ({
       <ListItemIcon>
         <Icon icon={icon} />
       </ListItemIcon>
-      <ListItemText>{label}</ListItemText>
+      <ListItemText primary={label} secondary={description} />
     </ListItem>
   );
 };
@@ -47,6 +48,7 @@ export default DragSource(
         layoutItem: props.layoutItem,
         label: props.label,
         icon: props.icon,
+        description: props.description,
       };
     },
   },

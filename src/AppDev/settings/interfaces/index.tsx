@@ -12,7 +12,12 @@ const PageInterfaces: React.FC<{ context: AppContext }> = ({ context }) => {
     context.data.objects.get("interface", {}, (interfaces) => {
       setInterfaceList(
         interfaces.map((i) => {
-          return { label: i.name, key: i.key, object: i };
+          return {
+            label: i.name,
+            key: i.key,
+            secondary: i.description,
+            object: i,
+          };
         })
       );
     });
@@ -35,8 +40,8 @@ const PageInterfaces: React.FC<{ context: AppContext }> = ({ context }) => {
             display: true,
             title: "New interface",
             fields: {
-              name: { label: "Name", linkToKeyField: "key" },
-              key: { label: "Key", type: "key" },
+              name: { label: "Name", linkToKeyField: "key", width: 6 },
+              key: { label: "Key", type: "key", width: 6 },
               description: { label: "Description" },
             },
             actions: [

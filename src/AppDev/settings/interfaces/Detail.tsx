@@ -71,6 +71,7 @@ const InterfaceDetail: React.FC<{
                   setLayout={(layout) =>
                     setInterfaceObject({ ...interfaceObject, layout })
                   }
+                  dropHint="Drop top level components here"
                 >
                   {(interfaceObject.layout || []).map(
                     (layoutItem, layoutItemIndex) => (
@@ -91,11 +92,12 @@ const InterfaceDetail: React.FC<{
               </context.UI.Design.Card>
             </context.UI.Design.Animation.Item>
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={4} className="scrollIndependently">
             {JSON.stringify(interfaceObject) !==
               JSON.stringify(item.object) && (
               <context.UI.Design.Animation.Item key="save">
                 <Button
+                  variant="contained"
                   fullWidth
                   style={{
                     color: "white",
@@ -126,7 +128,14 @@ const InterfaceDetail: React.FC<{
             )}
             <context.UI.Design.Animation.Item key="preview">
               <Button
-                style={{ color: "white" }}
+                variant="contained"
+                fullWidth
+                style={{
+                  color: "white",
+                  margin: 10,
+                  marginBottom: 0,
+                  width: "calc(100% - 20px)",
+                }}
                 onClick={() =>
                   context.canvas.interact.dialog({
                     display: true,

@@ -1,9 +1,5 @@
 import { List, ListSubheader } from "@mui/material";
 import { AppContext } from "../../../Components/Context";
-import {
-  InterfaceObjectType,
-  InterfaceobjectVariableType,
-} from "../../../Utils/Types";
 import DragItem from "./DragItem";
 
 const InterfaceComponents: React.FC<{
@@ -21,7 +17,7 @@ const InterfaceComponents: React.FC<{
 
   // UI
   return (
-    <List disablePadding>
+    <List disablePadding dense>
       <Animation.Container>
         <Animation.Item key="component-seperator-Layout">
           <ListSubheader>Animation</ListSubheader>
@@ -31,6 +27,7 @@ const InterfaceComponents: React.FC<{
             layoutItem={{ label: "Animation", type: "Animation" }}
             icon="angle-up"
             label="Animate"
+            description="Quick animation"
           />
         </Animation.Item>
         <Animation.Item key="component-AnimationContainer">
@@ -41,6 +38,7 @@ const InterfaceComponents: React.FC<{
             }}
             icon="angle-double-up"
             label="Animation Container"
+            description="Use for staggered animations"
           />
         </Animation.Item>
         <Animation.Item key="component-AnimationItem">
@@ -48,6 +46,7 @@ const InterfaceComponents: React.FC<{
             layoutItem={{ label: "Animation Item", type: "AnimationItem" }}
             icon="angle-up"
             label="Animation Item"
+            description="Use for staggered animations"
           />
         </Animation.Item>
         <Animation.Item key="component-seperator-layout">
@@ -58,6 +57,7 @@ const InterfaceComponents: React.FC<{
             layoutItem={{ label: "Grid Container", type: "GridContainer" }}
             icon="border-none"
             label="Grid Container"
+            description="A grid of layout blocks."
           />
         </Animation.Item>
         <Animation.Item key="component-GridItem">
@@ -65,6 +65,7 @@ const InterfaceComponents: React.FC<{
             layoutItem={{ label: "Grid Item", type: "GridItem" }}
             icon="th-large"
             label="Grid Item"
+            description="Responsively lays out content."
           />
         </Animation.Item>
         <Animation.Item key="component-ListDetailLayout">
@@ -75,6 +76,7 @@ const InterfaceComponents: React.FC<{
             }}
             icon="th-list"
             label="List-Detail Layout"
+            description="Shows a list and the corresponding detail page."
           />
         </Animation.Item>
         <Animation.Item key="Design">
@@ -85,6 +87,7 @@ const InterfaceComponents: React.FC<{
             layoutItem={{ label: "Card", type: "Card" }}
             icon="border-style"
             label="Card"
+            description="Used for grouping content in a layout."
           />
         </Animation.Item>
         <Animation.Item key="Components">
@@ -95,6 +98,7 @@ const InterfaceComponents: React.FC<{
             layoutItem={{ label: "List", type: "List" }}
             icon="list-alt"
             label="List"
+            description="Lists data"
           />
         </Animation.Item>
         <Animation.Item key="Objects">
@@ -105,6 +109,25 @@ const InterfaceComponents: React.FC<{
             layoutItem={{ label: "Object Layout", type: "ObjectLayout" }}
             icon="object-group"
             label="Object Layout"
+            description="Renders a model's layout."
+          />
+        </Animation.Item>
+        <Animation.Item key="component-DisplayText">
+          <DragItem
+            layoutItem={{ label: "Display Text", type: "DisplayText" }}
+            icon="align-left"
+            label="Display Text"
+            description="Displays formatted text (with formulas)"
+          />
+        </Animation.Item>
+        <Animation.Item key="Inputs">
+          <ListSubheader>Inputs</ListSubheader>
+        </Animation.Item>
+        <Animation.Item key="component-InputText">
+          <DragItem
+            layoutItem={{ label: "Text", type: "InputText" }}
+            icon="font"
+            label="Text"
           />
         </Animation.Item>
       </Animation.Container>

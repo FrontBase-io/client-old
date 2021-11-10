@@ -88,6 +88,7 @@ blockquote p {
 .scrollIndependently {
   height: calc(100vh - 64px);
   overflow: auto;
+  padding-bottom: 15px;
 
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */

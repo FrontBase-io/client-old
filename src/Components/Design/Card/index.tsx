@@ -17,6 +17,7 @@ const Card: React.FC<{
   overflow?: "none" | "auto" | "visible";
   onExplanation?: () => void;
   ref?: React.Ref<any>;
+  titleSecondary?: ReactElement;
 }> = ({
   children,
   style,
@@ -30,6 +31,7 @@ const Card: React.FC<{
   className,
   overflow,
   onExplanation,
+  titleSecondary,
 }) => {
   return (
     <div
@@ -52,6 +54,17 @@ const Card: React.FC<{
           </IconButton>
         </Tooltip>
       )}
+      {titleSecondary && (
+        <span
+          style={{
+            float: "right",
+            margin: withoutMargin ? 0 : 10,
+            padding: withoutPadding ? 0 : "5px 10px",
+          }}
+        >
+          {titleSecondary}
+        </span>
+      )}
       {title && (
         <Typography
           variant="h5"
@@ -71,6 +84,7 @@ const Card: React.FC<{
           {title}
         </Typography>
       )}
+
       {children}
     </div>
   );

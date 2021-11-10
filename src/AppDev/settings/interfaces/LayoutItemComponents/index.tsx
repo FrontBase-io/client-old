@@ -6,6 +6,7 @@ import {
   LayoutItemType,
   ModelType,
 } from "../../../../Utils/Types";
+import ComponentPreviewGridContainer from "./GridContainer";
 import ComponentListPreview from "./List";
 import ComponentPreviewListDetailLayout from "./ListDetailLayout";
 import ComponentPreviewObjectLayout from "./ObjectLayout";
@@ -23,6 +24,7 @@ const Components: {
   ListDetailLayout: ComponentPreviewListDetailLayout,
   List: ComponentListPreview,
   ObjectLayout: ComponentPreviewObjectLayout,
+  GridContainer: ComponentPreviewGridContainer,
 };
 
 const LayoutItemComponent: React.FC<{

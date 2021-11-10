@@ -21,7 +21,7 @@ const InterfaceVariables: React.FC<{
     context.data.models.getAll((models) => {
       setModelList(
         models.map((o) => {
-          return { label: o.label, value: o.key };
+          return { label: o.label_plural, value: o.key };
         })
       );
     });
@@ -43,8 +43,8 @@ const InterfaceVariables: React.FC<{
             display: true,
             title: "Add variable",
             fields: {
-              label: { label: "Label", linkToKeyField: "key" },
-              key: { label: "Key", type: "key" },
+              label: { label: "Label", linkToKeyField: "key", width: 6 },
+              key: { label: "Key", type: "key", width: 6 },
               type: {
                 label: "Type",
                 type: "options",
