@@ -6,6 +6,7 @@ import {
   LayoutItemType,
 } from "../../../../../../Utils/Types";
 import FourOhFour from "../../../../../FourOhFour";
+import InterfaceGridContainer from "./GridContainer";
 import InterfaceList from "./List";
 import InterfaceListDetailLayout from "./ListDetailLayout";
 import InterfaceObjectLayout from "./ObjectLayout";
@@ -23,6 +24,7 @@ const Components: {
   ListDetailLayout: InterfaceListDetailLayout,
   List: InterfaceList,
   ObjectLayout: InterfaceObjectLayout,
+  GridContainer: InterfaceGridContainer,
 };
 
 const InterfaceLayoutItem: React.FC<{

@@ -109,13 +109,17 @@ const AppCanvas: React.FC<{
       );
       setContext(context);
 
-      const appCode =
-        require(`../../../AppDev/${object.key}/index.tsx`).default;
+      const appCode = require(`../../../AppDev/${
+        object.type === "collection" ? "collection" : object.key
+      }/index.tsx`).default;
       setAppConfig(appCode.settings);
-
       // Get app pages (and sort them in groups)
-      appCode.getPages(context).then((result: AppPageType[]) => {
-        setPageMenu(groupBy(result, (o) => o.group));
+      appCode.getPages(context, object).then((result: AppPageType[]) => {
+        setPageMenu(
+          appCode.settings?.pages?.groups?.enabled
+            ? groupBy(result, (o) => o.group)
+            : result
+        );
         setFlatPageMenu(result);
       });
     };
@@ -170,6 +174,7 @@ const AppCanvas: React.FC<{
                         //@ts-ignore
                         args.match.params[0]
                       }
+                      {...(page.props || {})}
                     />
                   ) : (
                     <Loading />
