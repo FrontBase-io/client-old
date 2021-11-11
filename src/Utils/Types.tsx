@@ -215,7 +215,7 @@ export interface DialogActionType {
 export interface DialogFieldType {
   type?: "text" | "key" | "number" | "options" | "boolean" | "custom";
   label: string;
-  value?: string;
+  value?: any;
   width?:
     | false
     | "auto"
@@ -330,10 +330,17 @@ export interface InterfaceObjectType extends ObjectType {
   description: string;
   variables?: { [key: string]: InterfaceobjectVariableType };
   layout?: LayoutItemType[];
+  actions?: { [key: string]: InterfaceobjectActionType };
 }
 
 export interface InterfaceobjectVariableType {
   label: string;
   type?: "objects" | "object" | "text" | "number";
   model?: string;
+}
+
+export interface InterfaceobjectActionType {
+  label: string;
+  description?: string;
+  actions?: [];
 }

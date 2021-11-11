@@ -48,8 +48,12 @@ const ModelFields: React.FC<{ context: AppContext; model: ModelType }> = ({
               title: "Create field",
               size: "sm",
               fields: {
-                label: { label: "Field label", linkToKeyField: "key" },
-                key: { label: "Field key", type: "key" },
+                label: {
+                  label: "Field label",
+                  linkToKeyField: "key",
+                  width: 8,
+                },
+                key: { label: "Field key", type: "key", width: 4 },
               },
               actions: [
                 {

@@ -85,6 +85,24 @@ const ComponentPreviewInputText: React.FC<{
                 }}
               />
             </Grid>
+            <Grid item xs={12}>
+              <context.UI.Inputs.Boolean
+                label="Autofocus"
+                value={layoutItem.args?.autofocus}
+                onChange={async (autofocus) => {
+                  const newLayout = cloneDeep(layout);
+                  modifyRecursive(newLayout, layoutItem.key!, (item) => {
+                    const newItem = item;
+                    newItem!.args = {
+                      ...(item!.args || {}),
+                      autofocus,
+                    };
+                    return newItem;
+                  });
+                  setLayout(newLayout);
+                }}
+              />
+            </Grid>
           </Grid>
         </div>
         <Divider />
@@ -93,6 +111,7 @@ const ComponentPreviewInputText: React.FC<{
       <context.UI.Inputs.Text
         label={layoutItem.args?.label}
         placeholder={layoutItem.args?.placeholder}
+        autoFocus={layoutItem.args?.autofocus}
         disabled
       />
     </>
