@@ -85,6 +85,7 @@ blockquote p {
     cursor: grabbing;
   }
 }
+@media only screen and (min-width: 600px) {
 .scrollIndependently {
   height: calc(100vh - 64px);
   overflow: auto;
@@ -96,7 +97,7 @@ blockquote p {
   &::-webkit-scrollbar {
     display: none;
   }
-}
+}}
 
 .scrollHorizontal {
   overflow-x: scroll;
