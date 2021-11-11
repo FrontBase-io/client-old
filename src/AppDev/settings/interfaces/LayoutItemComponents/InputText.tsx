@@ -47,26 +47,54 @@ const ComponentPreviewInputText: React.FC<{
       </span>
       <Collapse in={settingsOpen} style={{ paddingBottom: 15 }}>
         <Divider />
-        <context.UI.Inputs.Text
-          label="Label"
-          value={layoutItem.args?.label}
-          onChange={async (label) => {
-            const newLayout = cloneDeep(layout);
-            modifyRecursive(newLayout, layoutItem.key!, (item) => {
-              const newItem = item;
-              newItem!.args = {
-                ...(item!.args || {}),
-                label,
-              };
-              return newItem;
-            });
-            setLayout(newLayout);
-          }}
-        />
+        <div style={{ padding: "5px 0" }}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <context.UI.Inputs.Text
+                label="Label"
+                value={layoutItem.args?.label}
+                onChange={async (label) => {
+                  const newLayout = cloneDeep(layout);
+                  modifyRecursive(newLayout, layoutItem.key!, (item) => {
+                    const newItem = item;
+                    newItem!.args = {
+                      ...(item!.args || {}),
+                      label,
+                    };
+                    return newItem;
+                  });
+                  setLayout(newLayout);
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <context.UI.Inputs.Text
+                label="Placeholder"
+                value={layoutItem.args?.placeholder}
+                onChange={async (placeholder) => {
+                  const newLayout = cloneDeep(layout);
+                  modifyRecursive(newLayout, layoutItem.key!, (item) => {
+                    const newItem = item;
+                    newItem!.args = {
+                      ...(item!.args || {}),
+                      placeholder,
+                    };
+                    return newItem;
+                  });
+                  setLayout(newLayout);
+                }}
+              />
+            </Grid>
+          </Grid>
+        </div>
         <Divider />
       </Collapse>
 
-      <context.UI.Inputs.Text label={layoutItem.args?.label} disabled />
+      <context.UI.Inputs.Text
+        label={layoutItem.args?.label}
+        placeholder={layoutItem.args?.placeholder}
+        disabled
+      />
     </>
   );
 };

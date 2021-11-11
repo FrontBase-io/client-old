@@ -29,6 +29,8 @@ const ComponentPreviewCard: React.FC<{
   return (
     <context.UI.Design.Card
       title={layoutItem.args?.label}
+      withoutMargin={layoutItem.args?.withoutMargin}
+      withoutPadding={layoutItem.args?.withoutPadding}
       titleSecondary={
         <Tooltip
           placement="bottom"

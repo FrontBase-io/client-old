@@ -6,7 +6,10 @@ import {
   LayoutItemType,
 } from "../../../../../../Utils/Types";
 import FourOhFour from "../../../../../FourOhFour";
+import InterfaceCard from "./Card";
 import InterfaceGridContainer from "./GridContainer";
+import InterfaceGridItem from "./GridItem";
+import InterfaceInputText from "./InputText";
 import InterfaceList from "./List";
 import InterfaceListDetailLayout from "./ListDetailLayout";
 import InterfaceObjectLayout from "./ObjectLayout";
@@ -25,6 +28,9 @@ const Components: {
   List: InterfaceList,
   ObjectLayout: InterfaceObjectLayout,
   GridContainer: InterfaceGridContainer,
+  GridItem: InterfaceGridItem,
+  Card: InterfaceCard,
+  InputText: InterfaceInputText,
 };
 
 const InterfaceLayoutItem: React.FC<{

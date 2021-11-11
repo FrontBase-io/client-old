@@ -14,6 +14,7 @@ const TextInput: React.FC<{
   keyMode?: true | boolean;
   mode?: "text" | "textarea";
   autoFocus?: boolean;
+  placeholder?: string;
 }> = ({
   label,
   value,
@@ -24,6 +25,7 @@ const TextInput: React.FC<{
   autoFocus,
   type,
   password,
+  placeholder,
 }) => {
   // Vars
 
@@ -38,6 +40,7 @@ const TextInput: React.FC<{
           autoFocus={autoFocus}
           value={value}
           type={password ? "password" : type || "text"}
+          placeholder={placeholder}
           onChange={(e) => {
             onChange &&
               onChange(

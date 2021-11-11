@@ -97,10 +97,10 @@ const InterfaceList: React.FC<{
 
   return (
     <context.UI.Design.Animation.Container>
-      <List>
+      <List disablePadding>
         {items.map((item) => (
           <context.UI.Design.Animation.Item key={item.key}>
-            <ListItem>
+            <ListItem button>
               <ListItemText>{item.label}</ListItemText>
             </ListItem>
           </context.UI.Design.Animation.Item>

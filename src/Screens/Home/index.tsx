@@ -6,8 +6,8 @@ import { Grid } from "@mui/material";
 const HomeScreen: React.FC = () => {
   return (
     <Animate>
-      <Grid container>
-        <Grid item xs={4}>
+      <Grid container justifyContent="center">
+        <Grid item xs={12} md={4}>
           <Card title="Home page">
             This will soon be a nice grid of widgets.
           </Card>

@@ -6,7 +6,7 @@ import {
   LayoutItemType,
 } from "../../../../../../Utils/Types";
 
-const InterfaceGridContainer: React.FC<{
+const InterfaceCard: React.FC<{
   context: AppContext;
   layoutItem: LayoutItemType;
   layout: LayoutItemType[];
@@ -21,13 +21,10 @@ const InterfaceGridContainer: React.FC<{
   // UI
 
   return (
-    <Grid
-      container
-      direction={layoutItem.args?.direction || "row"}
-      justifyContent={layoutItem.args?.justify || "center"}
-      alignItems={layoutItem.args?.align || "center"}
-      spacing={layoutItem.args?.spacing || 0}
-      style={{ width: "100%" }}
+    <context.UI.Design.Card
+      title={layoutItem.args?.label}
+      withoutMargin={layoutItem.args?.withoutMargin}
+      withoutPadding={layoutItem.args?.withoutPadding}
     >
       {(layoutItem.items || []).map((childLayoutItem) => (
         <InterfaceLayoutItem
@@ -39,8 +36,8 @@ const InterfaceGridContainer: React.FC<{
           interfaceObject={interfaceObject}
         />
       ))}
-    </Grid>
+    </context.UI.Design.Card>
   );
 };
 
-export default InterfaceGridContainer;
+export default InterfaceCard;
