@@ -58,8 +58,7 @@ const Card: React.FC<{
         <span
           style={{
             float: "right",
-            margin: withoutMargin ? 0 : 10,
-            padding: withoutPadding ? 0 : "5px 10px",
+            padding: withoutPadding && "10px 10px 0 10px",
           }}
         >
           {titleSecondary}
@@ -72,6 +71,7 @@ const Card: React.FC<{
           onClick={onTitleClick}
           className={styles.title}
           color="primary"
+          noWrap
           style={{
             cursor: onTitleClick ? "pointer" : "default",
             padding: withoutPadding && "10px 10px 0 10px",

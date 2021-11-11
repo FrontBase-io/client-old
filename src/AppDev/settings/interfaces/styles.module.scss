@@ -5,13 +5,15 @@
 .dropTarget {
   width: 100%;
   border: 1px solid #a0a0a0;
-  background-color: #eaeaea;
+  background-color: #fbfbfb;
+  transition: all 0.3s;
   min-height: 2rem;
   transition: all 0.3s;
   border-radius: 8px;
   padding: 5px;
   box-sizing: border-box;
   text-align: center;
+  margin-top: 5px;
 
   &.hovered {
     border: 1px solid #a0a0a0;

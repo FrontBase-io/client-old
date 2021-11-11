@@ -35,9 +35,15 @@ const ComponentPreviewGridItem: React.FC<{
       xl={layoutItem.args?.xl}
     >
       <span style={{ float: "right" }}>
-        <Tooltip placement="bottom" title="Edit grid item settings">
+        <Tooltip
+          placement="bottom"
+          title={settingsOpen ? "Close grid item settings" : "Edit grid item settings"}
+        >
           <IconButton onClick={() => setSettingsOpen(!settingsOpen)}>
-            <context.UI.Design.Icon icon="wrench" size={15} />
+            <context.UI.Design.Icon
+              icon={settingsOpen ? "times-circle" : "wrench"}
+              size={15}
+            />
           </IconButton>
         </Tooltip>
       </span>

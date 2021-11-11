@@ -6,8 +6,10 @@ import {
   LayoutItemType,
   ModelType,
 } from "../../../../Utils/Types";
+import ComponentPreviewCard from "./Card";
 import ComponentPreviewGridContainer from "./GridContainer";
 import ComponentPreviewGridItem from "./GridItem";
+import ComponentPreviewInputText from "./InputText";
 import ComponentListPreview from "./List";
 import ComponentPreviewListDetailLayout from "./ListDetailLayout";
 import ComponentPreviewObjectLayout from "./ObjectLayout";
@@ -27,6 +29,8 @@ const Components: {
   ObjectLayout: ComponentPreviewObjectLayout,
   GridContainer: ComponentPreviewGridContainer,
   GridItem: ComponentPreviewGridItem,
+  InputText: ComponentPreviewInputText,
+  Card: ComponentPreviewCard,
 };
 
 const LayoutItemComponent: React.FC<{
