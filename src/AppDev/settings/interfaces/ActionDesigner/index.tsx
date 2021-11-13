@@ -7,6 +7,10 @@ import {
   ListItemText,
   ListSubheader,
   Popover,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
@@ -20,10 +24,9 @@ import ReactFlow, {
   ReactFlowProvider,
   Node,
 } from "react-flow-renderer";
-import { cloneDeep, find } from "lodash";
+import { cloneDeep, find, map } from "lodash";
 import {
   InterfaceobjectVariableType,
-  ObjectType,
   SelectOptionType,
 } from "../../../../Utils/Types";
 import uniqid from "uniqid";
@@ -105,7 +108,7 @@ const InterfaceActionDesigner: React.FC<{
               onNodeDragStop={(event, node) => {
                 let newValue = cloneDeep(value);
                 //@ts-ignore
-                value[findIndex(newValue, (o) => o.id === node.id)] = node;
+                newValue[findIndex(newValue, (o) => o.id === node.id)] = node;
                 onChange(newValue);
               }}
               onDragOver={(event) => {
@@ -178,6 +181,32 @@ const InterfaceActionDesigner: React.FC<{
               button
               onClick={() => {
                 setAddNodePopoverAnchor(null);
+                onChange([
+                  ...value,
+                  {
+                    id: uniqid(),
+                    type: "default",
+                    position: { x: 100, y: 250 },
+                    data: {
+                      type: "assign_values",
+                      label: "Assign values",
+                    },
+                  },
+                ]);
+              }}
+            >
+              <ListItemIcon>
+                <context.UI.Design.Icon icon="equals" />
+              </ListItemIcon>
+              <ListItemText
+                primary="Assign value(s)"
+                secondary="Set the values of given variables."
+              />
+            </ListItem>
+            <ListItem
+              button
+              onClick={() => {
+                setAddNodePopoverAnchor(null);
 
                 onChange([
                   ...value,
@@ -219,11 +248,28 @@ const InterfaceActionDesigner: React.FC<{
                         findIndex(newValue, (o) => o.id === selectedNode.id)
                         //@ts-ignore
                       ].data.args = newArgs;
-                      console.log(newValue);
 
                       onChange(newValue);
                     }}
                     modelListOptions={modelListOptions}
+                    variables={variables}
+                  />
+                ) : selectedNode.data.type === "assign_values" ? (
+                  <AssignValuesSettings
+                    context={context}
+                    args={selectedNode.data.args}
+                    onChange={(newArgs) => {
+                      const newValue = value;
+                      newValue[
+                        //@ts-ignore
+                        findIndex(newValue, (o) => o.id === selectedNode.id)
+                        //@ts-ignore
+                      ].data.args = newArgs;
+
+                      onChange(newValue);
+                    }}
+                    modelListOptions={modelListOptions}
+                    variables={variables}
                   />
                 ) : (
                   `Unknown data type ${selectedNode.data.type}`
@@ -253,6 +299,7 @@ const CreateObjectsSettings: React.FC<{
   onChange: (newArgs: CreateObjectsArgs) => void;
   context: AppContext;
   modelListOptions: SelectOptionType[];
+  variables: { [key: string]: InterfaceobjectVariableType };
 }> = ({ args, onChange, context, modelListOptions }) => {
   // UI
   return (
@@ -300,6 +347,74 @@ const CreateObjectsSettings: React.FC<{
           </>
         )}
       </div>
+    </>
+  );
+};
+interface AssignValuesArgs {
+  values: {
+    [key: string]: string | { _form: string };
+  };
+}
+const AssignValuesSettings: React.FC<{
+  args: AssignValuesArgs;
+  onChange: (newArgs: AssignValuesArgs) => void;
+  context: AppContext;
+  modelListOptions: SelectOptionType[];
+  variables: { [key: string]: InterfaceobjectVariableType };
+}> = ({ args, onChange, context, modelListOptions, variables }) => {
+  // Vars
+
+  // Lifecycle
+
+  // UI
+  return (
+    <>
+      <Table>
+        <TableBody>
+          {map(args?.values || {}, (varValue, varKey) => (
+            <TableRow key={varKey}>
+              <TableCell>
+                {
+                  //@ts-ignore
+                  args?.values[varKey]._form ? (
+                    <>Test</>
+                  ) : variables[varKey].type === "objects" ||
+                    variables[varKey].type === "object" ? (
+                    "Todo: set objects"
+                  ) : variables[varKey].type === "text" ? (
+                    <context.UI.Inputs.Text
+                      label={variables[varKey].label}
+                      value={(args?.values[varKey] as string) || ""}
+                      onChange={(newVal) =>
+                        onChange({
+                          ...args,
+                          values: { ...args.values, [varKey]: newVal },
+                        })
+                      }
+                    />
+                  ) : (
+                    `Unknown type ${variables[varKey].type}`
+                  )
+                }
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <context.UI.Inputs.Select
+        label="Add variable"
+        options={context.utils.listifyObjectForSelect(variables, "label")}
+        value="wrong"
+        onChange={(newKey) =>
+          onChange({
+            ...(args || {}),
+            values: {
+              ...(args?.values || {}),
+              [newKey as string]: "",
+            },
+          })
+        }
+      />
     </>
   );
 };

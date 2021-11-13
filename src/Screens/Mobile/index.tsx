@@ -26,16 +26,15 @@ import HomeScreen from "../Home";
 import AppCanvas from "./AppCanvas";
 import frontbase from "./frontbase.png";
 import styles from "./styles.module.scss";
+
 const Mobile: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
   // Vars
   const [apps, setApps] = useState<AppObjectType[]>();
-  const [appMenuElement, setAppMenuElement] = useState<Element | null>();
-  const [userMenuElement, setUserMenuElement] = useState<Element | null>();
-  const [selectedApp, setSelectedApp] = useState<AppObjectType>();
+
+  const [, setSelectedApp] = useState<AppObjectType>();
   const history = useHistory();
   const [upLink, setUpLink] = useState<(() => void) | string | undefined>();
   const [pageName, setPageName] = useState<string>("FrontBase");
-  const [headerIsIndented, setHeaderIsIndented] = useState<Boolean>(false);
   const [navBarActions, setNavBarActions] = useState<{
     [key: string]: NavBarButtonType;
   }>({});
