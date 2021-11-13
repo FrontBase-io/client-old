@@ -342,5 +342,17 @@ export interface InterfaceobjectVariableType {
 export interface InterfaceobjectActionType {
   label: string;
   description?: string;
-  actions?: [];
+  actions?: InterfaceActionStepType[];
+}
+export interface InterfaceActionStepType {
+  type: "default" | "input" | "output";
+  data: {
+    type: "create_objects";
+    args?: {
+      // Create objects
+      mode?: "m" | "v";
+      model?: string;
+      newObject?: ObjectType;
+    };
+  };
 }

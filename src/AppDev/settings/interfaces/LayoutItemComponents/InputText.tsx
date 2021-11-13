@@ -140,14 +140,14 @@ const ComponentPreviewInputText: React.FC<{
               <br />
               <ActionDesignerLauncher
                 context={context}
-                value={layoutItem.args?.action}
-                onChange={async (action) => {
+                value={layoutItem.args?.onEnter}
+                onChange={async (onEnter) => {
                   const newLayout = cloneDeep(layout);
                   modifyRecursive(newLayout, layoutItem.key!, (item) => {
                     const newItem = item;
                     newItem!.args = {
                       ...(item!.args || {}),
-                      action,
+                      onEnter,
                     };
                     return newItem;
                   });

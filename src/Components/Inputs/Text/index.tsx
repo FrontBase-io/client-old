@@ -15,6 +15,7 @@ const TextInput: React.FC<{
   mode?: "text" | "textarea";
   autoFocus?: boolean;
   placeholder?: string;
+  onEnter?: () => void;
 }> = ({
   label,
   value,
@@ -26,6 +27,7 @@ const TextInput: React.FC<{
   type,
   password,
   placeholder,
+  onEnter,
 }) => {
   // Vars
 
@@ -50,6 +52,11 @@ const TextInput: React.FC<{
               );
           }}
           disabled={disabled}
+          onKeyUp={(event) => {
+            if (event.key === "Enter") {
+              onEnter && onEnter();
+            }
+          }}
         />
       )}
       {mode === "textarea" && (
