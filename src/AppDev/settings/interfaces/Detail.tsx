@@ -19,7 +19,6 @@ import {
 import InterfaceComponents from "./Components";
 import LayoutItemComponent from "./LayoutItemComponents";
 import { map } from "lodash";
-import InterfaceActions from "./Actions";
 
 const InterfaceDetail: React.FC<{
   context: AppContext;
@@ -174,23 +173,6 @@ const InterfaceDetail: React.FC<{
                             setInterfaceObject({
                               ...interfaceObject,
                               variables: newV,
-                            })
-                          }
-                        />
-                      ),
-                    },
-
-                    {
-                      label: "Actions",
-                      key: "actions",
-                      component: (
-                        <InterfaceActions
-                          context={context}
-                          interfaceObject={interfaceObject}
-                          onChange={(newA) =>
-                            setInterfaceObject({
-                              ...interfaceObject,
-                              actions: newA,
                             })
                           }
                         />

@@ -216,8 +216,11 @@ const AppCanvas: React.FC<{
                 // If onlyDisplaysWhen is active we need to process the criteria and set displays to false if they don't meet
                 if (field.onlyDisplayWhen) {
                   if (field.onlyDisplayWhen.and) {
-                    map(field.onlyDisplayWhen.and, (val, key) => {
-                      if (dialogFieldValues[key] !== val) {
+                    map(field.onlyDisplayWhen.and, (andValue, andKey) => {
+                      if (
+                        (dialogFieldValues[andKey] ||
+                          dialog.fields![andKey].value) !== andValue
+                      ) {
                         displays = false; // One 'and' statement is false -> hide
                       }
                     });
@@ -226,8 +229,11 @@ const AppCanvas: React.FC<{
                     let orTruesHit = 0;
                     // eslint-disable-next-line array-callback-return
                     field.onlyDisplayWhen.or.map((orCondition) => {
-                      map(orCondition, (value, key) => {
-                        if (dialogFieldValues[key] !== value) {
+                      map(orCondition, (orValue, orKey) => {
+                        if (
+                          (dialogFieldValues[orKey] ||
+                            dialog.fields![orKey].value) !== orValue
+                        ) {
                           orTruesHit++;
                         }
                       });

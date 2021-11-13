@@ -34,7 +34,6 @@ const ActionDesigner: React.FC<{
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} md={9}>
-        {" "}
         <ReactFlowProvider>
           <div ref={reactFlowWrapper} style={{ width: "100%", height: "100%" }}>
             <ReactFlow
