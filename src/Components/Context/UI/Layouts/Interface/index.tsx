@@ -51,6 +51,7 @@ const RenderInterface: React.FC<{
           vars={vars}
           baseUrl={baseUrl}
           interfaceObject={appliedInterfaceObject}
+          setVars={setVars}
         />
       ))}
     </>

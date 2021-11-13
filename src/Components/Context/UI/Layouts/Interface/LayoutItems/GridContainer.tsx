@@ -3,6 +3,7 @@ import InterfaceLayoutItem from ".";
 import { AppContext } from "../../../..";
 import {
   InterfaceObjectType,
+  InterfaceobjectVariableType,
   LayoutItemType,
 } from "../../../../../../Utils/Types";
 
@@ -13,7 +14,8 @@ const InterfaceGridContainer: React.FC<{
   vars: { [key: string]: any };
   baseUrl: string;
   interfaceObject: InterfaceObjectType;
-}> = ({ vars, layoutItem, context, baseUrl, interfaceObject }) => {
+  setVars: (vars: { [key: string]: InterfaceobjectVariableType }) => void;
+}> = ({ vars, layoutItem, context, baseUrl, interfaceObject, setVars }) => {
   // Vars
 
   // Lifecycle
@@ -37,6 +39,7 @@ const InterfaceGridContainer: React.FC<{
           vars={vars}
           baseUrl={baseUrl}
           interfaceObject={interfaceObject}
+          setVars={setVars}
         />
       ))}
     </Grid>

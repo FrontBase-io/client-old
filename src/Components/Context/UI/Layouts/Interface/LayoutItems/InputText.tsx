@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AppContext } from "../../../..";
 import {
   InterfaceObjectType,
+  InterfaceobjectVariableType,
   LayoutItemType,
 } from "../../../../../../Utils/Types";
 import executeInterfaceActions from "../executeInterfaceAction";
@@ -13,7 +14,8 @@ const InterfaceInputText: React.FC<{
   vars: { [key: string]: any };
   baseUrl: string;
   interfaceObject: InterfaceObjectType;
-}> = ({ vars, layoutItem, context, baseUrl, interfaceObject }) => {
+  setVars: (vars: { [key: string]: InterfaceobjectVariableType }) => void;
+}> = ({ vars, layoutItem, context, baseUrl, interfaceObject, setVars }) => {
   // Vars
   const [value, setValue] = useState<string>("");
   // Lifecycle
@@ -29,11 +31,17 @@ const InterfaceInputText: React.FC<{
       onEnter={
         layoutItem.args?.onEnter
           ? () => {
-              executeInterfaceActions(context, layoutItem.args?.onEnter, {
-                ...vars,
-                currentInputValue: value,
-                currentInputKey: layoutItem.key,
-              });
+              executeInterfaceActions(
+                context,
+                layoutItem.args?.onEnter,
+                {
+                  ...vars,
+                  currentInputValue: value,
+                  currentInputKey: layoutItem.key,
+                  setCurrentInputValue: setValue,
+                },
+                setVars
+              );
             }
           : undefined
       }

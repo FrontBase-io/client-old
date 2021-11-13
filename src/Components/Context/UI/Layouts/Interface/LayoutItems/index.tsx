@@ -22,6 +22,7 @@ const Components: {
     vars: { [key: string]: InterfaceobjectVariableType };
     baseUrl: string;
     interfaceObject: InterfaceObjectType;
+    setVars: (vars: { [key: string]: InterfaceobjectVariableType }) => void;
   }>;
 } = {
   ListDetailLayout: InterfaceListDetailLayout,
@@ -40,7 +41,16 @@ const InterfaceLayoutItem: React.FC<{
   vars: { [key: string]: InterfaceobjectVariableType };
   baseUrl: string;
   interfaceObject: InterfaceObjectType;
-}> = ({ layoutItem, context, layout, vars, baseUrl, interfaceObject }) => {
+  setVars: (vars: { [key: string]: InterfaceobjectVariableType }) => void;
+}> = ({
+  layoutItem,
+  context,
+  layout,
+  vars,
+  baseUrl,
+  interfaceObject,
+  setVars,
+}) => {
   // Vars
   const Component = Components[layoutItem.type]
     ? Components[layoutItem.type]
@@ -55,6 +65,7 @@ const InterfaceLayoutItem: React.FC<{
       vars={vars}
       baseUrl={baseUrl}
       interfaceObject={interfaceObject}
+      setVars={setVars}
     />
   );
 };

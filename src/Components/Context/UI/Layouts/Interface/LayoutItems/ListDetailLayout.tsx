@@ -3,6 +3,7 @@ import InterfaceLayoutItem from ".";
 import { AppContext } from "../../../..";
 import {
   InterfaceObjectType,
+  InterfaceobjectVariableType,
   LayoutItemType,
   ListItemType,
   ObjectType,
@@ -15,7 +16,8 @@ const InterfaceListDetailLayout: React.FC<{
   vars: { [key: string]: any };
   baseUrl: string;
   interfaceObject: InterfaceObjectType;
-}> = ({ vars, layoutItem, context, baseUrl, interfaceObject }) => {
+  setVars: (vars: { [key: string]: InterfaceobjectVariableType }) => void;
+}> = ({ vars, layoutItem, context, baseUrl, interfaceObject, setVars }) => {
   // Vars
   const [items, setItems] = useState<ListItemType[]>();
 
@@ -37,7 +39,13 @@ const InterfaceListDetailLayout: React.FC<{
       //@ts-ignore
       detailComponent={DetailComponent}
       baseUrl={baseUrl}
-      detailComponentProps={{ layoutItem, vars, baseUrl, interfaceObject }}
+      detailComponentProps={{
+        layoutItem,
+        vars,
+        baseUrl,
+        interfaceObject,
+        setVars,
+      }}
       title={layoutItem.args?.title}
     />
   );
@@ -53,6 +61,7 @@ const DetailComponent: React.FC<{
   vars: { [key: string]: any };
   baseUrl: string;
   interfaceObject: InterfaceObjectType;
+  setVars: (vars: { [key: string]: InterfaceobjectVariableType }) => void;
 }> = ({
   context,
   selectedKey,
@@ -61,6 +70,7 @@ const DetailComponent: React.FC<{
   vars,
   baseUrl,
   interfaceObject,
+  setVars,
 }) => {
   return (
     <>
@@ -82,6 +92,7 @@ const DetailComponent: React.FC<{
           }}
           baseUrl={baseUrl}
           interfaceObject={interfaceObject}
+          setVars={setVars}
         />
       ))}
     </>

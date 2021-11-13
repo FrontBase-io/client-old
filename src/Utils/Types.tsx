@@ -347,12 +347,14 @@ export interface InterfaceobjectActionType {
 export interface InterfaceActionStepType {
   type: "default" | "input" | "output";
   data: {
-    type: "create_objects";
+    type: "create_objects" | "assign_values";
     args?: {
       // Create objects
       mode?: "m" | "v";
       model?: string;
       newObject?: ObjectType;
+      // Assign values:
+      values?: { [key: string]: any };
     };
   };
 }
