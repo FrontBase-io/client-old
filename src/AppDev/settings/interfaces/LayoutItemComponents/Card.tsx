@@ -8,6 +8,7 @@ import {
   InterfaceobjectVariableType,
   LayoutItemType,
   ModelType,
+  SelectOptionType,
 } from "../../../../Utils/Types";
 import DropTarget from "../DropTarget";
 import LayoutItemComponent from "./index";
@@ -19,7 +20,16 @@ const ComponentPreviewCard: React.FC<{
   setLayout: (layout: LayoutItemType[]) => void;
   variables: { [key: string]: InterfaceobjectVariableType };
   modelList: ModelType[];
-}> = ({ context, layoutItem, layout, setLayout, variables, modelList }) => {
+  modelListOptions: SelectOptionType[];
+}> = ({
+  context,
+  layoutItem,
+  layout,
+  setLayout,
+  variables,
+  modelList,
+  modelListOptions,
+}) => {
   // Vars
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
 
@@ -122,6 +132,7 @@ const ComponentPreviewCard: React.FC<{
             setLayout={setLayout}
             modelList={modelList}
             variables={variables}
+            modelListOptions={modelListOptions}
           />
         ))}
       </DropTarget>

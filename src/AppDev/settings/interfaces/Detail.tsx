@@ -6,6 +6,7 @@ import {
   InterfaceObjectType,
   ListItemType,
   ModelType,
+  SelectOptionType,
 } from "../../../Utils/Types";
 import DropTarget from "./DropTarget";
 import InterfaceVariables from "./Variables";
@@ -18,7 +19,7 @@ import {
 } from "react-dnd-multi-backend";
 import InterfaceComponents from "./Components";
 import LayoutItemComponent from "./LayoutItemComponents";
-import { map } from "lodash";
+import { isEqual, map } from "lodash";
 
 const InterfaceDetail: React.FC<{
   context: AppContext;
@@ -28,17 +29,25 @@ const InterfaceDetail: React.FC<{
   // Vars
   const [interfaceObject, setInterfaceObject] = useState<InterfaceObjectType>();
   const [modelList, setModelList] = useState<ModelType[]>();
+  const [modelListOptions, setModelListOptions] =
+    useState<SelectOptionType[]>();
 
   // Lifecycle
   useEffect(() => {
     item && setInterfaceObject(item.object);
   }, [item]);
   useEffect(() => {
-    context.data.models.getAll((ms) => setModelList(ms));
+    context.data.models.getAll((ms) => {
+      setModelListOptions(
+        context.utils.listifyForSelect(ms, "label_plural", "key")
+      );
+      setModelList(ms);
+    });
   }, []);
 
   // UI
-  if (!interfaceObject || !modelList) return <context.UI.Loading />;
+  if (!interfaceObject || !modelList || !modelListOptions)
+    return <context.UI.Loading />;
   return (
     <DndProvider
       options={{
@@ -89,6 +98,7 @@ const InterfaceDetail: React.FC<{
                         }
                         variables={interfaceObject.variables || {}}
                         modelList={modelList}
+                        modelListOptions={modelListOptions}
                       />
                     )
                   )}
@@ -97,8 +107,7 @@ const InterfaceDetail: React.FC<{
             </context.UI.Design.Animation.Item>
           </Grid>
           <Grid item xs={12} md={4} className="scrollIndependently">
-            {JSON.stringify(interfaceObject) !==
-              JSON.stringify(item.object) && (
+            {!isEqual(interfaceObject, item.object) && (
               <context.UI.Design.Animation.Item key="save">
                 <Button
                   variant="contained"
@@ -112,10 +121,7 @@ const InterfaceDetail: React.FC<{
                   onClick={() => {
                     const fieldsToUpdate: { [key: string]: any } = {};
                     map(interfaceObject, (value, key) => {
-                      if (
-                        JSON.stringify(value) !==
-                        JSON.stringify(item.object[key])
-                      ) {
+                      if (!isEqual(value, item.object[key])) {
                         fieldsToUpdate[key] = value;
                       }
                     });

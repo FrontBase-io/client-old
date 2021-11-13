@@ -1,16 +1,22 @@
-import { Collapse, Divider, Grid, IconButton, Tooltip } from "@mui/material";
+import {
+  Collapse,
+  Divider,
+  Grid,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { cloneDeep } from "lodash";
 import { useState } from "react";
 import { AppContext } from "../../../../Components/Context";
-import TextInput from "../../../../Components/Inputs/Text";
 import { modifyRecursive } from "../../../../Utils/Functions";
 import {
   InterfaceobjectVariableType,
   LayoutItemType,
   ModelType,
+  SelectOptionType,
 } from "../../../../Utils/Types";
-import DropTarget from "../DropTarget";
-import LayoutItemComponent from "./index";
+import ActionDesignerLauncher from "./ActionDesignerLauncher";
 
 const ComponentPreviewInputText: React.FC<{
   context: AppContext;
@@ -19,7 +25,16 @@ const ComponentPreviewInputText: React.FC<{
   setLayout: (layout: LayoutItemType[]) => void;
   variables: { [key: string]: InterfaceobjectVariableType };
   modelList: ModelType[];
-}> = ({ context, layoutItem, layout, setLayout, variables, modelList }) => {
+  modelListOptions: SelectOptionType[];
+}> = ({
+  context,
+  layoutItem,
+  layout,
+  setLayout,
+  variables,
+  modelList,
+  modelListOptions,
+}) => {
   // Vars
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
 
@@ -28,7 +43,11 @@ const ComponentPreviewInputText: React.FC<{
   // UI
   return (
     <>
-      <span style={{ float: "right" }}>
+      <span
+        style={{
+          float: "right",
+        }}
+      >
         <Tooltip
           placement="bottom"
           title={
@@ -45,7 +64,16 @@ const ComponentPreviewInputText: React.FC<{
           </IconButton>
         </Tooltip>
       </span>
-      <Collapse in={settingsOpen} style={{ paddingBottom: 15 }}>
+      <Collapse
+        in={settingsOpen}
+        style={{
+          border: "1px solid rgba(0,0,0,0.05)",
+          borderRadius: 8,
+          padding: 15,
+          margin: 5,
+        }}
+      >
+        <Typography variant="h6">Input settings</Typography>
         <Divider />
         <div style={{ padding: "5px 0" }}>
           <Grid container spacing={3}>
@@ -101,6 +129,42 @@ const ComponentPreviewInputText: React.FC<{
                   });
                   setLayout(newLayout);
                 }}
+              />
+            </Grid>
+            <Divider />
+            <Grid item xs={12}>
+              <Typography variant="h6">Events</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              On enter
+              <br />
+              <ActionDesignerLauncher
+                context={context}
+                value={layoutItem.args?.action}
+                onChange={async (action) => {
+                  const newLayout = cloneDeep(layout);
+                  modifyRecursive(newLayout, layoutItem.key!, (item) => {
+                    const newItem = item;
+                    newItem!.args = {
+                      ...(item!.args || {}),
+                      action,
+                    };
+                    return newItem;
+                  });
+                  setLayout(newLayout);
+                }}
+                variables={{
+                  ...variables,
+                  currentInputKey: {
+                    type: "text",
+                    label: "Current input: Key",
+                  },
+                  currentInputValue: {
+                    type: "text",
+                    label: "Current input: Value",
+                  },
+                }}
+                modelListOptions={modelListOptions}
               />
             </Grid>
           </Grid>

@@ -28,7 +28,16 @@ const ComponentPreviewListDetailLayout: React.FC<{
   setLayout: (layout: LayoutItemType[]) => void;
   variables: { [key: string]: InterfaceobjectVariableType };
   modelList: ModelType[];
-}> = ({ context, layoutItem, layout, setLayout, variables, modelList }) => {
+  modelListOptions: SelectOptionType[];
+}> = ({
+  context,
+  layoutItem,
+  layout,
+  setLayout,
+  variables,
+  modelList,
+  modelListOptions,
+}) => {
   // Vars
   const [variableList, setVariableList] = useState<SelectOptionType[]>([]);
   const [settingsOpen, setSettingsOpen] = useState<boolean>(
@@ -185,6 +194,7 @@ const ComponentPreviewListDetailLayout: React.FC<{
                         layout={layout || []}
                         setLayout={setLayout}
                         modelList={modelList}
+                        modelListOptions={modelListOptions}
                         variables={{
                           ...variables,
                           [`selected${layoutItem.args?.listItems}`]: {

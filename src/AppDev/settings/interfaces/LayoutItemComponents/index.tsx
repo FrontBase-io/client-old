@@ -5,6 +5,7 @@ import {
   InterfaceobjectVariableType,
   LayoutItemType,
   ModelType,
+  SelectOptionType,
 } from "../../../../Utils/Types";
 import ComponentPreviewCard from "./Card";
 import ComponentPreviewGridContainer from "./GridContainer";
@@ -22,6 +23,7 @@ const Components: {
     setLayout: (layout: LayoutItemType[]) => void;
     variables: { [key: string]: InterfaceobjectVariableType };
     modelList: ModelType[];
+    modelListOptions: SelectOptionType[];
   }>;
 } = {
   ListDetailLayout: ComponentPreviewListDetailLayout,
@@ -40,7 +42,16 @@ const LayoutItemComponent: React.FC<{
   setLayout: (layout: LayoutItemType[]) => void;
   variables: { [key: string]: InterfaceobjectVariableType };
   modelList: ModelType[];
-}> = ({ layoutItem, context, layout, setLayout, variables, modelList }) => {
+  modelListOptions: SelectOptionType[];
+}> = ({
+  layoutItem,
+  context,
+  layout,
+  setLayout,
+  variables,
+  modelList,
+  modelListOptions,
+}) => {
   const Component = Components[layoutItem.type]
     ? Components[layoutItem.type]
     : FourOhFour;
@@ -52,6 +63,7 @@ const LayoutItemComponent: React.FC<{
       setLayout={setLayout}
       variables={variables}
       modelList={modelList}
+      modelListOptions={modelListOptions}
     />
   );
 };

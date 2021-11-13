@@ -7,6 +7,7 @@ import {
   InterfaceobjectVariableType,
   LayoutItemType,
   ModelType,
+  SelectOptionType,
 } from "../../../../Utils/Types";
 import DropTarget from "../DropTarget";
 import LayoutItemComponent from "./index";
@@ -18,7 +19,16 @@ const ComponentPreviewGridItem: React.FC<{
   setLayout: (layout: LayoutItemType[]) => void;
   variables: { [key: string]: InterfaceobjectVariableType };
   modelList: ModelType[];
-}> = ({ context, layoutItem, layout, setLayout, variables, modelList }) => {
+  modelListOptions: SelectOptionType[];
+}> = ({
+  context,
+  layoutItem,
+  layout,
+  setLayout,
+  variables,
+  modelList,
+  modelListOptions,
+}) => {
   // Vars
   const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
 
@@ -37,7 +47,11 @@ const ComponentPreviewGridItem: React.FC<{
       <span style={{ float: "right" }}>
         <Tooltip
           placement="bottom"
-          title={settingsOpen ? "Close grid item settings" : "Edit grid item settings"}
+          title={
+            settingsOpen
+              ? "Close grid item settings"
+              : "Edit grid item settings"
+          }
         >
           <IconButton onClick={() => setSettingsOpen(!settingsOpen)}>
             <context.UI.Design.Icon
@@ -158,6 +172,7 @@ const ComponentPreviewGridItem: React.FC<{
             setLayout={setLayout}
             modelList={modelList}
             variables={variables}
+            modelListOptions={modelListOptions}
           />
         ))}
       </DropTarget>
