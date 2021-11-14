@@ -13,8 +13,10 @@ const executeInterfaceActions = (
     description?: string;
     actions: InterfaceActionStepType[];
   },
-  vars: { [key: string]: any },
-  setVars: (vars: { [key: string]: InterfaceobjectVariableType }) => void
+  variables: { [key: string]: any },
+  setVariables: (variables: {
+    [key: string]: InterfaceobjectVariableType;
+  }) => void
 ) =>
   new Promise(async (resolve, reject) => {
     let currentEdge = findLast(
@@ -28,7 +30,7 @@ const executeInterfaceActions = (
       (o) => o.id === currentEdge.target
     )!;
     while (currentNode.type !== "output") {
-      await executeNode(context, currentNode, vars, setVars);
+      await executeNode(context, currentNode, variables, setVariables);
       currentEdge = findLast(
         interfaceActions.actions,
         //@ts-ignore
@@ -47,8 +49,10 @@ export default executeInterfaceActions;
 const executeNode = async (
   context: AppContext,
   node: InterfaceActionStepType,
-  vars: { [key: string]: any },
-  setVars: (vars: { [key: string]: InterfaceobjectVariableType }) => void
+  variables: { [key: string]: any },
+  setVariables: (variables: {
+    [key: string]: InterfaceobjectVariableType;
+  }) => void
 ) =>
   new Promise<void>(async (resolve) => {
     if (node.type === "default") {
@@ -67,7 +71,7 @@ const executeNode = async (
                 // Compile formula
                 const formula = new Formula(newObject[curr]._form);
                 await formula.onParsed;
-                newObject[curr] = await formula.parse(vars);
+                newObject[curr] = await formula.parse(variables);
               }
 
               return curr;
@@ -89,7 +93,7 @@ const executeNode = async (
               await prev;
               if (curr === "currentInputValue") {
                 // This is an exception. If we have the current input's value we need to call a state change instead
-                vars["setCurrentInputValue"](
+                variables["setCurrentInputValue"](
                   node.data.args!.values!.currentInputValue
                 );
               } else {

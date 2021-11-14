@@ -7,7 +7,10 @@ import {
 //@ts-ignore
 import Formula from "frontbase-formulas";
 
-const parseFormulas = (inputs: { [key: string]: { _form?: any } }, vars: {}) =>
+const parseFormulas = (
+  inputs: { [key: string]: { _form?: any } },
+  variables: {}
+) =>
   new Promise<{}>(async (resolve) => {
     const results = inputs;
 
@@ -19,7 +22,7 @@ const parseFormulas = (inputs: { [key: string]: { _form?: any } }, vars: {}) =>
         // Compile formula
         const formula = new Formula(inputs[curr]._form);
         await formula.onParsed;
-        results[curr] = await formula.parse(vars);
+        results[curr] = await formula.parse(variables);
       }
 
       return curr;
@@ -32,23 +35,23 @@ const InterfaceObjectLayout: React.FC<{
   context: AppContext;
   layoutItem: LayoutItemType;
   layout: LayoutItemType[];
-  vars: { [key: string]: any };
+  variables: { [key: string]: any };
   baseUrl: string;
   interfaceObject: InterfaceObjectType;
-}> = ({ vars, layoutItem, context, baseUrl, interfaceObject }) => {
+}> = ({ variables, layoutItem, context, baseUrl, interfaceObject }) => {
   // Vars
   const [defaults, setDefaults] = useState<{} | undefined | null>();
 
   // Lifecycle
   useEffect(() => {
     if (layoutItem.args?.defaults) {
-      parseFormulas(layoutItem.args?.defaults, vars).then((result) =>
+      parseFormulas(layoutItem.args?.defaults, variables).then((result) =>
         setDefaults(result)
       );
     } else {
       setDefaults(null);
     }
-  }, [layoutItem, vars]);
+  }, [layoutItem, variables]);
 
   // UI
   if (defaults === undefined) return <context.UI.Loading />;

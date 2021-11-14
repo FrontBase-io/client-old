@@ -11,7 +11,7 @@ const RenderInterface: React.FC<{
   baseUrl: string;
 }> = ({ context, interfaceObject, interfaceObjectKey, baseUrl }) => {
   // Vars
-  const [vars, setVars] = useState<{ [key: string]: any }>({});
+  const [variables, setVariables] = useState<{ [key: string]: any }>({});
   const [appliedInterfaceObject, setAppliedInterfaceObject] =
     useState<InterfaceObjectType>();
 
@@ -30,14 +30,14 @@ const RenderInterface: React.FC<{
   useEffect(() => {
     if (appliedInterfaceObject) {
       map(appliedInterfaceObject!.variables, (varInfo, varKey) => {
-        if (!vars[varKey]) {
+        if (!variables[varKey]) {
           context.data.objects.get(varInfo.model!, {}, (data) => {
-            setVars({ ...vars, [varKey]: data });
+            setVariables({ ...variables, [varKey]: data });
           });
         }
       });
     }
-  }, [appliedInterfaceObject, context.data.objects, vars]);
+  }, [appliedInterfaceObject, context.data.objects, variables]);
 
   // UI
   if (!appliedInterfaceObject) return <context.UI.Loading />;
@@ -48,10 +48,10 @@ const RenderInterface: React.FC<{
           context={context}
           layoutItem={layoutItem}
           layout={appliedInterfaceObject.layout!}
-          vars={vars}
+          variables={variables}
           baseUrl={baseUrl}
           interfaceObject={appliedInterfaceObject}
-          setVars={setVars}
+          setVariables={setVariables}
         />
       ))}
     </>

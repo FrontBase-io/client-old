@@ -11,11 +11,20 @@ const InterfaceGridItem: React.FC<{
   context: AppContext;
   layoutItem: LayoutItemType;
   layout: LayoutItemType[];
-  vars: { [key: string]: any };
+  variables: { [key: string]: any };
   baseUrl: string;
   interfaceObject: InterfaceObjectType;
-  setVars: (vars: { [key: string]: InterfaceobjectVariableType }) => void;
-}> = ({ vars, layoutItem, context, baseUrl, interfaceObject, setVars }) => {
+  setVariables: (variables: {
+    [key: string]: InterfaceobjectVariableType;
+  }) => void;
+}> = ({
+  variables,
+  layoutItem,
+  context,
+  baseUrl,
+  interfaceObject,
+  setVariables,
+}) => {
   // Vars
 
   // Lifecycle
@@ -36,10 +45,10 @@ const InterfaceGridItem: React.FC<{
           context={context}
           layoutItem={childLayoutItem}
           layout={interfaceObject.layout!}
-          vars={vars}
+          variables={variables}
           baseUrl={baseUrl}
           interfaceObject={interfaceObject}
-          setVars={setVars}
+          setVariables={setVariables}
         />
       ))}
     </Grid>

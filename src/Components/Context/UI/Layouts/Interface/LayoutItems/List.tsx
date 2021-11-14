@@ -11,7 +11,7 @@ import {
 import Formula from "frontbase-formulas";
 
 const filterListItems = (
-  vars: { [key: string]: any },
+  variables: { [key: string]: any },
   itemKey: string,
   layoutItem: LayoutItemType
 ) =>
@@ -31,7 +31,7 @@ const filterListItems = (
             );
             await formula.onParsed;
             filterSteps.push({
-              value: await formula.parse(vars),
+              value: await formula.parse(variables),
               key: currFilter,
             });
           } else {
@@ -49,7 +49,7 @@ const filterListItems = (
 
       // Now apply the filters
       const newList: ListItemType[] = [];
-      vars[itemKey]?.map((o: ObjectType) => {
+      variables[itemKey]?.map((o: ObjectType) => {
         let passedFilters = true;
         filterSteps.map((filter) => {
           if (o[filter.key] !== filter.value) {
@@ -63,7 +63,7 @@ const filterListItems = (
       resolve(newList);
     } else {
       resolve(
-        vars[itemKey].map((o: ObjectType) => {
+        variables[itemKey].map((o: ObjectType) => {
           return {
             label: o[layoutItem.args?.labelField],
             key: o._id,
@@ -77,21 +77,21 @@ const InterfaceList: React.FC<{
   context: AppContext;
   layoutItem: LayoutItemType;
   layout: LayoutItemType[];
-  vars: { [key: string]: any };
+  variables: { [key: string]: any };
   baseUrl: string;
   interfaceObject: InterfaceObjectType;
-}> = ({ vars, layoutItem, context, baseUrl, interfaceObject }) => {
+}> = ({ variables, layoutItem, context, baseUrl, interfaceObject }) => {
   // Vars
   const [items, setItems] = useState<ListItemType[]>([]);
 
   // Lifecycle
   useEffect(() => {
-    filterListItems(vars, layoutItem.args?.listItems, layoutItem).then(
+    filterListItems(variables, layoutItem.args?.listItems, layoutItem).then(
       (newItems) => {
         setItems(newItems);
       }
     );
-  }, [layoutItem, vars]);
+  }, [layoutItem, variables]);
 
   // UI
 

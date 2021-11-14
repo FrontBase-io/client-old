@@ -13,22 +13,31 @@ const InterfaceListDetailLayout: React.FC<{
   context: AppContext;
   layoutItem: LayoutItemType;
   layout: LayoutItemType[];
-  vars: { [key: string]: any };
+  variables: { [key: string]: any };
   baseUrl: string;
   interfaceObject: InterfaceObjectType;
-  setVars: (vars: { [key: string]: InterfaceobjectVariableType }) => void;
-}> = ({ vars, layoutItem, context, baseUrl, interfaceObject, setVars }) => {
+  setVariables: (variables: {
+    [key: string]: InterfaceobjectVariableType;
+  }) => void;
+}> = ({
+  variables,
+  layoutItem,
+  context,
+  baseUrl,
+  interfaceObject,
+  setVariables,
+}) => {
   // Vars
   const [items, setItems] = useState<ListItemType[]>();
 
   // Lifecycle
   useEffect(() => {
     setItems(
-      (vars[layoutItem.args?.listItems] || []).map((o: ObjectType) => {
+      (variables[layoutItem.args?.listItems] || []).map((o: ObjectType) => {
         return { label: o[layoutItem.args?.labelField], key: o._id };
       })
     );
-  }, [layoutItem, vars]);
+  }, [layoutItem, variables]);
 
   // UI
   if (!items) return <context.UI.Loading />;
@@ -41,10 +50,10 @@ const InterfaceListDetailLayout: React.FC<{
       baseUrl={baseUrl}
       detailComponentProps={{
         layoutItem,
-        vars,
+        variables,
         baseUrl,
         interfaceObject,
-        setVars,
+        setVariables,
       }}
       title={layoutItem.args?.title}
     />
@@ -58,19 +67,21 @@ const DetailComponent: React.FC<{
   selectedKey: string;
   item: ListItemType;
   layoutItem: LayoutItemType;
-  vars: { [key: string]: any };
+  variables: { [key: string]: any };
   baseUrl: string;
   interfaceObject: InterfaceObjectType;
-  setVars: (vars: { [key: string]: InterfaceobjectVariableType }) => void;
+  setVariables: (variables: {
+    [key: string]: InterfaceobjectVariableType;
+  }) => void;
 }> = ({
   context,
   selectedKey,
   item,
   layoutItem,
-  vars,
+  variables,
   baseUrl,
   interfaceObject,
-  setVars,
+  setVariables,
 }) => {
   return (
     <>
@@ -79,8 +90,8 @@ const DetailComponent: React.FC<{
           context={context}
           layoutItem={childLayoutItem}
           layout={interfaceObject.layout!}
-          vars={{
-            ...vars,
+          variables={{
+            ...variables,
             [`selected${
               layoutItem.args?.listItems.charAt(0).toUpperCase() +
               layoutItem.args?.listItems.slice(1)
@@ -92,7 +103,7 @@ const DetailComponent: React.FC<{
           }}
           baseUrl={baseUrl}
           interfaceObject={interfaceObject}
-          setVars={setVars}
+          setVariables={setVariables}
         />
       ))}
     </>

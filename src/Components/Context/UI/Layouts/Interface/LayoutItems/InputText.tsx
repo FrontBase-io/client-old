@@ -11,11 +11,18 @@ const InterfaceInputText: React.FC<{
   context: AppContext;
   layoutItem: LayoutItemType;
   layout: LayoutItemType[];
-  vars: { [key: string]: any };
+  variables: { [key: string]: any };
   baseUrl: string;
   interfaceObject: InterfaceObjectType;
-  setVars: (vars: { [key: string]: InterfaceobjectVariableType }) => void;
-}> = ({ vars, layoutItem, context, baseUrl, interfaceObject, setVars }) => {
+  setVariables: (vars: { [key: string]: InterfaceobjectVariableType }) => void;
+}> = ({
+  variables,
+  layoutItem,
+  context,
+  baseUrl,
+  interfaceObject,
+  setVariables,
+}) => {
   // Vars
   const [value, setValue] = useState<string>("");
   // Lifecycle
@@ -35,12 +42,12 @@ const InterfaceInputText: React.FC<{
                 context,
                 layoutItem.args?.onEnter,
                 {
-                  ...vars,
+                  ...variables,
                   currentInputValue: value,
                   currentInputKey: layoutItem.key,
                   setCurrentInputValue: setValue,
                 },
-                setVars
+                setVariables
               );
             }
           : undefined
