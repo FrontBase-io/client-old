@@ -30,7 +30,10 @@ const executeInterfaceActions = (
       (o) => o.id === currentEdge.target
     )!;
     while (currentNode.type !== "output") {
-      await executeNode(context, currentNode, variables, setVariables);
+      await executeNode(context, currentNode, variables, setVariables).then(
+        () => {},
+        (reason) => reject(reason)
+      );
       currentEdge = findLast(
         interfaceActions.actions,
         //@ts-ignore
@@ -104,6 +107,23 @@ const executeNode = async (
             Object.keys(node.data.args?.values || {})[0]
           );
 
+          break;
+        case "update_objects":
+          if (node.data.args?.mode === "m") {
+            context.data.objects.updateWhere(
+              (await context.utils.parseObjectFormulas(
+                cloneDeep(node.data.args?.filter)!,
+                variables
+              )) as { [key: string]: any },
+              (await context.utils.parseObjectFormulas(
+                cloneDeep(node.data.args?.fields)!,
+                variables
+              )) as { [key: string]: any }
+            );
+          }
+          if (node.data.args?.mode === "v") {
+            console.log("Todo: variable mode");
+          }
           break;
         default:
           reject(`unknown-type-${node.data.type}`);

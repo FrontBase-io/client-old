@@ -1,4 +1,4 @@
-import { map } from "lodash";
+import { cloneDeep, map } from "lodash";
 import { ListItemType, ModelType } from "../../../Utils/Types";
 //@ts-ignore
 import Formula from "frontbase-formulas";
@@ -84,6 +84,25 @@ const parseFormula = (formulaString: string, data: {}) =>
     resolve(await formula.parse(data));
   });
 
+const parseObjectFormulas = (object: {}, data: {}) =>
+  new Promise(async (resolve, reject) => {
+    const newObject = cloneDeep(object);
+    //@ts-ignore
+    await Object.keys(object).reduce(async (prev, curr) => {
+      await prev;
+
+      if (object[curr]._form) {
+        newObject[curr] = await parseFormula(object[curr]._form, data);
+      }
+      if (object[curr].value?._form) {
+        newObject[curr] = await parseFormula(object[curr].value._form, data);
+      }
+
+      return curr;
+    }, Object.keys(object)[0]);
+    resolve(newObject);
+  });
+
 const utils = {
   listify,
   listifyObject,
@@ -91,5 +110,6 @@ const utils = {
   listifyObjectForSelect,
   modelListToModelObject,
   parseFormula,
+  parseObjectFormulas,
 };
 export default utils;

@@ -193,7 +193,13 @@ const ComponentListPreview: React.FC<{
                     layout={layout || []}
                     setLayout={setLayout}
                     modelList={modelList}
-                    variables={variables}
+                    variables={{
+                      ...variables,
+                      currentListItem: {
+                        label: "Current list item",
+                        type: "object",
+                      },
+                    }}
                     modelListOptions={modelListOptions}
                   />
                 )}

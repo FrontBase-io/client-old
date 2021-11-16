@@ -106,6 +106,25 @@ const update = (_id: string, newObject: { [key: string]: any }) =>
     });
   });
 
+const updateWhere = (
+  filter: { [key: string]: any },
+  newObject: { [key: string]: any }
+) =>
+  new Promise((resolve, reject) => {
+    Socket.emit(
+      "updateObjectsWhere",
+      filter,
+      newObject,
+      (response: ResponseType) => {
+        if (response.success) {
+          resolve(response.result);
+        } else {
+          reject(response.reason);
+        }
+      }
+    );
+  });
+
 // Turn objectId into modelKey
 const turnObjectIdIntoModelKey = (_id: string) =>
   new Promise<string>((resolve, reject) => {
@@ -124,6 +143,7 @@ const objectFunctions = {
   trashMany,
   turnObjectIdIntoModelKey,
   getOnce,
+  updateWhere,
 };
 
 export default objectFunctions;

@@ -71,7 +71,44 @@ const ComponentPreviewInputBoolean: React.FC<{
       >
         <Typography variant="h6">Input settings</Typography>
         <Divider />
-        <div style={{ padding: "5px 0" }}>Test</div>
+        <div style={{ padding: "5px 0" }}>
+          <Grid container>
+            <Grid item xs={12}>
+              On change
+              <br />
+              <ActionDesignerLauncher
+                context={context}
+                value={layoutItem.args?.onChange}
+                onChange={async (onChange) => {
+                  const newLayout = cloneDeep(layout);
+                  modifyRecursive(
+                    newLayout,
+                    layoutItem.key!,
+                    (item) => {
+                      const newItem = item;
+                      newItem!.args = {
+                        ...(item!.args || {}),
+                        onChange,
+                      };
+                      return newItem;
+                    },
+                    ["avatarElement"]
+                  );
+                  setLayout(newLayout);
+                }}
+                variables={{
+                  ...variables,
+
+                  currentInputValue: {
+                    type: "boolean",
+                    label: "Current input: Value",
+                  },
+                }}
+                modelListOptions={modelListOptions}
+              />
+            </Grid>
+          </Grid>
+        </div>
         <Divider />
       </Collapse>
 

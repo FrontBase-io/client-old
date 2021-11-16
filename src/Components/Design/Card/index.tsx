@@ -48,8 +48,8 @@ const Card: React.FC<{
         margin: withoutMargin ? 0 : 10,
         padding: withoutPadding ? 0 : "5px 10px",
         overflow,
-        overflowX: withHorizontalOverflow ? "hidden" : "auto",
-        overflowY: withVerticalOverflow ? "hidden" : "auto",
+        overflowX: withHorizontalOverflow ? "auto" : "hidden",
+        overflowY: withVerticalOverflow ? "auto" : "hidden",
         ...style,
       }}
     >

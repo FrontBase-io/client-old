@@ -158,6 +158,7 @@ const InterfaceActionDesigner: React.FC<{
         <Button
           fullWidth
           onClick={(event) => setAddNodePopoverAnchor(event.currentTarget)}
+          variant="contained"
         >
           Add node
         </Button>
@@ -230,6 +231,33 @@ const InterfaceActionDesigner: React.FC<{
                 secondary="Insert one or more objects into the database."
               />
             </ListItem>
+            <ListItem
+              button
+              onClick={() => {
+                setAddNodePopoverAnchor(null);
+
+                onChange([
+                  ...value,
+                  {
+                    id: uniqid(),
+                    type: "default",
+                    position: { x: 100, y: 250 },
+                    data: {
+                      type: "update_objects",
+                      label: "Update objects",
+                    },
+                  },
+                ]);
+              }}
+            >
+              <ListItemIcon>
+                <context.UI.Design.Icon icon="pen-alt" />
+              </ListItemIcon>
+              <ListItemText
+                primary="Update object(s)"
+                secondary="Update values for one or more objects."
+              />
+            </ListItem>
           </List>
         </Popover>
 
@@ -256,6 +284,23 @@ const InterfaceActionDesigner: React.FC<{
                   />
                 ) : selectedNode.data.type === "assign_values" ? (
                   <AssignValuesSettings
+                    context={context}
+                    args={selectedNode.data.args}
+                    onChange={(newArgs) => {
+                      const newValue = value;
+                      newValue[
+                        //@ts-ignore
+                        findIndex(newValue, (o) => o.id === selectedNode.id)
+                        //@ts-ignore
+                      ].data.args = newArgs;
+
+                      onChange(newValue);
+                    }}
+                    modelListOptions={modelListOptions}
+                    variables={variables}
+                  />
+                ) : selectedNode.data.type === "update_objects" ? (
+                  <UpdateObjectsSettings
                     context={context}
                     args={selectedNode.data.args}
                     onChange={(newArgs) => {
@@ -415,6 +460,87 @@ const AssignValuesSettings: React.FC<{
           })
         }
       />
+    </>
+  );
+};
+
+interface UpdateObjectsArgs {
+  mode?: string;
+  // Custom mode
+  model?: string;
+  filter?: {};
+  fields?: {};
+}
+const UpdateObjectsSettings: React.FC<{
+  args: UpdateObjectsArgs;
+  onChange: (newArgs: UpdateObjectsArgs) => void;
+  context: AppContext;
+  modelListOptions: SelectOptionType[];
+  variables: { [key: string]: InterfaceobjectVariableType };
+}> = ({ args, onChange, context, modelListOptions, variables }) => {
+  // Vars
+
+  // Lifecycle
+
+  // UI
+  return (
+    <>
+      <ToggleButtonGroup
+        value={args?.mode || "v"}
+        exclusive
+        onChange={(_, mode) => onChange({ ...(args || {}), mode })}
+        aria-label="Action mode"
+      >
+        <ToggleButton value="v" aria-label="Variable mode">
+          Variable
+        </ToggleButton>
+        <ToggleButton value="m" aria-label="Manual mode">
+          Manual
+        </ToggleButton>
+      </ToggleButtonGroup>
+      <div>
+        {(args?.mode || "v") === "v" && <>Variable mode</>}
+        {args?.mode === "m" && (
+          <>
+            <context.UI.Inputs.Select
+              label="Model"
+              options={modelListOptions}
+              value={args?.model}
+              onChange={(model) =>
+                onChange({ ...(args || {}), model: model as string })
+              }
+            />
+            {args?.model && (
+              <>
+                <context.UI.Objects.Designer
+                  context={context}
+                  title="Objects to update"
+                  value={args?.filter || {}}
+                  withFormula
+                  withId
+                  onChange={(filter) => onChange({ ...(args || {}), filter })}
+                  model={
+                    find(modelListOptions, (o) => o.object!.key === args.model)!
+                      .object
+                  }
+                />
+                <context.UI.Objects.Designer
+                  context={context}
+                  title="Set values"
+                  value={args?.fields || {}}
+                  mode="create"
+                  withFormula
+                  onChange={(fields) => onChange({ ...(args || {}), fields })}
+                  model={
+                    find(modelListOptions, (o) => o.object!.key === args.model)!
+                      .object
+                  }
+                />
+              </>
+            )}
+          </>
+        )}
+      </div>
     </>
   );
 };

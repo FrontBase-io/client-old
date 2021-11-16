@@ -19,7 +19,11 @@ const filterListItems = (
 ) =>
   new Promise<ListItemType[]>(async (resolve, reject) => {
     if (layoutItem.args?.filter) {
-      const filterSteps: { value: any; key: string }[] = [];
+      const filterSteps: {
+        value: any;
+        key: string;
+        operator: "equals" | "not_equals";
+      }[] = [];
       // First parse the formula so we know what values we expect
       await Object.keys(layoutItem.args?.filter || {}).reduce(
         //@ts-ignore
@@ -34,12 +38,14 @@ const filterListItems = (
             await formula.onParsed;
             filterSteps.push({
               value: await formula.parse(variables),
+              operator: layoutItem.args?.filter[currFilter].operator,
               key: currFilter,
             });
           } else {
             // Normal value
             filterSteps.push({
               value: layoutItem.args?.filter[currFilter].value,
+              operator: layoutItem.args?.filter[currFilter].operator,
               key: currFilter,
             });
           }
@@ -54,7 +60,10 @@ const filterListItems = (
       variables[itemKey]?.map((o: ObjectType) => {
         let passedFilters = true;
         filterSteps.map((filter) => {
-          if (o[filter.key] !== filter.value) {
+          if (
+            (filter.operator === "equals" && o[filter.key] !== filter.value) ||
+            (filter.operator === "not_equals" && o[filter.key] === filter.value)
+          ) {
             passedFilters = false;
           }
         });
@@ -125,7 +134,7 @@ const InterfaceList: React.FC<{
                       context={context}
                       layoutItem={layoutItem.args?.avatarElement}
                       layout={interfaceObject.layout!}
-                      variables={variables}
+                      variables={{ ...variables, currentListItem: item }}
                       baseUrl={baseUrl}
                       interfaceObject={interfaceObject}
                       setVariables={setVariables}

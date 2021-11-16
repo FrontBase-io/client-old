@@ -36,6 +36,22 @@ const InterfaceInputBoolean: React.FC<{
       withoutPropagation
       onChange={(val) => {
         setValue(val);
+        if (layoutItem.args?.onChange) {
+          executeInterfaceActions(
+            context,
+            layoutItem.args?.onChange,
+            {
+              ...variables,
+              currentInputValue: val,
+              currentInputKey: layoutItem.key,
+              setCurrentInputValue: setValue,
+            },
+            setVariables
+          ).then(
+            () => {},
+            (reason) => context.canvas.interact.snackbar(reason, "error")
+          );
+        }
       }}
     />
   );

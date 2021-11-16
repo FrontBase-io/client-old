@@ -335,7 +335,7 @@ export interface InterfaceObjectType extends ObjectType {
 
 export interface InterfaceobjectVariableType {
   label: string;
-  type?: "objects" | "object" | "text" | "number";
+  type?: "objects" | "object" | "text" | "number" | "boolean";
   model?: string;
 }
 
@@ -347,7 +347,7 @@ export interface InterfaceobjectActionType {
 export interface InterfaceActionStepType {
   type: "default" | "input" | "output";
   data: {
-    type: "create_objects" | "assign_values";
+    type: "create_objects" | "assign_values" | "update_objects";
     args?: {
       // Create objects
       mode?: "m" | "v";
@@ -355,6 +355,9 @@ export interface InterfaceActionStepType {
       newObject?: ObjectType;
       // Assign values:
       values?: { [key: string]: any };
+      // Update values
+      filter?: { [key: string]: any };
+      fields?: { [key: string]: any };
     };
   };
 }

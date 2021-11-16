@@ -16,13 +16,14 @@ import Icon from "../../../Design/Icon";
 const ObjectDesigner: React.FC<{
   context: AppContext;
   withFormula?: true;
+  withId?: true;
   model?: ModelType;
   modelKey?: string;
   value: { [key: string]: any };
   onChange: (value: {}) => void;
   mode?: "filter" | "create";
   title?: string;
-}> = ({ model, modelKey, context, value, onChange, title, mode }) => {
+}> = ({ model, modelKey, context, value, onChange, title, mode, withId }) => {
   // Vars
   const [appliedModel, setAppliedModel] = useState<ModelType>();
   const [fieldOptions, setFieldOptions] = useState<SelectOptionType[]>([]);
@@ -64,18 +65,21 @@ const ObjectDesigner: React.FC<{
                 const field = appliedModel.fields[fieldKey];
                 return (
                   <TableRow key={fieldKey}>
-                    <TableCell>{field.label}</TableCell>
+                    <TableCell>{field?.label || "Object ID"}</TableCell>
                     <TableCell>
                       <context.UI.Inputs.Select
                         label="Operator"
                         value={fieldValue.operator}
-                        options={[{ label: "Is equal to", value: "equals" }]}
+                        options={[
+                          { label: "Is equal to", value: "equals" },
+                          { label: "Is not equal to", value: "not_equals" },
+                        ]}
                         onChange={(newValue) =>
                           onChange({
                             ...value,
                             [fieldKey]: {
                               ...fieldValue,
-                              value: { _form: newValue },
+                              operator: newValue,
                             },
                           })
                         }
@@ -84,9 +88,9 @@ const ObjectDesigner: React.FC<{
                     <TableCell>
                       <Grid container>
                         <Grid item xs={11}>
-                          {fieldValue.value._form ? (
+                          {fieldValue.value._form || !field ? (
                             <context.UI.Inputs.Text
-                              label={field.label}
+                              label={field?.label || "Object ID"}
                               value={fieldValue.value._form}
                               onChange={(newValue) =>
                                 onChange({
@@ -101,12 +105,23 @@ const ObjectDesigner: React.FC<{
                           ) : field.type === "text" ? (
                             <context.UI.Inputs.Text
                               label={field.label}
-                              value={fieldValue}
+                              value={fieldValue.value}
+                              onChange={(newValue) =>
+                                onChange({
+                                  ...value,
+                                  [fieldKey]: newValue,
+                                })
+                              }
+                            />
+                          ) : field.type === "boolean" ? (
+                            <context.UI.Inputs.Boolean
+                              label={field.label}
+                              value={fieldValue.value}
                               onChange={(newValue) =>
                                 onChange({
                                   ...value,
                                   [fieldKey]: {
-                                    ...fieldValue,
+                                    ...value[fieldKey],
                                     value: newValue,
                                   },
                                 })
@@ -132,19 +147,21 @@ const ObjectDesigner: React.FC<{
                               <Icon icon="keyboard" />
                             </IconButton>
                           ) : (
-                            <IconButton
-                              onClick={() =>
-                                onChange({
-                                  ...value,
-                                  [fieldKey]: {
-                                    ...fieldValue,
-                                    value: { _form: fieldValue.value },
-                                  },
-                                })
-                              }
-                            >
-                              <Icon icon="vials" />
-                            </IconButton>
+                            field && (
+                              <IconButton
+                                onClick={() =>
+                                  onChange({
+                                    ...value,
+                                    [fieldKey]: {
+                                      ...fieldValue,
+                                      value: { _form: fieldValue.value },
+                                    },
+                                  })
+                                }
+                              >
+                                <Icon icon="vials" />
+                              </IconButton>
+                            )
                           )}
                         </Grid>
                       </Grid>
@@ -172,6 +189,17 @@ const ObjectDesigner: React.FC<{
                             />
                           ) : field.type === "text" ? (
                             <context.UI.Inputs.Text
+                              label={field.label}
+                              value={fieldValue}
+                              onChange={(newValue) =>
+                                onChange({
+                                  ...value,
+                                  [fieldKey]: newValue,
+                                })
+                              }
+                            />
+                          ) : field.type === "boolean" ? (
+                            <context.UI.Inputs.Boolean
                               label={field.label}
                               value={fieldValue}
                               onChange={(newValue) =>
@@ -219,7 +247,10 @@ const ObjectDesigner: React.FC<{
             <TableCell colSpan={3}>
               <context.UI.Inputs.Select
                 label="Add field"
-                options={fieldOptions}
+                options={[
+                  ...fieldOptions,
+                  { label: "Object ID", value: "_id" },
+                ]}
                 onChange={(val) => {
                   onChange({
                     ...value,
