@@ -24,7 +24,7 @@ const InterfaceInputBoolean: React.FC<{
   setVariables,
 }) => {
   // Vars
-  const [value, setValue] = useState<boolean>(false);
+  const [value, setValue] = useState<boolean>(layoutItem.args?.value || false);
   // Lifecycle
 
   // UI
@@ -33,6 +33,7 @@ const InterfaceInputBoolean: React.FC<{
     <context.UI.Inputs.Boolean
       label={layoutItem.args?.label}
       value={value}
+      disabled={layoutItem.args?.disabled}
       withoutPropagation
       onChange={(val) => {
         setValue(val);

@@ -67,12 +67,59 @@ const ComponentPreviewInputBoolean: React.FC<{
         style={{
           border: "1px solid rgba(0,0,0,0.05)",
           borderRadius: 8,
+          minWidth: 250,
         }}
       >
         <Typography variant="h6">Input settings</Typography>
         <Divider />
         <div style={{ padding: "5px 0" }}>
           <Grid container>
+            <Grid item xs={12}>
+              <context.UI.Inputs.Boolean
+                label="Disabled"
+                value={layoutItem.args?.disabled}
+                onChange={async (disabled) => {
+                  const newLayout = cloneDeep(layout);
+                  modifyRecursive(
+                    newLayout,
+                    layoutItem.key!,
+                    (item) => {
+                      const newItem = item;
+                      newItem!.args = {
+                        ...(item!.args || {}),
+                        disabled,
+                      };
+                      return newItem;
+                    },
+                    ["avatarElement"]
+                  );
+                  setLayout(newLayout);
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <context.UI.Inputs.Boolean
+                label="Value"
+                value={layoutItem.args?.value}
+                onChange={async (value) => {
+                  const newLayout = cloneDeep(layout);
+                  modifyRecursive(
+                    newLayout,
+                    layoutItem.key!,
+                    (item) => {
+                      const newItem = item;
+                      newItem!.args = {
+                        ...(item!.args || {}),
+                        value,
+                      };
+                      return newItem;
+                    },
+                    ["avatarElement"]
+                  );
+                  setLayout(newLayout);
+                }}
+              />
+            </Grid>
             <Grid item xs={12}>
               On change
               <br />

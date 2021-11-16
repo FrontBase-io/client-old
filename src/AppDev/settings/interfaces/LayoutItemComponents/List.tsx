@@ -164,7 +164,7 @@ const ComponentListPreview: React.FC<{
       {layoutItem.args?.listItems && (
         <List disablePadding style={{ marginTop: 15 }}>
           <ListItem>
-            <ListItemAvatar>
+            <ListItemAvatar style={{ maxWidth: 120, overflowX: "auto" }}>
               <DropTarget
                 id={layoutItem.key!}
                 layout={layout}

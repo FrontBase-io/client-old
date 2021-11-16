@@ -71,7 +71,7 @@ const InterfaceDetail: React.FC<{
     >
       <context.UI.Design.Animation.Container>
         <Grid container>
-          <Grid item xs={12} md={8} className="scrollIndependently">
+          <Grid item xs={12} md={10} className="scrollIndependently">
             <context.UI.Design.Animation.Item key="left">
               <context.UI.Design.Card>
                 <DropTarget
@@ -106,7 +106,7 @@ const InterfaceDetail: React.FC<{
               </context.UI.Design.Card>
             </context.UI.Design.Animation.Item>
           </Grid>
-          <Grid item xs={12} md={4} className="scrollIndependently">
+          <Grid item xs={12} md={2} className="scrollIndependently">
             {!isEqual(interfaceObject, item.object) && (
               <context.UI.Design.Animation.Item key="save">
                 <Button
