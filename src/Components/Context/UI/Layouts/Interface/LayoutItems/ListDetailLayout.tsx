@@ -1,3 +1,4 @@
+import { find } from "lodash";
 import { useEffect, useState } from "react";
 import InterfaceLayoutItem from ".";
 import { AppContext } from "../../../..";
@@ -34,7 +35,7 @@ const InterfaceListDetailLayout: React.FC<{
   useEffect(() => {
     setItems(
       (variables[layoutItem.args?.listItems] || []).map((o: ObjectType) => {
-        return { label: o[layoutItem.args?.labelField], key: o._id };
+        return { label: o[layoutItem.args?.labelField], key: o._id, object: o };
       })
     );
   }, [layoutItem, variables]);
@@ -65,10 +66,10 @@ export default InterfaceListDetailLayout;
 const DetailComponent: React.FC<{
   context: AppContext;
   selectedKey: string;
-  item: ListItemType;
   layoutItem: LayoutItemType;
   variables: { [key: string]: any };
   baseUrl: string;
+  item: ListItemType;
   interfaceObject: InterfaceObjectType;
   setVariables: (variables: {
     [key: string]: InterfaceobjectVariableType;
@@ -76,13 +77,18 @@ const DetailComponent: React.FC<{
 }> = ({
   context,
   selectedKey,
-  item,
   layoutItem,
   variables,
   baseUrl,
   interfaceObject,
   setVariables,
+  item,
 }) => {
+  // Vars
+
+  // Lifecycle
+  // UI
+  if (!item) return <context.UI.Loading />;
   return (
     <>
       {(layoutItem.items || []).map((childLayoutItem) => (

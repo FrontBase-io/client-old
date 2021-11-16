@@ -38,7 +38,7 @@ const ComponentPreviewCard: React.FC<{
   // UI
   return (
     <context.UI.Design.Card
-      title={layoutItem.args?.label}
+      title={layoutItem.args?.label._form || layoutItem.args?.label}
       withoutMargin={layoutItem.args?.withoutMargin}
       withoutPadding={layoutItem.args?.withoutPadding}
       titleSecondary={
@@ -60,22 +60,67 @@ const ComponentPreviewCard: React.FC<{
         <div style={{ padding: 15 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <context.UI.Inputs.Text
-                label="Label"
-                value={layoutItem.args?.label}
-                onChange={async (label) => {
-                  const newLayout = cloneDeep(layout);
-                  modifyRecursive(newLayout, layoutItem.key!, (item) => {
-                    const newItem = item;
-                    newItem!.args = {
-                      ...(item!.args || {}),
-                      label,
-                    };
-                    return newItem;
-                  });
-                  setLayout(newLayout);
-                }}
-              />
+              <Grid container>
+                <Grid item xs={11}>
+                  {layoutItem.args?.label._form ? (
+                    <context.UI.Inputs.Text
+                      label="Label formula"
+                      value={layoutItem.args?.label._form}
+                      onChange={async (label) => {
+                        const newLayout = cloneDeep(layout);
+                        modifyRecursive(newLayout, layoutItem.key!, (item) => {
+                          const newItem = item;
+                          newItem!.args = {
+                            ...(item!.args || {}),
+                            label: { _form: label },
+                          };
+                          return newItem;
+                        });
+                        setLayout(newLayout);
+                      }}
+                    />
+                  ) : (
+                    <context.UI.Inputs.Text
+                      label="Label"
+                      value={layoutItem.args?.label}
+                      onChange={async (label) => {
+                        const newLayout = cloneDeep(layout);
+                        modifyRecursive(newLayout, layoutItem.key!, (item) => {
+                          const newItem = item;
+                          newItem!.args = {
+                            ...(item!.args || {}),
+                            label,
+                          };
+                          return newItem;
+                        });
+                        setLayout(newLayout);
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item xs={1}>
+                  <IconButton
+                    onClick={async () => {
+                      const newLayout = cloneDeep(layout);
+                      modifyRecursive(newLayout, layoutItem.key!, (item) => {
+                        const newItem = item;
+                        newItem!.args = {
+                          ...(item!.args || {}),
+                          label: layoutItem.args?.label._form
+                            ? layoutItem.args?.label._form || ""
+                            : { _form: layoutItem.args?.label || "" },
+                        };
+                        return newItem;
+                      });
+                      setLayout(newLayout);
+                    }}
+                  >
+                    <context.UI.Design.Icon
+                      icon={layoutItem.args?.label._form ? "font" : "vials"}
+                    />
+                  </IconButton>
+                </Grid>
+              </Grid>
             </Grid>
             <Grid item xs={6}>
               <context.UI.Inputs.Boolean

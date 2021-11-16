@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import InterfaceLayoutItem from ".";
 import { AppContext } from "../../../..";
 import {
@@ -25,14 +26,21 @@ const InterfaceCard: React.FC<{
   setVariables,
 }) => {
   // Vars
-
+  const [label, setLabel] = useState<string>();
   // Lifecycle
+  useEffect(() => {
+    layoutItem.args?.label._form
+      ? context.utils
+          .parseFormula(layoutItem.args?.label._form, variables)
+          .then((result) => setLabel(result))
+      : setLabel(layoutItem.args?.label);
+  }, [variables, context.utils.parseFormula]);
 
   // UI
 
   return (
     <context.UI.Design.Card
-      title={layoutItem.args?.label}
+      title={label}
       withoutMargin={layoutItem.args?.withoutMargin}
       withoutPadding={layoutItem.args?.withoutPadding}
     >

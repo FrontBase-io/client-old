@@ -18,6 +18,8 @@ const Card: React.FC<{
   onExplanation?: () => void;
   ref?: React.Ref<any>;
   titleSecondary?: ReactElement;
+  withHorizontalOverflow?: true;
+  withVerticalOverflow?: true;
 }> = ({
   children,
   style,
@@ -32,6 +34,8 @@ const Card: React.FC<{
   overflow,
   onExplanation,
   titleSecondary,
+  withHorizontalOverflow,
+  withVerticalOverflow,
 }) => {
   return (
     <div
@@ -44,6 +48,8 @@ const Card: React.FC<{
         margin: withoutMargin ? 0 : 10,
         padding: withoutPadding ? 0 : "5px 10px",
         overflow,
+        overflowX: withHorizontalOverflow ? "hidden" : "auto",
+        overflowY: withVerticalOverflow ? "hidden" : "auto",
         ...style,
       }}
     >

@@ -6268,10 +6268,10 @@ from2@^2.1.0:
     inherits "^2.0.1"
     readable-stream "^2.0.0"
 
-frontbase-formulas@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/frontbase-formulas/-/frontbase-formulas-0.0.5.tgz#b1aaa48b288457acd20b9dbea16048d51aa553fb"
-  integrity sha512-ut5ELU2jGG5NsfVrWkMmc/3xO15tTx3LShe/G+OhhN440J+Hu61cEerj/7uBwL1RbLUVvQumBAFOwuHzY+HidA==
+frontbase-formulas@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/frontbase-formulas/-/frontbase-formulas-0.0.7.tgz#1f33499e6838dc9660a8aaf3b01b113da2468fbd"
+  integrity sha512-pu7STORp6HjwUSvP35hvdT62Mg8fDywCk1tMwDY8o+wu6b7sdyGIbBGx0UIzd7wmhsVNO3d8C6WUn6hEn+KKlQ==
   dependencies:
     date-fns "^2.25.0"
     lodash "^4.17.20"

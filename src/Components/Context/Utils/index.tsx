@@ -1,5 +1,7 @@
 import { map } from "lodash";
 import { ListItemType, ModelType } from "../../../Utils/Types";
+//@ts-ignore
+import Formula from "frontbase-formulas";
 
 const listify = (
   list: { [key: string]: any }[],
@@ -75,11 +77,19 @@ const modelListToModelObject = (list: ModelType[]) => {
   return newObject;
 };
 
+const parseFormula = (formulaString: string, data: {}) =>
+  new Promise<string>(async (resolve, reject) => {
+    const formula = new Formula(formulaString);
+    await formula.onParsed;
+    resolve(await formula.parse(data));
+  });
+
 const utils = {
   listify,
   listifyObject,
   listifyForSelect,
   listifyObjectForSelect,
   modelListToModelObject,
+  parseFormula,
 };
 export default utils;
