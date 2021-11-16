@@ -5,11 +5,14 @@ import {
   IconButton,
   List,
   ListItem,
+  ListItemAvatar,
+  ListItemSecondaryAction,
   ListItemText,
   Tooltip,
 } from "@mui/material";
 import { cloneDeep, find, map } from "lodash";
 import { useEffect, useState } from "react";
+import LayoutItemComponent from ".";
 import { AppContext } from "../../../../Components/Context";
 import { modifyRecursive } from "../../../../Utils/Functions";
 import {
@@ -18,6 +21,7 @@ import {
   ModelType,
   SelectOptionType,
 } from "../../../../Utils/Types";
+import DropTarget from "../DropTarget";
 
 const ComponentListPreview: React.FC<{
   context: AppContext;
@@ -26,7 +30,16 @@ const ComponentListPreview: React.FC<{
   setLayout: (layout: LayoutItemType[]) => void;
   variables: { [key: string]: InterfaceobjectVariableType };
   modelList: ModelType[];
-}> = ({ context, layoutItem, layout, setLayout, variables, modelList }) => {
+  modelListOptions: SelectOptionType[];
+}> = ({
+  context,
+  layoutItem,
+  layout,
+  setLayout,
+  variables,
+  modelList,
+  modelListOptions,
+}) => {
   // Vars
   const [variableList, setVariableList] = useState<SelectOptionType[]>([]);
   const [fieldList, setFieldList] = useState<SelectOptionType[]>([]);
@@ -103,6 +116,23 @@ const ComponentListPreview: React.FC<{
               setLayout(newLayout);
             }}
           />
+          <context.UI.Inputs.Select
+            label="Secondary field"
+            options={fieldList}
+            value={layoutItem.args?.secondaryField}
+            onChange={async (secondaryField) => {
+              const newLayout = cloneDeep(layout);
+              modifyRecursive(newLayout, layoutItem.key!, (item) => {
+                const newItem = item;
+                newItem!.args = {
+                  ...(item!.args || {}),
+                  secondaryField,
+                };
+                return newItem;
+              });
+              setLayout(newLayout);
+            }}
+          />
           {layoutItem.args?.listItems && (
             <context.UI.Objects.Designer
               context={context}
@@ -133,23 +163,54 @@ const ComponentListPreview: React.FC<{
       </Collapse>
       {layoutItem.args?.listItems && (
         <List disablePadding style={{ marginTop: 15 }}>
-          <ListItem button>
+          <ListItem>
+            <ListItemAvatar>
+              <DropTarget
+                id={layoutItem.key!}
+                layout={layout}
+                setLayout={setLayout}
+                mini
+                single
+                onDrop={(avatarElement) => {
+                  const newLayout = cloneDeep(layout);
+                  modifyRecursive(newLayout, layoutItem.key!, (item) => {
+                    const newItem = item;
+                    newItem!.args = {
+                      ...(item!.args || {}),
+                      avatarElement,
+                    };
+                    return newItem;
+                  });
+                  setLayout(newLayout);
+                }}
+                accepts={["InputBoolean"]}
+              >
+                {layoutItem.args?.avatarElement && (
+                  <LayoutItemComponent
+                    layoutItem={layoutItem.args?.avatarElement}
+                    context={context}
+                    key={`layoutItem-avatar`}
+                    layout={layout || []}
+                    setLayout={setLayout}
+                    modelList={modelList}
+                    variables={variables}
+                    modelListOptions={modelListOptions}
+                  />
+                )}
+              </DropTarget>
+            </ListItemAvatar>
             <ListItemText>
               {variables[layoutItem.args?.listItems].label}{" "}
-              {layoutItem.args?.labelField || "item"} #1
+              {layoutItem.args?.labelField || "item"}
             </ListItemText>
-          </ListItem>
-          <ListItem button>
-            <ListItemText>
-              {variables[layoutItem.args?.listItems].label}{" "}
-              {layoutItem.args?.labelField || "item"} #2
-            </ListItemText>
-          </ListItem>
-          <ListItem button>
-            <ListItemText>
-              {variables[layoutItem.args?.listItems].label}{" "}
-              {layoutItem.args?.labelField || "item"} #3
-            </ListItemText>
+            <ListItemSecondaryAction>
+              <DropTarget
+                id={layoutItem.key!}
+                layout={layout}
+                setLayout={setLayout}
+                mini
+              ></DropTarget>
+            </ListItemSecondaryAction>
           </ListItem>
         </List>
       )}

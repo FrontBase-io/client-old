@@ -7,6 +7,7 @@ import { useDrop } from "react-dnd";
 import uniqid from "uniqid";
 import { cloneDeep } from "lodash";
 import { modifyRecursive } from "../../../Utils/Functions";
+import Icon from "../../../Components/Design/Icon";
 
 const Target: FC<{
   id: string;
@@ -14,7 +15,20 @@ const Target: FC<{
   setLayout: (layout: LayoutItemType[]) => void;
   dropHint?: string;
   accepts?: string[];
-}> = ({ children, id, layout, setLayout, dropHint, accepts }) => {
+  mini?: true;
+  single?: true;
+  onDrop?: (dropped: any) => void;
+}> = ({
+  children,
+  id,
+  layout,
+  setLayout,
+  dropHint,
+  accepts,
+  mini,
+  single,
+  onDrop,
+}) => {
   const [{ isOverCurrent }, drop] = useDrop(
     () => ({
       accept: "component",
@@ -32,19 +46,29 @@ const Target: FC<{
             ...monitor.getItem().layoutItem,
             key: uniqid(),
           };
-
-          if (id === "root") {
-            setLayout([...(layout || []), newLayoutItem]);
+          if (onDrop) {
+            onDrop(newLayoutItem);
           } else {
-            const newLayout = cloneDeep(layout);
-            modifyRecursive(newLayout, id, (item) => {
-              const newItems = item!.items || [];
-              newItems.push(newLayoutItem);
-              item!.items = newItems;
-              return item;
-            });
-            setLayout(newLayout);
+            if (id === "root") {
+              setLayout([...(layout || []), newLayoutItem]);
+            } else {
+              const newLayout = cloneDeep(layout);
+              modifyRecursive(newLayout, id, (item) => {
+                const newItems = item!.items || [];
+                newItems.push(newLayoutItem);
+                item!.items = newItems;
+                return item;
+              });
+              setLayout(newLayout);
+            }
           }
+        } else {
+          console.log(
+            `This zone doesn't accept ${
+              //@ts-ignore
+              monitor?.getItem().layoutItem.type
+            }. Only ${accepts.join(", ")} accepted.`
+          );
         }
       },
       collect: (monitor) => ({
@@ -57,15 +81,22 @@ const Target: FC<{
 
   return (
     <>
-      {" "}
       {children}
-      <div
-        ref={drop}
-        role={id}
-        className={`${styles.dropTarget} ${isOverCurrent && styles.hovered}`}
-      >
-        {isOverCurrent ? "Drop here" : dropHint || "Drop components here"}
-      </div>
+      {(!single || children === undefined) && (
+        <div
+          ref={drop}
+          role={id}
+          className={`${styles.dropTarget} ${isOverCurrent && styles.hovered}`}
+        >
+          {mini ? (
+            <Icon icon="people-carry" size={16} />
+          ) : isOverCurrent ? (
+            "Drop here"
+          ) : (
+            dropHint || "Drop components here"
+          )}
+        </div>
+      )}
     </>
   );
 };

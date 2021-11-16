@@ -130,6 +130,13 @@ const InterfaceComponents: React.FC<{
             label="Text"
           />
         </Animation.Item>
+        <Animation.Item key="component-InputBoolean">
+          <DragItem
+            layoutItem={{ label: "Checkbox", type: "InputBoolean" }}
+            icon="check-square"
+            label="Checkbox"
+          />
+        </Animation.Item>
       </Animation.Container>
     </List>
   );

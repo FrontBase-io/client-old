@@ -1,14 +1,16 @@
-import { List, ListItem, ListItemText } from "@mui/material";
+import { List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
 import { useEffect, useState } from "react";
 import { AppContext } from "../../../..";
 import {
   InterfaceObjectType,
+  InterfaceobjectVariableType,
   LayoutItemType,
   ListItemType,
   ObjectType,
 } from "../../../../../../Utils/Types";
 //@ts-ignore
 import Formula from "frontbase-formulas";
+import InterfaceLayoutItem from ".";
 
 const filterListItems = (
   variables: { [key: string]: any },
@@ -58,7 +60,11 @@ const filterListItems = (
         });
 
         if (passedFilters)
-          newList.push({ label: o[layoutItem.args?.labelField], key: o._id });
+          newList.push({
+            label: o[layoutItem.args?.labelField],
+            key: o._id,
+            object: o,
+          });
       });
       resolve(newList);
     } else {
@@ -67,6 +73,7 @@ const filterListItems = (
           return {
             label: o[layoutItem.args?.labelField],
             key: o._id,
+            object: o,
           };
         })
       );
@@ -80,7 +87,17 @@ const InterfaceList: React.FC<{
   variables: { [key: string]: any };
   baseUrl: string;
   interfaceObject: InterfaceObjectType;
-}> = ({ variables, layoutItem, context, baseUrl, interfaceObject }) => {
+  setVariables: (variables: {
+    [key: string]: InterfaceobjectVariableType;
+  }) => void;
+}> = ({
+  variables,
+  layoutItem,
+  context,
+  baseUrl,
+  interfaceObject,
+  setVariables,
+}) => {
   // Vars
   const [items, setItems] = useState<ListItemType[]>([]);
 
@@ -102,7 +119,23 @@ const InterfaceList: React.FC<{
           return (
             <context.UI.Design.Animation.Item key={item.key}>
               <ListItem button>
-                <ListItemText>{item.label}</ListItemText>
+                {layoutItem.args?.avatarElement && (
+                  <ListItemAvatar>
+                    <InterfaceLayoutItem
+                      context={context}
+                      layoutItem={layoutItem.args?.avatarElement}
+                      layout={interfaceObject.layout!}
+                      variables={variables}
+                      baseUrl={baseUrl}
+                      interfaceObject={interfaceObject}
+                      setVariables={setVariables}
+                    />
+                  </ListItemAvatar>
+                )}
+                <ListItemText
+                  primary={item.label}
+                  secondary={item.object[layoutItem.args?.secondaryField]}
+                />
               </ListItem>
             </context.UI.Design.Animation.Item>
           );

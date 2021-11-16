@@ -11,7 +11,16 @@ const BooleanInput: React.FC<{
   disabled?: true | boolean;
   fullWidth?: true;
   explanation?: string;
-}> = ({ label, value, onChange, disabled, fullWidth, explanation }) => {
+  withoutPropagation?: true;
+}> = ({
+  label,
+  value,
+  onChange,
+  disabled,
+  fullWidth,
+  explanation,
+  withoutPropagation,
+}) => {
   // Vars
 
   // Lifecycle
@@ -22,9 +31,10 @@ const BooleanInput: React.FC<{
       control={
         <Checkbox
           checked={value || false}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            onChange && onChange(event.target.checked)
-          }
+          onMouseDown={(event) => withoutPropagation && event.stopPropagation()}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            onChange && onChange(event.target.checked);
+          }}
           disabled={disabled}
           color="primary"
         />

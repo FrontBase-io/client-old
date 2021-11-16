@@ -9,6 +9,7 @@ import FourOhFour from "../../../../../FourOhFour";
 import InterfaceCard from "./Card";
 import InterfaceGridContainer from "./GridContainer";
 import InterfaceGridItem from "./GridItem";
+import InterfaceInputBoolean from "./InputBoolean";
 import InterfaceInputText from "./InputText";
 import InterfaceList from "./List";
 import InterfaceListDetailLayout from "./ListDetailLayout";
@@ -34,6 +35,7 @@ const Components: {
   GridItem: InterfaceGridItem,
   Card: InterfaceCard,
   InputText: InterfaceInputText,
+  InputBoolean: InterfaceInputBoolean,
 };
 
 const InterfaceLayoutItem: React.FC<{

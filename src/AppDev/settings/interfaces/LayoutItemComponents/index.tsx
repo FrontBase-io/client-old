@@ -10,6 +10,7 @@ import {
 import ComponentPreviewCard from "./Card";
 import ComponentPreviewGridContainer from "./GridContainer";
 import ComponentPreviewGridItem from "./GridItem";
+import ComponentPreviewInputBoolean from "./InputBoolean";
 import ComponentPreviewInputText from "./InputText";
 import ComponentListPreview from "./List";
 import ComponentPreviewListDetailLayout from "./ListDetailLayout";
@@ -32,6 +33,7 @@ const Components: {
   GridContainer: ComponentPreviewGridContainer,
   GridItem: ComponentPreviewGridItem,
   InputText: ComponentPreviewInputText,
+  InputBoolean: ComponentPreviewInputBoolean,
   Card: ComponentPreviewCard,
 };
 
