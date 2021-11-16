@@ -6268,10 +6268,10 @@ from2@^2.1.0:
     inherits "^2.0.1"
     readable-stream "^2.0.0"
 
-frontbase-formulas@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/frontbase-formulas/-/frontbase-formulas-0.0.4.tgz#26b59e2a18c6b7e723f3b2ca65d5f54be177bb81"
-  integrity sha512-w/hpHSKGxCMt8DW7Vt+TlPGtukENyzjMO804QYL4H4plHUVCkMPB/BHD7W3QowbozgNEWINQ3qZFl3FhABPbLQ==
+frontbase-formulas@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/frontbase-formulas/-/frontbase-formulas-0.0.5.tgz#b1aaa48b288457acd20b9dbea16048d51aa553fb"
+  integrity sha512-ut5ELU2jGG5NsfVrWkMmc/3xO15tTx3LShe/G+OhhN440J+Hu61cEerj/7uBwL1RbLUVvQumBAFOwuHzY+HidA==
   dependencies:
     date-fns "^2.25.0"
     lodash "^4.17.20"
@@ -12804,7 +12804,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^4.1.2:
+typescript@^4.4.4:
   version "4.4.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.4.4.tgz#2cd01a1a1f160704d3101fd5a58ff0f9fcb8030c"
   integrity sha512-DqGhF5IKoBl8WNf8C1gu8q0xZSInh9j1kJJMqT3a94w1JzVaBU4EXOSMrz9yDqMT0xt3selp83fuFMQ0uzv6qA==

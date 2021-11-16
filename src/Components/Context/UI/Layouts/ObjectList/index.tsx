@@ -74,7 +74,7 @@ const ObjectList: React.FC<{
   return (
     <context.UI.Design.Animation.Animate>
       <context.UI.Design.Card withoutPadding>
-        {(selectedItems || []).length < 2 ? (
+        {(selectedItems || []).length < 1 ? (
           <div style={{ padding: "15px 15px 0 15px", boxSizing: "border-box" }}>
             {selectedList && model.lists[selectedList].actions && (
               <>

@@ -98,13 +98,15 @@ const InterfaceList: React.FC<{
   return (
     <context.UI.Design.Animation.Container>
       <List disablePadding>
-        {items.map((item) => (
-          <context.UI.Design.Animation.Item key={item.key}>
-            <ListItem button>
-              <ListItemText>{item.label}</ListItemText>
-            </ListItem>
-          </context.UI.Design.Animation.Item>
-        ))}
+        {items.map((item) => {
+          return (
+            <context.UI.Design.Animation.Item key={item.key}>
+              <ListItem button>
+                <ListItemText>{item.label}</ListItemText>
+              </ListItem>
+            </context.UI.Design.Animation.Item>
+          );
+        })}
       </List>
     </context.UI.Design.Animation.Container>
   );

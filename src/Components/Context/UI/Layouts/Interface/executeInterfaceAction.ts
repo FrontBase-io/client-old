@@ -1,4 +1,4 @@
-import { findLast, map, reject } from "lodash";
+import { cloneDeep, findLast, map, reject } from "lodash";
 import { AppContext } from "../../..";
 import {
   InterfaceActionStepType,
@@ -61,7 +61,7 @@ const executeNode = async (
           // Create an object
           if (node.data.args?.mode === "m") {
             // First resolve all the formulas
-            const newObject = node.data.args?.newObject!;
+            const newObject = cloneDeep(node.data.args?.newObject!);
 
             //@ts-ignore
             await Object.keys(newObject).reduce(async (prev, curr) => {
