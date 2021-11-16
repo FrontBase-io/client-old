@@ -48,7 +48,7 @@ const ObjectDesigner: React.FC<{
   // UI
   if (!appliedModel) return <context.UI.Loading />;
   return (
-    <context.UI.Design.Card title={title}>
+    <context.UI.Design.Card title={title} withHorizontalOverflow>
       <Table>
         {(!mode || mode === "filter") && (
           <TableHead>

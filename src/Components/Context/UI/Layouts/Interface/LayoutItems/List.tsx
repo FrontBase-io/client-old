@@ -78,7 +78,7 @@ const filterListItems = (
       resolve(newList);
     } else {
       resolve(
-        variables[itemKey].map((o: ObjectType) => {
+        (variables[itemKey] || []).map((o: ObjectType) => {
           return {
             label: o[layoutItem.args?.labelField],
             key: o._id,

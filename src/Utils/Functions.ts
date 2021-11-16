@@ -14,22 +14,23 @@ export const modifyRecursive = (
         const result = array;
 
         // Search for 'extra' 'keys (in case not everything is included in itmes)
-        //@ts-ignore
-        await (extraKeysToSearchFor || []).reduce(async (prev, extraKey) => {
-          await prev;
+        if (extraKeysToSearchFor) {
+          //@ts-ignore
+          await (extraKeysToSearchFor || []).reduce(async (prev, extraKey) => {
+            await prev;
 
-          if (Object.keys(item.args).includes(extraKey)) {
-            result[extraKey] = await modifyRecursive(
-              [item.args[extraKey]],
-              key,
-              modifyItem,
-              extraKeysToSearchFor
-            );
-          }
+            if (Object.keys(item.args).includes(extraKey)) {
+              result[extraKey] = await modifyRecursive(
+                [item.args[extraKey]],
+                key,
+                modifyItem,
+                extraKeysToSearchFor
+              );
+            }
 
-          return extraKey;
-        }, (extraKeysToSearchFor || [])[0]);
-
+            return extraKey;
+          }, (extraKeysToSearchFor || [])[0]);
+        }
         //@ts-ignore
         result.items = await modifyRecursive(
           item.items,

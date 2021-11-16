@@ -41,6 +41,7 @@ const ComponentPreviewCard: React.FC<{
       title={layoutItem.args?.label._form || layoutItem.args?.label}
       withoutMargin={layoutItem.args?.withoutMargin}
       withoutPadding={layoutItem.args?.withoutPadding}
+      withHorizontalOverflow
       titleSecondary={
         <Tooltip
           placement="bottom"
