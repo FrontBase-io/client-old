@@ -1,9 +1,9 @@
 import { ListDetailType } from "../../../Utils/Types";
-import SettingsLinkHandler from "./link-handlers";
+import SettingsApiKeys from "./api-keys";
 
 const SettingsDetail: React.FC<ListDetailType> = ({ context, item }) => {
-  return item.key === "link-handlers" ? (
-    <SettingsLinkHandler context={context} item={item} />
+  return item.key === "api-keys" ? (
+    <SettingsApiKeys context={context} item={item} />
   ) : (
     <>Unknown page</>
   );

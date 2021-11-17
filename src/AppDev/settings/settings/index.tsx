@@ -13,9 +13,7 @@ const PageSettings: React.FC<{ context: AppContext }> = ({ context }) => {
       context={context}
       baseUrl="/settings/settings"
       title="Settings"
-      items={[
-        { label: "Link handlers", key: "link-handlers", icon: "hands-helping" },
-      ]}
+      items={[{ label: "API Keys", key: "api-keys", icon: "table" }]}
       detailComponent={SettingsDetail}
       navWidth={2}
       withoutPadding
