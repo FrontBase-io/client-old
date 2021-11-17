@@ -41,6 +41,7 @@ const InterfaceObjectLayout: React.FC<{
 }> = ({ variables, layoutItem, context, baseUrl, interfaceObject }) => {
   // Vars
   const [defaults, setDefaults] = useState<{} | undefined | null>();
+  const [objectId, setObjectId] = useState<string | null>();
 
   // Lifecycle
   useEffect(() => {
@@ -51,10 +52,19 @@ const InterfaceObjectLayout: React.FC<{
     } else {
       setDefaults(null);
     }
+
+    if (layoutItem.args?.objectId) {
+      context.utils
+        .parseFormula(layoutItem.args?.objectId, variables)
+        .then((parsedFormula) => setObjectId(parsedFormula));
+    } else {
+      setObjectId(null);
+    }
   }, [layoutItem, variables]);
 
   // UI
-  if (defaults === undefined) return <context.UI.Loading />;
+  if (defaults === undefined || objectId === undefined)
+    return <context.UI.Loading />;
   return (
     <context.UI.Layouts.ObjectDetail
       context={context}
@@ -62,6 +72,7 @@ const InterfaceObjectLayout: React.FC<{
       layoutKey={layoutItem.args?.layouts || ["default"]}
       style={{ height: "auto" }}
       defaults={defaults || {}}
+      objectId={objectId!}
     />
   );
 };

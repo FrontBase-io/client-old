@@ -97,26 +97,47 @@ const ComponentPreviewObjectLayout: React.FC<{
                   setLayout(newLayout);
                 }}
               />
-              <context.UI.Objects.Designer
-                title="Add defaults"
-                context={context}
-                mode="create"
-                model={find(modelList, (o) => o.key === layoutItem.args?.model)}
-                withFormula
-                value={layoutItem.args?.defaults || {}}
-                onChange={(defaults) => {
+              <context.UI.Inputs.Text
+                label="Object ID"
+                value={layoutItem.args?.objectId || []}
+                onChange={(objectId) => {
                   const newLayout = cloneDeep(layout);
                   modifyRecursive(newLayout, layoutItem.key!, (item) => {
                     const newItem = item;
                     newItem!.args = {
                       ...(item!.args || {}),
-                      defaults,
+                      objectId,
                     };
                     return newItem;
                   });
                   setLayout(newLayout);
                 }}
               />
+              {!layoutItem.args?.objectId && (
+                <context.UI.Objects.Designer
+                  title="New object defaults"
+                  context={context}
+                  mode="create"
+                  model={find(
+                    modelList,
+                    (o) => o.key === layoutItem.args?.model
+                  )}
+                  withFormula
+                  value={layoutItem.args?.defaults || {}}
+                  onChange={(defaults) => {
+                    const newLayout = cloneDeep(layout);
+                    modifyRecursive(newLayout, layoutItem.key!, (item) => {
+                      const newItem = item;
+                      newItem!.args = {
+                        ...(item!.args || {}),
+                        defaults,
+                      };
+                      return newItem;
+                    });
+                    setLayout(newLayout);
+                  }}
+                />
+              )}
             </>
           )}
         </div>

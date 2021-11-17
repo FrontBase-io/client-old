@@ -107,7 +107,7 @@ const DetailComponent: React.FC<{
               layoutItem.args?.listItems.slice(1)
             }Key`]: selectedKey,
           }}
-          baseUrl={baseUrl}
+          baseUrl={`${baseUrl}/${selectedKey}`}
           interfaceObject={interfaceObject}
           setVariables={setVariables}
         />
