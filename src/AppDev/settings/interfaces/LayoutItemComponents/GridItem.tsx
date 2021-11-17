@@ -1,4 +1,4 @@
-import { Collapse, Divider, Grid, IconButton, Tooltip } from "@mui/material";
+import { Grid, IconButton, Popover, Tooltip } from "@mui/material";
 import { cloneDeep } from "lodash";
 import { useState } from "react";
 import { AppContext } from "../../../../Components/Context";
@@ -30,40 +30,29 @@ const ComponentPreviewGridItem: React.FC<{
   modelListOptions,
 }) => {
   // Vars
-  const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
+  const [settingsAnchor, setSettingsAnchor] =
+    useState<HTMLButtonElement | null>();
 
   // Lifecycle
 
   // UI
   return (
-    <Grid
-      item
-      xs={layoutItem.args?.xs}
-      sm={layoutItem.args?.sm}
-      md={layoutItem.args?.md}
-      lg={layoutItem.args?.lg}
-      xl={layoutItem.args?.xl}
-    >
-      <span style={{ float: "right" }}>
-        <Tooltip
-          placement="bottom"
-          title={
-            settingsOpen
-              ? "Close grid item settings"
-              : "Edit grid item settings"
-          }
-        >
-          <IconButton onClick={() => setSettingsOpen(!settingsOpen)}>
-            <context.UI.Design.Icon
-              icon={settingsOpen ? "times-circle" : "wrench"}
-              size={15}
-            />
-          </IconButton>
-        </Tooltip>
-      </span>
-      <Collapse in={settingsOpen} style={{ paddingBottom: 15 }}>
-        <Divider />
-        <Grid container spacing={1}>
+    <>
+      <Popover
+        id="settings-popover"
+        open={Boolean(settingsAnchor)}
+        anchorEl={settingsAnchor}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+        onClose={() => setSettingsAnchor(null)}
+      >
+        <Grid container spacing={1} style={{ padding: 10 }}>
           <Grid item xs={4}>
             <context.UI.Inputs.Number
               label="Extra Small"
@@ -155,28 +144,54 @@ const ComponentPreviewGridItem: React.FC<{
             />
           </Grid>
         </Grid>
-      </Collapse>
-
-      <DropTarget
-        id={layoutItem.key!}
-        layout={layout}
-        setLayout={setLayout}
-        dropHint={layoutItem.items ? "More Grid Content" : "Grid Content"}
+      </Popover>
+      <Grid
+        item
+        xs={layoutItem.args?.xs}
+        sm={layoutItem.args?.sm}
+        md={layoutItem.args?.md}
+        lg={layoutItem.args?.lg}
+        xl={layoutItem.args?.xl}
       >
-        {(layoutItem.items || []).map((subLayoutItem, layoutItemIndex) => (
-          <LayoutItemComponent
-            layoutItem={subLayoutItem}
-            context={context}
-            key={`layoutItem-${layoutItemIndex}`}
-            layout={layout || []}
-            setLayout={setLayout}
-            modelList={modelList}
-            variables={variables}
-            modelListOptions={modelListOptions}
-          />
-        ))}
-      </DropTarget>
-    </Grid>
+        <span style={{ float: "right" }}>
+          <Tooltip
+            placement="bottom"
+            title={
+              Boolean(settingsAnchor)
+                ? "Close grid item settings"
+                : "Edit grid item settings"
+            }
+          >
+            <IconButton onClick={(e) => setSettingsAnchor(e.currentTarget)}>
+              <context.UI.Design.Icon
+                icon={Boolean(settingsAnchor) ? "times-circle" : "wrench"}
+                size={18}
+              />
+            </IconButton>
+          </Tooltip>
+        </span>
+
+        <DropTarget
+          id={layoutItem.key!}
+          layout={layout}
+          setLayout={setLayout}
+          dropHint={layoutItem.items ? "More Grid Content" : "Grid Content"}
+        >
+          {(layoutItem.items || []).map((subLayoutItem, layoutItemIndex) => (
+            <LayoutItemComponent
+              layoutItem={subLayoutItem}
+              context={context}
+              key={`layoutItem-${layoutItemIndex}`}
+              layout={layout || []}
+              setLayout={setLayout}
+              modelList={modelList}
+              variables={variables}
+              modelListOptions={modelListOptions}
+            />
+          ))}
+        </DropTarget>
+      </Grid>
+    </>
   );
 };
 

@@ -73,6 +73,7 @@ const Tabs: React.FC<{
           {tabs.map((tab) => (
             <Route
               path={`${baseUrl}/${tab.key}`}
+              key={`${baseUrl}/${tab.key}`}
               render={(args) => (
                 <CallbackComponent
                   tab={tab}

@@ -3,6 +3,7 @@ import {
   Divider,
   Grid,
   IconButton,
+  Popover,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -36,43 +37,29 @@ const ComponentPreviewInputBoolean: React.FC<{
   modelListOptions,
 }) => {
   // Vars
-  const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
+  const [settingsAnchor, setSettingsAnchor] =
+    useState<HTMLButtonElement | null>();
 
   // Lifecycle
 
   // UI
   return (
     <>
-      <span
-        style={{
-          float: "right",
+      <Popover
+        id="settings-popover"
+        open={Boolean(settingsAnchor)}
+        anchorEl={settingsAnchor}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
         }}
-      >
-        <Tooltip
-          placement="bottom"
-          title={
-            settingsOpen ? "Close checkbox settings" : "Edit checkbox settings"
-          }
-        >
-          <IconButton onClick={() => setSettingsOpen(!settingsOpen)}>
-            <context.UI.Design.Icon
-              icon={settingsOpen ? "times-circle" : "wrench"}
-              size={15}
-            />
-          </IconButton>
-        </Tooltip>
-      </span>
-      <Collapse
-        in={settingsOpen}
-        style={{
-          border: "1px solid rgba(0,0,0,0.05)",
-          borderRadius: 8,
-          minWidth: 250,
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
         }}
+        onClose={() => setSettingsAnchor(null)}
       >
-        <Typography variant="h6">Input settings</Typography>
-        <Divider />
-        <div style={{ padding: "5px 0" }}>
+        <div style={{ padding: 10 }}>
           <Grid container>
             <Grid item xs={12}>
               <context.UI.Inputs.Boolean
@@ -156,9 +143,28 @@ const ComponentPreviewInputBoolean: React.FC<{
             </Grid>
           </Grid>
         </div>
-        <Divider />
-      </Collapse>
-
+      </Popover>
+      <span
+        style={{
+          float: "right",
+        }}
+      >
+        <Tooltip
+          placement="bottom"
+          title={
+            Boolean(settingsAnchor)
+              ? "Close layout settings"
+              : "Edit layout settings"
+          }
+        >
+          <IconButton onClick={(e) => setSettingsAnchor(e.currentTarget)}>
+            <context.UI.Design.Icon
+              icon={Boolean(settingsAnchor) ? "times-circle" : "wrench"}
+              size={18}
+            />
+          </IconButton>
+        </Tooltip>
+      </span>
       <context.UI.Inputs.Boolean label={layoutItem.args?.label} disabled />
     </>
   );

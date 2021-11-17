@@ -1,3 +1,4 @@
+import { IconButton, Popover, Tooltip } from "@mui/material";
 import { cloneDeep, find } from "lodash";
 import { useEffect, useState } from "react";
 import { AppContext } from "../../../../Components/Context";
@@ -20,6 +21,9 @@ const ComponentPreviewObjectLayout: React.FC<{
   // Vars
   const [modelOptions, setModelOptions] = useState<SelectOptionType[]>([]);
   const [layoutOptions, setLayoutOptions] = useState<SelectOptionType[]>([]);
+  const [settingsAnchor, setSettingsAnchor] =
+    useState<HTMLButtonElement | null>();
+
   // Lifecycle
   useEffect(() => {
     setModelOptions(
@@ -40,67 +44,106 @@ const ComponentPreviewObjectLayout: React.FC<{
 
   // UI
   return (
-    <context.UI.Design.Card title="Layout">
-      <context.UI.Inputs.Select
-        label="Model"
-        value={layoutItem.args?.model || ""}
-        options={modelOptions}
-        onChange={(model) => {
-          const newLayout = cloneDeep(layout);
-          modifyRecursive(newLayout, layoutItem.key!, (item) => {
-            const newItem = item;
-            newItem!.args = {
-              ...(item!.args || {}),
-              model,
-            };
-            return newItem;
-          });
-          setLayout(newLayout);
+    <>
+      <Popover
+        id="settings-popover"
+        open={Boolean(settingsAnchor)}
+        anchorEl={settingsAnchor}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
         }}
-      />
-      {layoutItem.args?.model && (
-        <>
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+        onClose={() => setSettingsAnchor(null)}
+      >
+        <div style={{ margin: 10 }}>
           <context.UI.Inputs.Select
-            label="Layouts"
-            value={layoutItem.args?.layouts || []}
-            options={layoutOptions}
-            multi
-            onChange={(layouts) => {
+            label="Model"
+            value={layoutItem.args?.model || ""}
+            options={modelOptions}
+            onChange={(model) => {
               const newLayout = cloneDeep(layout);
               modifyRecursive(newLayout, layoutItem.key!, (item) => {
                 const newItem = item;
                 newItem!.args = {
                   ...(item!.args || {}),
-                  layouts,
+                  model,
                 };
                 return newItem;
               });
               setLayout(newLayout);
             }}
           />
-          <context.UI.Objects.Designer
-            title="Add defaults"
-            context={context}
-            mode="create"
-            model={find(modelList, (o) => o.key === layoutItem.args?.model)}
-            withFormula
-            value={layoutItem.args?.defaults || {}}
-            onChange={(defaults) => {
-              const newLayout = cloneDeep(layout);
-              modifyRecursive(newLayout, layoutItem.key!, (item) => {
-                const newItem = item;
-                newItem!.args = {
-                  ...(item!.args || {}),
-                  defaults,
-                };
-                return newItem;
-              });
-              setLayout(newLayout);
-            }}
-          />
-        </>
-      )}
-    </context.UI.Design.Card>
+          {layoutItem.args?.model && (
+            <>
+              <context.UI.Inputs.Select
+                label="Layouts"
+                value={layoutItem.args?.layouts || []}
+                options={layoutOptions}
+                multi
+                onChange={(layouts) => {
+                  const newLayout = cloneDeep(layout);
+                  modifyRecursive(newLayout, layoutItem.key!, (item) => {
+                    const newItem = item;
+                    newItem!.args = {
+                      ...(item!.args || {}),
+                      layouts,
+                    };
+                    return newItem;
+                  });
+                  setLayout(newLayout);
+                }}
+              />
+              <context.UI.Objects.Designer
+                title="Add defaults"
+                context={context}
+                mode="create"
+                model={find(modelList, (o) => o.key === layoutItem.args?.model)}
+                withFormula
+                value={layoutItem.args?.defaults || {}}
+                onChange={(defaults) => {
+                  const newLayout = cloneDeep(layout);
+                  modifyRecursive(newLayout, layoutItem.key!, (item) => {
+                    const newItem = item;
+                    newItem!.args = {
+                      ...(item!.args || {}),
+                      defaults,
+                    };
+                    return newItem;
+                  });
+                  setLayout(newLayout);
+                }}
+              />
+            </>
+          )}
+        </div>
+      </Popover>
+      <context.UI.Design.Card
+        title="Layout"
+        titleSecondary={
+          <Tooltip
+            placement="bottom"
+            title={
+              Boolean(settingsAnchor)
+                ? "Close layout settings"
+                : "Edit layout settings"
+            }
+          >
+            <IconButton onClick={(e) => setSettingsAnchor(e.currentTarget)}>
+              <context.UI.Design.Icon
+                icon={Boolean(settingsAnchor) ? "times-circle" : "wrench"}
+                size={18}
+              />
+            </IconButton>
+          </Tooltip>
+        }
+      >
+        Lay-out
+      </context.UI.Design.Card>
+    </>
   );
 };
 

@@ -8,6 +8,7 @@ import {
   ListItemAvatar,
   ListItemSecondaryAction,
   ListItemText,
+  Popover,
   Tooltip,
 } from "@mui/material";
 import { cloneDeep, find, map } from "lodash";
@@ -43,9 +44,8 @@ const ComponentListPreview: React.FC<{
   // Vars
   const [variableList, setVariableList] = useState<SelectOptionType[]>([]);
   const [fieldList, setFieldList] = useState<SelectOptionType[]>([]);
-  const [settingsOpen, setSettingsOpen] = useState<boolean>(
-    layoutItem.args ? false : true
-  );
+  const [settingsAnchor, setSettingsAnchor] =
+    useState<HTMLButtonElement | null>();
 
   // Lifecycle
   useEffect(() => {
@@ -66,21 +66,20 @@ const ComponentListPreview: React.FC<{
   // UI
   return (
     <>
-      <span style={{ float: "right" }}>
-        <Tooltip
-          placement="bottom"
-          title={settingsOpen ? "Close list settings" : "Edit list settings"}
-        >
-          <IconButton onClick={() => setSettingsOpen(!settingsOpen)}>
-            <context.UI.Design.Icon
-              icon={settingsOpen ? "times-circle" : "wrench"}
-              size={15}
-            />
-          </IconButton>
-        </Tooltip>
-      </span>
-      <Collapse in={settingsOpen}>
-        <Divider />
+      <Popover
+        id="settings-popover"
+        open={Boolean(settingsAnchor)}
+        anchorEl={settingsAnchor}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+        onClose={() => setSettingsAnchor(null)}
+      >
         <div style={{ padding: 15 }}>
           <context.UI.Inputs.Select
             label="List items"
@@ -159,8 +158,25 @@ const ComponentListPreview: React.FC<{
             />
           )}
         </div>
-        <Divider />
-      </Collapse>
+      </Popover>
+      <div style={{ margin: 10, textAlign: "right" }}>
+        <Tooltip
+          placement="bottom"
+          title={
+            Boolean(settingsAnchor)
+              ? "Close layout settings"
+              : "Edit layout settings"
+          }
+        >
+          <IconButton onClick={(e) => setSettingsAnchor(e.currentTarget)}>
+            <context.UI.Design.Icon
+              icon={Boolean(settingsAnchor) ? "times-circle" : "wrench"}
+              size={18}
+            />
+          </IconButton>
+        </Tooltip>
+      </div>
+
       {layoutItem.args?.listItems && (
         <List disablePadding style={{ marginTop: 15 }}>
           <ListItem>

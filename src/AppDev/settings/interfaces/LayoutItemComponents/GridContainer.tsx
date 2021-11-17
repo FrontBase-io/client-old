@@ -1,4 +1,11 @@
-import { Collapse, Divider, Grid, IconButton, Tooltip } from "@mui/material";
+import {
+  Collapse,
+  Divider,
+  Grid,
+  IconButton,
+  Popover,
+  Tooltip,
+} from "@mui/material";
 import { cloneDeep } from "lodash";
 import { useState } from "react";
 import { AppContext } from "../../../../Components/Context";
@@ -30,31 +37,29 @@ const ComponentPreviewGridContainer: React.FC<{
   modelListOptions,
 }) => {
   // Vars
-  const [settingsOpen, setSettingsOpen] = useState<boolean>(
-    layoutItem.args ? false : true
-  );
+  const [settingsAnchor, setSettingsAnchor] =
+    useState<HTMLButtonElement | null>();
 
   // Lifecycle
 
   // UI
   return (
     <>
-      <span style={{ float: "right" }}>
-        <Tooltip
-          placement="bottom"
-          title={settingsOpen ? "Close grid settings" : "Edit grid settings"}
-        >
-          <IconButton onClick={() => setSettingsOpen(!settingsOpen)}>
-            <context.UI.Design.Icon
-              icon={settingsOpen ? "times-circle" : "wrench"}
-              size={15}
-            />
-          </IconButton>
-        </Tooltip>
-      </span>
-      <Collapse in={settingsOpen} style={{ paddingBottom: 15 }}>
-        <Divider />
-        <Grid container spacing={3}>
+      <Popover
+        id="settings-popover"
+        open={Boolean(settingsAnchor)}
+        anchorEl={settingsAnchor}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+        onClose={() => setSettingsAnchor(null)}
+      >
+        <Grid container style={{ padding: 10 }} spacing={2}>
           <Grid item xs={6}>
             <context.UI.Inputs.Select
               label="Direction"
@@ -149,7 +154,25 @@ const ComponentPreviewGridContainer: React.FC<{
             />
           </Grid>
         </Grid>
-      </Collapse>
+      </Popover>
+      <span style={{ float: "right" }}>
+        <Tooltip
+          placement="bottom"
+          title={
+            Boolean(settingsAnchor)
+              ? "Close grid settings"
+              : "Edit grid settings"
+          }
+        >
+          <IconButton onClick={(e) => setSettingsAnchor(e.currentTarget)}>
+            <context.UI.Design.Icon
+              icon={Boolean(settingsAnchor) ? "times-circle" : "wrench"}
+              size={18}
+            />
+          </IconButton>
+        </Tooltip>
+      </span>
+
       <Grid
         container
         direction={layoutItem.args?.direction || "row"}
