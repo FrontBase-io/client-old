@@ -180,9 +180,9 @@ const AppLayout: React.FC<{
             initial="hidden"
             animate="visible"
             exit={{ opacity: 0, left: -200 }}
-            key="PageMenu"
+            key={app._id}
           >
-            <motion.div variants={item}>
+            <motion.div variants={item} key="header">
               <Link
                 to={`/${app.key}`}
                 className="no-link"
@@ -212,7 +212,7 @@ const AppLayout: React.FC<{
               {Array.isArray(pageMenu) ? (
                 <>
                   {pageMenu.map((page: AppPageType) => (
-                    <motion.li key={page.key} variants={item}>
+                    <motion.li key={`${app._id}-${page.key}`} variants={item}>
                       <ListItem
                         button
                         onClick={() => history.push(`/${app.key}/${page.key}`)}

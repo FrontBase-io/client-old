@@ -26,13 +26,13 @@ function App() {
   const [colors, setColors] = useGlobal<any>("colors");
   const [theme, setTheme] = useGlobal<any>("theme");
   const setPrimaryColor = (colorString?: string) => {
-    if (!colorString) colorString = "#1b8dd2";
+    if (!colorString) colorString = "#4874a8";
     const color = chroma(colorString);
     setTheme({
       ...theme,
       palette: {
-        ...theme.palette,
-        primary: { ...theme.palette.primary, main: color.hex() },
+        ...(theme?.palette || {}),
+        primary: { ...(theme?.palette.primary || {}), main: color.hex() },
       },
     });
     setColors({ ...colors, primary: color });
@@ -106,6 +106,10 @@ function App() {
       },
     });
   }, [setColors, setTheme, setUser]);
+  // Once per app
+  useEffect(() => {
+    setPrimaryColor(); // Force the header to match night mode
+  }, []);
 
   // UI
   if (mode === "loading") return <FrontBaseLoader />;
