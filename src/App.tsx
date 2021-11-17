@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useGlobal, useState } from "reactn";
 import "./App.css";
 import socket, { serverUrl } from "./Utils/Socket";
@@ -25,26 +25,31 @@ function App() {
   );
   const [colors, setColors] = useGlobal<any>("colors");
   const [theme, setTheme] = useGlobal<any>("theme");
-  const setPrimaryColor = (colorString?: string) => {
-    if (!colorString) colorString = "#4874a8";
-    const color = chroma(colorString);
-    setTheme({
-      ...theme,
-      palette: {
-        ...(theme?.palette || {}),
-        primary: { ...(theme?.palette.primary || {}), main: color.hex() },
-      },
-    });
-    setColors({ ...colors, primary: color });
-    var metaThemeColor = document.querySelector("meta[name=theme-color]")!;
-    metaThemeColor.setAttribute(
-      "content",
-      window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "#222222"
-        : color.hex()
-    );
-  };
+  const setPrimaryColor = useCallback(
+    (colorString?: string) => {
+      if (!colorString) colorString = "#4874a8";
+      const color = chroma(colorString);
+      if (theme) {
+        setTheme({
+          ...theme,
+          palette: {
+            ...theme.palette,
+            primary: { ...theme.palette.primary, main: color.hex() },
+          },
+        });
+      }
+      setColors({ ...colors, primary: color });
+      var metaThemeColor = document.querySelector("meta[name=theme-color]")!;
+      metaThemeColor.setAttribute(
+        "content",
+        window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "#222222"
+          : color.hex()
+      );
+    },
+    [theme]
+  );
   const history = useHistory();
   history.listen(() => {
     //@ts-ignore
@@ -87,32 +92,32 @@ function App() {
     socket.on("mode set to onboard", () => {
       setMode("onboard");
     });
-
-    // Colors
-    setColors({ primary: chroma("#1b8dd2") });
-    setTheme({
-      palette: {
-        primary: { main: "#1b8dd2" },
-        mode:
-          window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light",
-      },
-      props: {
-        MuiTooltip: {
-          arrow: true,
-        },
-      },
-    });
   }, [setColors, setTheme, setUser]);
   // Once per app
   useEffect(() => {
-    setPrimaryColor(); // Force the header to match night mode
-  }, []);
+    if (!theme) {
+      setTheme({
+        palette: {
+          primary: { main: "#1b8dd2" },
+          mode:
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light",
+        },
+        props: {
+          MuiTooltip: {
+            arrow: true,
+          },
+        },
+      });
+
+      setPrimaryColor(); // Force the header to match night mode
+    }
+  }, [theme]);
 
   // UI
-  if (mode === "loading") return <FrontBaseLoader />;
+  if (mode === "loading" || !theme) return <FrontBaseLoader />;
   return (
     <>
       {mode === "onboard" ? (
