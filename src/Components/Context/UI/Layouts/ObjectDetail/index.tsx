@@ -301,7 +301,7 @@ const ObjectDetail: React.FC<{
           </div>
         </div>
       )}
-      {layout.factsbar && (
+      {layout.factsbar && (layout.factsbar.fields || []).length > 0 && (
         <Grid container>
           {layout.factsbar.image && (
             <Grid item xs={1}>

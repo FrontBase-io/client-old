@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AppContext } from "../../../../Components/Context";
 import { ListItemType } from "../../../../Utils/Types";
 import SettingsApiKeyDetail from "./detail";
+import Server from "../../../../Utils/Socket";
 
 interface ApiKeyType {
   label: string;
@@ -20,7 +21,7 @@ const SettingsApiKeys: React.FC<{
       if (response.reason === "no-such-setting") {
         setApiKeys([]);
       } else {
-        setApiKeys(context.utils.listify(response.value, "label", "key"));
+        setApiKeys(context.utils.listifyObject(response.value, "label"));
       }
     });
   }, []);
@@ -41,16 +42,17 @@ const SettingsApiKeys: React.FC<{
             title: "New API key",
             text: "Every key comes with a permission. Once you assign this permission to models everyone with this key can perform the allowed actions. ",
             fields: {
-              label: { label: "Label" },
+              label: { label: "Label", width: 8, linkToKeyField: "key" },
+              key: { label: "Key", width: 4, type: "key" },
             },
             size: "sm",
             actions: [
               {
                 label: "Create key",
-                onClick: (form, close) => {
-                  console.log(form);
-                  close();
-                },
+                onClick: (form, close) =>
+                  Server.emit("createApiKey", form.label, form.key, () =>
+                    window.location.reload()
+                  ),
               },
             ],
           }),

@@ -173,12 +173,13 @@ const ModelLayoutDetail: React.FC<{
                       label="Title"
                       value={layout.factsbar?.title}
                       options={titleFields}
+                      clearable
                       onChange={(newValue) => {
                         setLayout({
                           ...layout,
                           factsbar: {
                             ...layout.factsbar,
-                            title: newValue as string,
+                            title: newValue as string | undefined,
                           },
                         });
                       }}
@@ -571,7 +572,11 @@ const LayoutItem: React.FC<{
                       label: "Fields",
                       type: "custom",
                       component: SelectFieldComponent,
-                      componentProps: { model, field: layoutItem.args?.field },
+                      componentProps: {
+                        model,
+                        field: layoutItem.args?.field,
+                        multi: true,
+                      },
                     },
                   },
                   actionValues: layoutItem.args,

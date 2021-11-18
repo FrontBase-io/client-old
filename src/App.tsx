@@ -98,7 +98,7 @@ function App() {
     if (!theme) {
       setTheme({
         palette: {
-          primary: { main: "#1b8dd2" },
+          primary: { main: "#4874a8" },
           mode:
             window.matchMedia &&
             window.matchMedia("(prefers-color-scheme: dark)").matches

@@ -90,33 +90,33 @@ const ModelFieldDetail: React.FC<{
                     ]}
                   />
                 </Grid>
-                {field.type === "relationship" ||
-                  (field.type === "relationship_m" && (
-                    <>
-                      <Grid item xs={6}>
-                        <context.UI.Inputs.Select
-                          label="Relationship to"
-                          value={field.relationshipTo || ""}
-                          options={context.utils.listifyForSelect(
-                            models,
-                            "label",
-                            "key"
-                          )}
-                          onChange={(relationshipTo) =>
-                            setField({
-                              ...field,
-                              relationshipTo: relationshipTo as string,
-                            })
-                          }
-                        />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Typography variant="body1">
-                          Filter relationship
-                        </Typography>
-                      </Grid>
-                    </>
-                  ))}
+                {(field.type === "relationship" ||
+                  field.type === "relationship_m") && (
+                  <>
+                    <Grid item xs={6}>
+                      <context.UI.Inputs.Select
+                        label="Relationship to"
+                        value={field.relationshipTo || ""}
+                        options={context.utils.listifyForSelect(
+                          models,
+                          "label",
+                          "key"
+                        )}
+                        onChange={(relationshipTo) =>
+                          setField({
+                            ...field,
+                            relationshipTo: relationshipTo as string,
+                          })
+                        }
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="body1">
+                        Filter relationship
+                      </Typography>
+                    </Grid>
+                  </>
+                )}
                 {field.type === "formula" && (
                   <FormulaDesigner
                     context={context}

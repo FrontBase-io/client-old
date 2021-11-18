@@ -74,7 +74,7 @@ const SelectInput: React.FC<{
               onChange(val, args);
             } else {
               //@ts-ignore
-              onChange(chosen.value || "");
+              onChange(chosen?.value || "");
             }
           }
         }}
