@@ -6277,6 +6277,13 @@ frontbase-formulas@^0.0.7:
     lodash "^4.17.20"
     uniqid "^5.2.0"
 
+frontbase-publisher-client@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/frontbase-publisher-client/-/frontbase-publisher-client-0.0.2.tgz#04bfbe24edc489b99302005d0a4c61eae8e9a2fe"
+  integrity sha512-wc54b6MSlHsQ9cHAqo5BG7sPhp4dHZxv5UDpvcB8UA6r6+y3Wo4pTR2aHmZThKlv9MsRIapQoH3lAWwsGsbHyw==
+  dependencies:
+    react "^17.0.2"
+
 fs-extra@^7.0.0:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-7.0.1.tgz#4f189c44aa123b895f722804f55ea23eadc348e9"

@@ -97,7 +97,7 @@ const AppLayout: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    const onReceive = (object: AppObjectType) => {
+    const onReceive = async (object: AppObjectType) => {
       setApp(object);
       setPageName(object.name);
       utils.setPrimaryColor(
@@ -124,9 +124,24 @@ const AppLayout: React.FC<{
       );
       setContext(context);
 
-      const appCode = require(`../../../AppDev/${
-        object.type === "collection" ? "collection" : object.key
-      }/index.tsx`).default;
+      console.log(
+        object.internal
+          ? `../../../AppDev/${
+              object.type === "collection" ? "collection" : object.key
+            }/index.tsx`
+          : `frontbase-${object.key}-client`
+      );
+
+      let appCode: any = null;
+      if (object.internal) {
+        appCode = require(`../../../AppDev/${
+          object.type === "collection" ? "collection" : object.key
+        }/index.tsx`).default;
+      } else {
+        appCode =
+          await require(`../../../../node_modules/frontbase-${object.key}-client/dist/index`)
+            .default;
+      }
 
       // Get app pages (and sort them in groups)
       appCode.getPages(context, object).then((result: AppPageType[]) => {
