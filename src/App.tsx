@@ -6,7 +6,7 @@ import asyncComponent from "./AsyncComponent";
 import { ResponseType } from "./Utils/Types";
 import Socket from "./Utils/Socket";
 import Hidden from "@mui/material/Hidden";
-import { createTheme, ThemeProvider } from "@mui/material";
+import { Alert, createTheme, ThemeProvider } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import chroma from "chroma-js";
 import FrontBaseLoader from "./Components/Loading/FrontBaseLoader";
@@ -23,6 +23,7 @@ function App() {
   const [mode, setMode] = useState<"onboard" | "logIn" | "loading" | "normal">(
     "loading"
   );
+  const [isConnected, setIsConnected] = useState<boolean>(true);
   const [colors, setColors] = useGlobal<any>("colors");
   const [theme, setTheme] = useGlobal<any>("theme");
   const setPrimaryColor = useCallback(
@@ -64,6 +65,8 @@ function App() {
   useEffect(() => {
     // Basic interactions
     console.log(`Connecting to ${serverUrl}`);
+    socket.on("connect", () => setIsConnected(true));
+    socket.on("disconnect", () => setIsConnected(false));
     socket.emit("alive?", (response: ResponseType) => {
       if (response.success) {
         if (localStorage.getItem("username")) {
@@ -120,6 +123,9 @@ function App() {
   if (mode === "loading" || !theme) return <FrontBaseLoader />;
   return (
     <>
+      {!isConnected && (
+        <Alert severity="warning">Can't connect to FrontBase!</Alert>
+      )}
       {mode === "onboard" ? (
         <Onboard />
       ) : mode === "logIn" ? (
