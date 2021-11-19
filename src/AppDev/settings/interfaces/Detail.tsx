@@ -12,14 +12,11 @@ import DropTarget from "./DropTarget";
 import InterfaceVariables from "./Variables";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
-import {
-  DndProvider,
-  TouchTransition,
-  MouseTransition,
-} from "react-dnd-multi-backend";
+import { DndProvider } from "react-dnd";
 import InterfaceComponents from "./Components";
 import LayoutItemComponent from "./LayoutItemComponents";
 import { isEqual, map } from "lodash";
+import { useGlobal } from "reactn";
 
 const InterfaceDetail: React.FC<{
   context: AppContext;
@@ -31,6 +28,7 @@ const InterfaceDetail: React.FC<{
   const [modelList, setModelList] = useState<ModelType[]>();
   const [modelListOptions, setModelListOptions] =
     useState<SelectOptionType[]>();
+  const [isMobile] = useGlobal<any>("isMobile");
 
   // Lifecycle
   useEffect(() => {
@@ -49,26 +47,7 @@ const InterfaceDetail: React.FC<{
   if (!interfaceObject || !modelList || !modelListOptions)
     return <context.UI.Loading />;
   return (
-    <DndProvider
-      options={{
-        backends: [
-          {
-            id: "html5",
-            //@ts-ignore
-            backend: HTML5Backend,
-            transition: MouseTransition,
-          },
-          {
-            id: "touch",
-            //@ts-ignore
-            backend: TouchBackend,
-            options: { enableMouseEvents: true },
-            preview: true,
-            transition: TouchTransition,
-          },
-        ],
-      }}
-    >
+    <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
       <context.UI.Design.Animation.Container>
         <Grid container>
           <Grid item xs={12} md={10} className="scrollIndependently">

@@ -13,11 +13,7 @@ import ModelLayoutComponents from "./Components";
 import ModelLayoutFields from "./Fields";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
-import {
-  DndProvider,
-  TouchTransition,
-  MouseTransition,
-} from "react-dnd-multi-backend";
+import { DndProvider } from "react-dnd";
 import DropTarget from "./DropTarget";
 import styles from "./styles.module.scss";
 import { cloneDeep, isEqual, map } from "lodash";
@@ -127,26 +123,7 @@ const ModelLayoutDetail: React.FC<{
   // UI
   if (!layout) return <context.UI.Loading />;
   return (
-    <DndProvider
-      options={{
-        backends: [
-          {
-            id: "html5",
-            //@ts-ignore
-            backend: HTML5Backend,
-            transition: MouseTransition,
-          },
-          {
-            id: "touch",
-            //@ts-ignore
-            backend: TouchBackend,
-            options: { enableMouseEvents: true },
-            preview: true,
-            transition: TouchTransition,
-          },
-        ],
-      }}
-    >
+    <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
       <Animation.Container>
         <Grid container>
           <Grid
