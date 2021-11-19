@@ -57,53 +57,55 @@ const ListDetailLayout: React.FC<{
         {((isMobile && !selectedItem) || !isMobile) && (
           <Grid item xs={12} md={navWidth || 2} style={{ height: "100%" }}>
             <context.UI.Design.Animation.Item key="menu">
-              <context.UI.Design.Card title={title} withoutPadding>
-                <List disablePadding>
-                  <context.UI.Design.Animation.Container>
-                    {(items || []).map((menuItem) => (
-                      <context.UI.Design.Animation.Item key={menuItem.key}>
-                        <ListItem
-                          button
-                          onClick={() =>
-                            history.push(`${baseUrl}/${menuItem.key}`)
-                          }
-                          selected={menuItem.key === selectedItem}
-                          style={{ paddingLeft: withoutPadding && 0 }}
-                        >
-                          {menuItem.icon && (
-                            <ListItemIcon style={{ minWidth: 48 }}>
-                              <Icon
-                                icon={
-                                  transformIcon
-                                    ? transformIcon(menuItem.icon)
-                                    : menuItem.icon
-                                }
-                                size={18}
-                              />
-                            </ListItemIcon>
-                          )}
-                          <ListItemText
-                            primary={menuItem.label}
-                            secondary={menuItem.secondary}
-                          />
-                        </ListItem>
-                      </context.UI.Design.Animation.Item>
-                    ))}
-                    {create && (
-                      <>
-                        <Divider />
-                        <context.UI.Design.Animation.Item key="create">
-                          <ListItem button onClick={create.onClick}>
-                            <ListItemText>
-                              {create.label || "Create"}
-                            </ListItemText>
+              <div className="scrollIndependently">
+                <context.UI.Design.Card title={title} withoutPadding>
+                  <List disablePadding>
+                    <context.UI.Design.Animation.Container>
+                      {(items || []).map((menuItem) => (
+                        <context.UI.Design.Animation.Item key={menuItem.key}>
+                          <ListItem
+                            button
+                            onClick={() =>
+                              history.push(`${baseUrl}/${menuItem.key}`)
+                            }
+                            selected={menuItem.key === selectedItem}
+                            style={{ paddingLeft: withoutPadding && 0 }}
+                          >
+                            {menuItem.icon && (
+                              <ListItemIcon style={{ minWidth: 48 }}>
+                                <Icon
+                                  icon={
+                                    transformIcon
+                                      ? transformIcon(menuItem.icon)
+                                      : menuItem.icon
+                                  }
+                                  size={18}
+                                />
+                              </ListItemIcon>
+                            )}
+                            <ListItemText
+                              primary={menuItem.label}
+                              secondary={menuItem.secondary}
+                            />
                           </ListItem>
                         </context.UI.Design.Animation.Item>
-                      </>
-                    )}
-                  </context.UI.Design.Animation.Container>
-                </List>
-              </context.UI.Design.Card>
+                      ))}
+                      {create && (
+                        <>
+                          <Divider />
+                          <context.UI.Design.Animation.Item key="create">
+                            <ListItem button onClick={create.onClick}>
+                              <ListItemText>
+                                {create.label || "Create"}
+                              </ListItemText>
+                            </ListItem>
+                          </context.UI.Design.Animation.Item>
+                        </>
+                      )}
+                    </context.UI.Design.Animation.Container>
+                  </List>
+                </context.UI.Design.Card>
+              </div>
             </context.UI.Design.Animation.Item>
           </Grid>
         )}

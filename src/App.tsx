@@ -118,6 +118,13 @@ function App() {
       setPrimaryColor(); // Force the header to match night mode
     }
   }, [theme]);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+
+    mq.addEventListener("change", function (evt) {
+      setPrimaryColor(theme?.palette?.primary?.main);
+    });
+  }, [theme?.palette?.primary?.main]);
 
   // UI
   if (mode === "loading" || !theme) return <FrontBaseLoader />;

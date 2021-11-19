@@ -190,7 +190,7 @@ const AppLayout: React.FC<{
       <div className={styles.root}>
         {Object.keys(pageMenu).length > 0 && (
           <motion.div
-            className={styles.menu}
+            className={`${styles.menu} scrollIndependently`}
             variants={container}
             initial="hidden"
             animate="visible"

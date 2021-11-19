@@ -21,6 +21,9 @@ ReactDOM.render(
 reportWebVitals();
 
 serviceWorker.register({
+  onSuccess: (registration) => {
+    console.log(registration);
+  },
   onUpdate: (registration) => {
     console.log("New client version ready to use!");
     if (registration && registration.waiting) {
