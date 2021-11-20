@@ -124,14 +124,6 @@ const AppLayout: React.FC<{
       );
       setContext(context);
 
-      console.log(
-        object.internal
-          ? `../../../AppDev/${
-              object.type === "collection" ? "collection" : object.key
-            }/index.tsx`
-          : `frontbase-${object.key}-client`
-      );
-
       let appCode: any = null;
       if (object.internal) {
         appCode = require(`../../../AppDev/${
@@ -139,7 +131,7 @@ const AppLayout: React.FC<{
         }/index.tsx`).default;
       } else {
         appCode =
-          await require(`../../../../node_modules/frontbase-${object.key}-client/dist/index`)
+          await require(`../../../../node_modules/@frontbase/${object.key}-client/dist/index`)
             .default;
       }
 

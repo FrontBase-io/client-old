@@ -1388,6 +1388,11 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@frontbase/publisher-client@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@frontbase/publisher-client/-/publisher-client-0.0.1.tgz#b2bbae9688ef87ce913f0491a48c2c15d71d8e75"
+  integrity sha512-ZiPamSpHDuzZ3SPlz0hCkpAgdhAZshHTfFJHim9ECdstwZHIJgK65bBj7kKhcJs3LcHNL8HM370k5h1UQpK/BA==
+
 "@frontbase/types@^0.0.1":
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@frontbase/types/-/types-0.0.1.tgz#6425dc3dcef5d5992c2e43e3c47b2d965e7c013e"
@@ -6272,11 +6277,6 @@ frontbase-formulas@^0.0.7:
     date-fns "^2.25.0"
     lodash "^4.17.20"
     uniqid "^5.2.0"
-
-frontbase-publisher-client@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/frontbase-publisher-client/-/frontbase-publisher-client-0.0.3.tgz#23387cc3e6039357406b3eac6bc4b6935db6329e"
-  integrity sha512-TdhWuhECIONg32RkBchzPvblbvdSSXqZ67kHQIW4x9U6eN5J7HwlnM8yjEaQbRQSBRJyk3EUZmDRxc5q+9vzbg==
 
 fs-extra@^7.0.0:
   version "7.0.1"
