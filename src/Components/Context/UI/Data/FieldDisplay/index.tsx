@@ -98,6 +98,8 @@ const FieldDisplay: React.FC<{
           disabled
           value={objectField}
         />
+      ) : modelField.type === "free-data" ? (
+        JSON.stringify(objectField, null, 2)
       ) : (
         `Unknown type ${modelField.type}`
       )}
