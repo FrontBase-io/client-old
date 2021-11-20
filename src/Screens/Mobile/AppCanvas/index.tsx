@@ -116,7 +116,7 @@ const AppCanvas: React.FC<{
         }/index.tsx`).default;
       } else {
         appCode =
-          await require(`../../../../node_modules/@frontbase/${object.key}-client/index.tsx`)
+          await require(`../../../../node_modules/@frontbase/${object.key}-client/dist/index.js`)
             .default;
       }
       setAppConfig(appCode.settings);
@@ -395,7 +395,7 @@ const AppCanvas: React.FC<{
             showLabels
             value={
               window.location.href.match(`/${appKey}/`) &&
-              window.location.href.split(`/${appKey}.`)[1]
+              window.location.href.split(`/${appKey}/`)[1]
             }
             onChange={(event, newValue) => {
               if (newValue === 4) {
@@ -415,7 +415,15 @@ const AppCanvas: React.FC<{
             {flatPageMenu?.slice(0, 4).map((page) => (
               <BottomNavigationAction
                 label={page.label}
-                icon={<Icon icon={page.icon} />}
+                icon={
+                  <Icon
+                    icon={page.icon}
+                    size={16}
+                    primary={
+                      window.location.href.split(`/${appKey}/`)[1] === page.key
+                    }
+                  />
+                }
                 value={page.key}
                 key={page.key}
               />

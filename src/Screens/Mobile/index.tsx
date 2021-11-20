@@ -112,6 +112,7 @@ const Mobile: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
                   history.push(`/${app.key}`);
                   setMenuIsOpen(false);
                 }}
+                selected={window.location.href.split("/")[3] === app.key}
               >
                 <ListItemIcon
                   style={{
@@ -120,7 +121,10 @@ const Mobile: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
                     color: `rgb(${app.color.r}, ${app.color.g}, ${app.color.b})`,
                   }}
                 >
-                  <Icon icon={app.icon} />
+                  <Icon
+                    icon={app.icon}
+                    color={`rgb(${app.color.r}, ${app.color.g}, ${app.color.b})`}
+                  />
                 </ListItemIcon>
                 <ListItemText>{app.name}</ListItemText>
               </ListItem>
@@ -143,6 +147,7 @@ const Mobile: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
                   !favoriteList.includes(app.key) && (
                     <ListItem
                       button
+                      selected={window.location.href.split("/")[3] === app.key}
                       onClick={() => {
                         history.push(`/${app.key}`);
                         setMenuIsOpen(false);
@@ -154,7 +159,10 @@ const Mobile: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
                           color: `rgb(${app.color.r}, ${app.color.g}, ${app.color.b})`,
                         }}
                       >
-                        <Icon icon={app.icon} />
+                        <Icon
+                          icon={app.icon}
+                          color={`rgb(${app.color.r}, ${app.color.g}, ${app.color.b})`}
+                        />
                       </ListItemIcon>
                       <ListItemText primary={app.name} />
                     </ListItem>
