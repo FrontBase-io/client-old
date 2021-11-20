@@ -116,7 +116,7 @@ const AppCanvas: React.FC<{
         }/index.tsx`).default;
       } else {
         appCode =
-          await require(`../../../../node_modules/@frontbase/${object.key}-client/dist/index`)
+          await require(`../../../../node_modules/@frontbase/${object.key}-client/index.tsx`)
             .default;
       }
       setAppConfig(appCode.settings);
