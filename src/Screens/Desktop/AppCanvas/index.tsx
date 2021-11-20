@@ -131,7 +131,7 @@ const AppLayout: React.FC<{
         }/index.tsx`).default;
       } else {
         appCode =
-          await require(`../../../../node_modules/@frontbase/${object.key}-client/dist/index`)
+          await require(`/opt/frontbase/system/client/node_modules/@frontbase/${object.key}-client/dist/index`)
             .default;
       }
 
