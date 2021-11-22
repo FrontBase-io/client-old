@@ -272,8 +272,9 @@ const AppCanvas: React.FC<{
                               [key]: value,
                               ...(field.linkToKeyField
                                 ? {
-                                    [field.linkToKeyField]:
-                                      slugify(value).toLowerCase(),
+                                    [field.linkToKeyField]: slugify(value)
+                                      .toLowerCase()
+                                      .replace("-", "_"),
                                   }
                                 : {}), // If we're linked to a key field, set the key as well
                             })
