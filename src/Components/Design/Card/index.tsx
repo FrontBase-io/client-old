@@ -20,6 +20,7 @@ const Card: React.FC<{
   titleSecondary?: ReactElement;
   withHorizontalOverflow?: true;
   withVerticalOverflow?: true;
+  image?: string;
 }> = ({
   children,
   style,
@@ -36,6 +37,7 @@ const Card: React.FC<{
   titleSecondary,
   withHorizontalOverflow,
   withVerticalOverflow,
+  image,
 }) => {
   return (
     <div
@@ -69,6 +71,16 @@ const Card: React.FC<{
         >
           {titleSecondary}
         </span>
+      )}
+      {image && (
+        <div
+          style={{
+            backgroundImage: `url(${image})`,
+            width: "100%",
+            height: 150,
+            backgroundSize: "cover",
+          }}
+        />
       )}
       {title && (
         <Typography
