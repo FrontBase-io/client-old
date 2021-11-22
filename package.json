@@ -6,7 +6,7 @@
     "@date-io/date-fns": "^2.11.0",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
-    "@frontbase/publisher-client": "^0.0.3",
+    "@frontbase/publisher-client": "^0.0.4",
     "@frontbase/types": "^0.0.2",
     "@material-ui/core": "^4.12.3",
     "@mui/lab": "^5.0.0-alpha.49",

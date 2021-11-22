@@ -1388,10 +1388,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@frontbase/publisher-client@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@frontbase/publisher-client/-/publisher-client-0.0.3.tgz#da1dd1364ef45b0d8034ca6b96aef3a50400c833"
-  integrity sha512-+dvuL9nD2zkoVVSi8ofm21VA9brEXuJ+Et7fzw5DbzKamX2LWtCNfTf9d1BI3XQ9nfQxNJlqnsap71JtOQeg7w==
+"@frontbase/publisher-client@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@frontbase/publisher-client/-/publisher-client-0.0.4.tgz#a252efe9e0f51e62569b0979752b9a20ece51421"
+  integrity sha512-sBpc/i7HAlLidaTNzTnKUD9UMzEIVMlVQiW33coCqobaOYLBTcDvjyMJVQKKXnS6r67hSMJeCDVuzKxiyIEONw==
 
 "@frontbase/types@^0.0.2":
   version "0.0.2"
