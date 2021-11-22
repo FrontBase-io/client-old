@@ -17,7 +17,15 @@ const AppMenu: React.FC<{ apps: AppObjectType[]; closeMenu: () => void }> = ({
   // UI
   return (
     <Card
-      style={{ width: "40vw", height: "30vh", position: "relative" }}
+      style={{
+        width: "40vw",
+        height: "30vh",
+        position: "relative",
+        margin: 50,
+        left: -25,
+        top: -50,
+        zIndex: 99,
+      }}
       title="Apps"
       onTitleClick={() => {
         history.push("/");
@@ -25,7 +33,7 @@ const AppMenu: React.FC<{ apps: AppObjectType[]; closeMenu: () => void }> = ({
       }}
       withShadow
     >
-      <Grid container>
+      <Grid container spacing={3}>
         {apps.map((app) => (
           <Grid item xs={3} key={app._id}>
             <AppIcon app={app} onClick={closeMenu} />

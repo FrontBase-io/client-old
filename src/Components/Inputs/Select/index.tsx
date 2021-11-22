@@ -59,7 +59,6 @@ const SelectInput: React.FC<{
         isMulti={multi}
         autoFocus={autoFocus}
         value={newValue}
-        style={style}
         onChange={(chosen) => {
           if (onChange) {
             if (Array.isArray(chosen)) {
@@ -80,6 +79,7 @@ const SelectInput: React.FC<{
         }}
         menuPortalTarget={document.body}
         styles={{
+          ...(style || {}),
           control: (styles) => ({
             ...styles,
             backgroundColor:
