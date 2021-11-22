@@ -27,9 +27,30 @@ const executeManyAction = (actionId: string, objects: ObjectType[]) =>
     );
   });
 
+// Many action
+const executeAppAction = (
+  appKey: string,
+  actionKey: string,
+  args: { [key: string]: any }
+) =>
+  new Promise((resolve, reject) => {
+    console.log("emitting");
+
+    Socket.emit(
+      "executeAppAction",
+      appKey,
+      actionKey,
+      args,
+      (response: ResponseType) => {
+        response.success ? resolve(response.result) : reject(response.reason);
+      }
+    );
+  });
+
 const actionFunctions = {
   executeSingleAction,
   executeManyAction,
+  executeAppAction,
 };
 
 export default actionFunctions;

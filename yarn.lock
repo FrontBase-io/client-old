@@ -1393,6 +1393,13 @@
   resolved "https://registry.yarnpkg.com/@frontbase/publisher-client/-/publisher-client-0.0.5.tgz#1eb88a872431c67c16437c45ab8158ad4e3f3b6d"
   integrity sha512-E9HLS4c/PLHxbJyb2A2/Uh5OZNzbWY01bJqYrcOn/R+LS4O58XRlJ0XzLwWPgx5oCrMsMJ3XayRGM440PgY0fQ==
 
+"@frontbase/publisher-client@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@frontbase/publisher-client/-/publisher-client-0.0.6.tgz#e37786cde9fdc83212dcf0aa3dda2f303df00ffe"
+  integrity sha512-ysGwtOf52tR4mvy5va1pHbGhfoPBGSsFYOFsftx4hVRiHnE8g6aLopeKBEd3RWa9rOV9HZcGGIFxQy+Hu1/mAQ==
+  dependencies:
+    "@frontbase/publisher-client" "^0.0.5"
+
 "@frontbase/types@^0.0.2":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@frontbase/types/-/types-0.0.2.tgz#f224659ea079a829280ccfb521407f6ca2cc92de"
