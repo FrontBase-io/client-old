@@ -14,6 +14,9 @@ import DisplayColor from "./Color";
 import DisplayImage from "./Image";
 import { serverUrl } from "../../../../../Utils/Socket";
 import Icon from "../../../../Design/Icon";
+//@ts-ignore
+import JSONInput from "react-json-editor-ajrm";
+import { useGlobal } from "reactn";
 
 const FieldDisplay: React.FC<{
   context: AppContext;
@@ -26,6 +29,7 @@ const FieldDisplay: React.FC<{
   // Vars
   const modelField = model.fields[fieldKey];
   const objectField = object && object[fieldKey];
+  const [theme] = useGlobal<any>("theme");
 
   // Lifecycle
   // UI
@@ -99,7 +103,17 @@ const FieldDisplay: React.FC<{
           value={objectField}
         />
       ) : modelField.type === "free-data" ? (
-        JSON.stringify(objectField, null, 2)
+        <JSONInput
+          height={200}
+          label={modelField.label}
+          placeholder={objectField}
+          viewOnly
+          theme={
+            theme.palette.mode === "light"
+              ? "light_mitsuketa_tribute"
+              : "dark_vscode_tribute"
+          }
+        />
       ) : (
         `Unknown type ${modelField.type}`
       )}

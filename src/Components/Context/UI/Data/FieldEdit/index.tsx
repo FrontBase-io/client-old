@@ -2,6 +2,8 @@ import { Typography } from "@mui/material";
 import { useGlobal } from "reactn";
 import { AppContext } from "../../..";
 import { ColorType, ModelType, ObjectType } from "../../../../../Utils/Types";
+//@ts-ignore
+import JSONInput from "react-json-editor-ajrm";
 
 const FieldEdit: React.FC<{
   selectedField?: string;
@@ -120,6 +122,28 @@ const FieldEdit: React.FC<{
           value={objectField}
           onChange={(newVal) => onChange(newVal)}
         />
+      ) : modelField.type === "free-data" ? (
+        <div style={{ marginBottom: 15 }}>
+          <Typography
+            variant="caption"
+            style={{ fontSize: 16, display: "block", fontWeight: "bold" }}
+          >
+            {modelField.label}
+          </Typography>
+          <JSONInput
+            height={200}
+            label={modelField.label}
+            placeholder={objectField}
+            onChange={(newVal: any) =>
+              newVal.error === false && onChange(newVal.jsObject)
+            }
+            theme={
+              theme.palette.mode === "light"
+                ? "light_mitsuketa_tribute"
+                : "dark_vscode_tribute"
+            }
+          />
+        </div>
       ) : (
         `Unknown type ${modelField.type}`
       )}
