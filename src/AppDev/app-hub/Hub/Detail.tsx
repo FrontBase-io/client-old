@@ -2,7 +2,7 @@ import { AppContextType } from "@frontbase/types";
 import { Button, CircularProgress, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
-import { SystemTaskObjectType } from "../../../Utils/Types";
+import { AppObjectType, SystemTaskObjectType } from "../../../Utils/Types";
 import { APIAppType } from "../Types";
 
 const AppHubDetail: React.FC<{
@@ -11,20 +11,30 @@ const AppHubDetail: React.FC<{
 }> = ({ context, remoteApp }) => {
   // Vars
   const [task, setTask] = useState<SystemTaskObjectType>();
-  const [installedApps, setInstalledApps] = useState<string[]>([]);
+  const [installedApp, setInstalledApp] = useState<AppObjectType>();
+  const [foundTask, setFoundTask] = useState<boolean>(false);
 
   // Lifecycle
   useEffect(() => {
     context.data.objects.getLast(
       "system-task",
-      { done: false, type: "install-app" },
-      (object) => setTask((object as SystemTaskObjectType) || null)
+      { done: false, type: { $in: ["install-app", "uninstall-app"] } },
+      (object) => {
+        if (object) {
+          setTask((object as SystemTaskObjectType) || null);
+          setFoundTask(true);
+        } else {
+          if (foundTask) {
+            window.location.reload();
+          }
+        }
+      }
     );
 
-    context.data.settings.system.get("installed-apps", (fetched) =>
-      setInstalledApps(fetched)
+    context.data.objects.getOne("app", { key: remoteApp.key }, (object) =>
+      setInstalledApp(object as AppObjectType)
     );
-  }, []);
+  }, [foundTask]);
   useEffect(() => {
     context.canvas.navbar.name(remoteApp.name);
     context.canvas.navbar.up("/app-hub/hub");
@@ -93,11 +103,16 @@ const AppHubDetail: React.FC<{
         titleSecondary={
           <Button
             onClick={() => {
-              if (installedApps.includes(remoteApp.key)) {
-                context.canvas.interact.snackbar(
-                  "Uninstalling not yet implemented",
-                  "error"
-                );
+              if (installedApp) {
+                context.canvas.interact.snackbar("Uninstalling", "default");
+                context.data.objects.create("system-task", {
+                  type: "uninstall-app",
+                  done: false,
+                  description: `Uninstalling ${remoteApp.name}`,
+                  progress: 0,
+                  log: [{ label: "Requested...", time: new Date() }],
+                  args: { appKey: remoteApp.key },
+                });
               } else {
                 context.canvas.interact.snackbar("Installing", "default");
                 context.data.objects.create("system-task", {
@@ -111,7 +126,7 @@ const AppHubDetail: React.FC<{
               }
             }}
           >
-            {installedApps.includes(remoteApp.key) ? "Uninstall" : "Install"}
+            {installedApp ? "Uninstall" : "Install"}
           </Button>
         }
       >
