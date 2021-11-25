@@ -1400,10 +1400,10 @@
   dependencies:
     "@frontbase/publisher-client" "^0.0.5"
 
-"@frontbase/types@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@frontbase/types/-/types-0.0.2.tgz#f224659ea079a829280ccfb521407f6ca2cc92de"
-  integrity sha512-41y99qm+uYaQO2E+MQYHWQzo94akdct9W+LGwIjQW5aD+tk/CESno+NjF2MELJUHxufOMHCwdsQL4Z/D8M7X/A==
+"@frontbase/types@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@frontbase/types/-/types-0.0.8.tgz#190061e402ebaf1354cf15ba9ce3fd2a75b07103"
+  integrity sha512-eM3+9bmqJxcuA5tj4Oub326YQFaqlFVHIDz/lhx5z7wK/URElDzp4Ct/WL16K4lhFG9AYGT/0CmM5LNjrHuLMg==
   dependencies:
     js-tokens "^4.0.0"
     loose-envify "^1.4.0"

@@ -1,6 +1,8 @@
 import { AppContextType } from "@frontbase/types";
-import { useEffect } from "react";
-import { AppPageType } from "../../../Utils/Types";
+import { Button, CircularProgress, Typography } from "@mui/material";
+import { Box } from "@mui/system";
+import { useEffect, useState } from "react";
+import { SystemTaskObjectType } from "../../../Utils/Types";
 import { APIAppType } from "../Types";
 
 const AppHubDetail: React.FC<{
@@ -8,7 +10,21 @@ const AppHubDetail: React.FC<{
   remoteApp: APIAppType;
 }> = ({ context, remoteApp }) => {
   // Vars
+  const [task, setTask] = useState<SystemTaskObjectType>();
+  const [installedApps, setInstalledApps] = useState<string[]>([]);
+
   // Lifecycle
+  useEffect(() => {
+    context.data.objects.getLast(
+      "system-task",
+      { done: false, type: "install-app" },
+      (object) => setTask((object as SystemTaskObjectType) || null)
+    );
+
+    context.data.settings.system.get("installed-apps", (fetched) =>
+      setInstalledApps(fetched)
+    );
+  }, []);
   useEffect(() => {
     context.canvas.navbar.name(remoteApp.name);
     context.canvas.navbar.up("/app-hub/hub");
@@ -19,9 +35,85 @@ const AppHubDetail: React.FC<{
   }, [remoteApp]);
 
   // UI
-  return (
+  return task ? (
     <context.UI.Design.Animation.Animate>
-      <context.UI.Design.Card title={remoteApp.name}>
+      <div
+        style={{
+          height: "100%",
+          padding: 0,
+          margin: 0,
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <context.UI.Design.Card
+          title="Update"
+          style={{ width: 300, height: 270 }}
+        >
+          <>
+            <Box
+              position="relative"
+              display="inline-flex"
+              style={{ width: "100%", left: 60, top: 25 }}
+            >
+              <CircularProgress
+                value={task.progress}
+                color="primary"
+                style={{ height: 150, width: 150 }}
+              />
+              <Box
+                top={0}
+                left={0}
+                bottom={0}
+                right={0}
+                position="absolute"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                style={{ right: 130 }}
+              >
+                <Typography
+                  component="div"
+                  color="textSecondary"
+                  style={{ display: "block" }}
+                >{`${Math.round(task.progress)}%`}</Typography>
+              </Box>
+            </Box>
+            <div style={{ textAlign: "center", marginTop: 35 }}>
+              {(task.log || [])[(task.log || []).length - 1]?.label || ""}
+            </div>
+          </>
+        </context.UI.Design.Card>
+      </div>
+    </context.UI.Design.Animation.Animate>
+  ) : (
+    <context.UI.Design.Animation.Animate>
+      <context.UI.Design.Card
+        title={remoteApp.name}
+        titleSecondary={
+          <Button
+            onClick={() => {
+              if (installedApps.includes(remoteApp.key)) {
+                context.canvas.interact.snackbar(
+                  "Uninstalling not yet implemented",
+                  "error"
+                );
+              } else {
+                context.canvas.interact.snackbar("Installing", "default");
+                context.data.objects.create("system-task", {
+                  type: "install-app",
+                  done: false,
+                  description: `Installing ${remoteApp.name}`,
+                  progress: 0,
+                  log: [{ label: "Requested...", time: new Date() }],
+                });
+              }
+            }}
+          >
+            {installedApps.includes(remoteApp.key) ? "Uninstall" : "Install"}
+          </Button>
+        }
+      >
         {remoteApp.description}
       </context.UI.Design.Card>
     </context.UI.Design.Animation.Animate>

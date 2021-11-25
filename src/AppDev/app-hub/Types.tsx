@@ -1,4 +1,4 @@
-import { ModelType, ObjectType } from "@frontbase/types";
+import { ColorType, ModelType, ObjectType } from "@frontbase/types";
 
 export interface APIAppType {
   name: string;
@@ -11,4 +11,9 @@ export interface APIAppType {
   objects?: ObjectType[];
   summary: string;
   description: string;
+  image: string;
+  icon: string;
+  color: ColorType;
+  data_versions: {};
+  app_versions: {};
 }

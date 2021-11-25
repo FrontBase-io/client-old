@@ -74,6 +74,75 @@ const ObjectList: React.FC<{
   return (
     <context.UI.Design.Animation.Animate>
       <context.UI.Design.Card withoutPadding>
+        {selectedList && model.lists[selectedList].actions?.single && (
+          <Popover
+            id="singleActions"
+            open={Boolean(singleActionAnchorEl)}
+            anchorEl={singleActionAnchorEl}
+            onClose={() => setSingleActionAnchorEl(null)}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "center",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "center",
+            }}
+          >
+            <List disablePadding>
+              <ListSubheader>Actions</ListSubheader>
+              {model.lists[selectedList].actions?.single?.map((action) => {
+                if (action.type === "process") {
+                  return (
+                    <ListItem
+                      key={action.key}
+                      button
+                      onClick={() => {
+                        context.data.actions.executeSingleAction(
+                          action.key,
+                          find(
+                            objects!,
+                            (o) => o._id === selectedItems[0]
+                          ) as ObjectType
+                        );
+                        setSingleActionAnchorEl(null);
+                      }}
+                    >
+                      <ListItemIcon style={{ minWidth: 24 }}>
+                        <Icon icon={action.icon} size={14} />
+                      </ListItemIcon>
+                      <ListItemText>{action.label}</ListItemText>
+                    </ListItem>
+                  );
+                } else {
+                  const Action = Actions[action.key];
+                  return (
+                    <ListItem
+                      key={`singleAction-${action.key}`}
+                      button
+                      onClick={() => {
+                        Action.onClick(
+                          context,
+                          find(
+                            objects!,
+                            (o) => o._id === selectedItems[0]
+                          ) as ObjectType,
+                          model
+                        );
+                        setSingleActionAnchorEl(null);
+                      }}
+                    >
+                      <ListItemIcon style={{ minWidth: 24 }}>
+                        <Icon icon={action.icon} size={14} />
+                      </ListItemIcon>
+                      <ListItemText>{action.label}</ListItemText>
+                    </ListItem>
+                  );
+                }
+              })}
+            </List>
+          </Popover>
+        )}
         {(selectedItems || []).length < 1 ? (
           <div style={{ padding: "15px 15px 0 15px", boxSizing: "border-box" }}>
             {selectedList && model.lists[selectedList].actions && (
@@ -105,77 +174,6 @@ const ObjectList: React.FC<{
                       )}
                     </ButtonGroup>
                   </div>
-                )}
-                {model.lists[selectedList].actions?.single && (
-                  <Popover
-                    id="singleActions"
-                    open={Boolean(singleActionAnchorEl)}
-                    anchorEl={singleActionAnchorEl}
-                    onClose={() => setSingleActionAnchorEl(null)}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "center",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "center",
-                    }}
-                  >
-                    <List disablePadding>
-                      <ListSubheader>Actions</ListSubheader>
-                      {model.lists[selectedList].actions?.single?.map(
-                        (action) => {
-                          if (action.type === "process") {
-                            return (
-                              <ListItem
-                                key={action.key}
-                                button
-                                onClick={() => {
-                                  context.data.actions.executeSingleAction(
-                                    action.key,
-                                    find(
-                                      objects!,
-                                      (o) => o._id === selectedItems[0]
-                                    ) as ObjectType
-                                  );
-                                  setSingleActionAnchorEl(null);
-                                }}
-                              >
-                                <ListItemIcon style={{ minWidth: 24 }}>
-                                  <Icon icon={action.icon} size={14} />
-                                </ListItemIcon>
-                                <ListItemText>{action.label}</ListItemText>
-                              </ListItem>
-                            );
-                          } else {
-                            const Action = Actions[action.key];
-                            return (
-                              <ListItem
-                                key={`singleAction-${action.key}`}
-                                button
-                                onClick={() => {
-                                  Action.onClick(
-                                    context,
-                                    find(
-                                      objects!,
-                                      (o) => o._id === selectedItems[0]
-                                    ) as ObjectType,
-                                    model
-                                  );
-                                  setSingleActionAnchorEl(null);
-                                }}
-                              >
-                                <ListItemIcon style={{ minWidth: 24 }}>
-                                  <Icon icon={action.icon} size={14} />
-                                </ListItemIcon>
-                                <ListItemText>{action.label}</ListItemText>
-                              </ListItem>
-                            );
-                          }
-                        }
-                      )}
-                    </List>
-                  </Popover>
                 )}
               </>
             )}

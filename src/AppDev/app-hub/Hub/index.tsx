@@ -46,8 +46,12 @@ const AppHub: React.FC<{
                 <context.UI.Design.Card
                   title={app.name}
                   style={{ cursor: "pointer" }}
+                  image={`https://frontbase.vtvc.nl${app.image}`}
+                  withoutPadding
                 >
-                  {app.summary}
+                  <div style={{ padding: "0 10px 5px 10px" }}>
+                    {app.summary}
+                  </div>
                 </context.UI.Design.Card>
               </Link>
             </context.UI.Design.Animation.Item>

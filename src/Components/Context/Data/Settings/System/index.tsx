@@ -3,9 +3,9 @@ import { ResponseType } from "../../../../../Utils/Types";
 
 const get = (key: string, respond: (response: ResponseType) => void) => {
   Socket.emit("getSystemSetting", key, (response: ResponseType) => {
-    respond(response);
+    respond(response.value);
     Socket.on(`receive ${response.key}`, (response: ResponseType) =>
-      respond(response)
+      respond(response.value)
     );
   });
 };
