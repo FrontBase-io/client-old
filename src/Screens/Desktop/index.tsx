@@ -89,7 +89,7 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
                       : upLink();
                   }}
                 >
-                  <Icon icon="chevron-left" />
+                  <Icon icon="chevron-left" size={18} />
                 </IconButton>
               )}
               <Typography variant="h6" noWrap>
@@ -99,7 +99,7 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
                 {map(navBarActions, (action, key) => (
                   <Tooltip key={key} title={action.label} placement="bottom">
                     <IconButton onClick={action.onClick}>
-                      <Icon icon={action.icon} />
+                      <Icon icon={action.icon} color="white" size={18} />
                     </IconButton>
                   </Tooltip>
                 ))}

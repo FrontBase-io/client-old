@@ -73,7 +73,10 @@ const ObjectDetail: React.FC<{
           onSave && onSave();
         },
         (reason) => {
-          context.canvas.interact.snackbar(reason, "error");
+          context.canvas.interact.snackbar(
+            typeof reason !== "string" ? JSON.stringify(reason) : reason,
+            "error"
+          );
           onSave && onSave();
         }
       );
@@ -231,7 +234,12 @@ const ObjectDetail: React.FC<{
 
   return (
     <div
-      style={{ height: "100%", ...style }}
+      style={{
+        height: "100%",
+        paddingBottom: 100,
+        ...style,
+      }}
+      className="scrollIndependently"
       onKeyDown={(event) => {
         if (
           viewMode === "edit" &&

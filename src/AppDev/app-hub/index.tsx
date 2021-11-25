@@ -1,5 +1,6 @@
 import FourOhFour from "../../Components/FourOhFour";
 import { AppPageType } from "../../Utils/Types";
+import AppHub from "./Hub";
 
 const app = {
   // Settings
@@ -16,7 +17,8 @@ const app = {
           label: "Hub",
           key: "hub",
           icon: "mobile",
-          component: FourOhFour,
+          //@ts-ignore
+          component: AppHub,
         },
         {
           label: "Installed apps",

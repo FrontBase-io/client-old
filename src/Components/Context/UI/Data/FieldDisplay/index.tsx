@@ -16,6 +16,9 @@ import { serverUrl } from "../../../../../Utils/Socket";
 import Icon from "../../../../Design/Icon";
 //@ts-ignore
 import JSONInput from "react-json-editor-ajrm";
+//@ts-ignore
+import locale from "react-json-editor-ajrm/locale/en";
+
 import { useGlobal } from "reactn";
 
 const FieldDisplay: React.FC<{
@@ -106,13 +109,18 @@ const FieldDisplay: React.FC<{
         <JSONInput
           height={200}
           label={modelField.label}
-          placeholder={objectField}
+          placeholder={
+            typeof objectField === "string"
+              ? JSON.parse(objectField)
+              : objectField
+          }
           viewOnly
           theme={
             theme.palette.mode === "light"
               ? "light_mitsuketa_tribute"
               : "dark_vscode_tribute"
           }
+          locale={locale}
         />
       ) : (
         `Unknown type ${modelField.type}`
