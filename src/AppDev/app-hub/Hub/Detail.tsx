@@ -106,6 +106,7 @@ const AppHubDetail: React.FC<{
                   description: `Installing ${remoteApp.name}`,
                   progress: 0,
                   log: [{ label: "Requested...", time: new Date() }],
+                  args: { appKey: remoteApp.key },
                 });
               }
             }}
