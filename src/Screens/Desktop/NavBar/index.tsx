@@ -83,10 +83,10 @@ const NavBar: React.FC<{
             overflowX: "visible",
           }}
         >
-          {selectedApp && !favoriteList.includes(selectedApp.key) && (
+          {selectedApp && !favoriteList?.includes(selectedApp.key) && (
             <NavBarAppIcon app={selectedApp} selected />
           )}
-          {favoriteList.map((appKey) => (
+          {favoriteList?.map((appKey) => (
             <NavBarAppIcon
               app={find(apps, (o) => o.key === appKey) as AppObjectType}
               selected={selectedApp?.key === appKey}
