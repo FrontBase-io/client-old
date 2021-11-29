@@ -4,6 +4,7 @@ import {
   AppObjectType,
   NavBarButtonType,
   ResponseType,
+  UserObjectType,
 } from "../../Utils/Types";
 import NavBar from "./NavBar";
 import Popover from "@mui/material/Popover";
@@ -24,6 +25,9 @@ import Tooltip from "@mui/material/Tooltip";
 import O from "../../AppDev/system/o";
 import { useGlobal } from "reactn";
 import FrontBaseLoader from "../../Components/Loading/FrontBaseLoader";
+import Card from "../../Components/Design/Card";
+import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import Me from "../../AppDev/system/me";
 
 const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
   // Vars
@@ -39,7 +43,7 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
     [key: string]: NavBarButtonType;
   }>({});
   const [, setIsMobile] = useGlobal<any>("isMobile");
-
+  const [user] = useGlobal<UserObjectType>("user");
   // Lifecycle
   useEffect(() => {
     const onReceive = (objects: AppObjectType[]) => {
@@ -112,7 +116,7 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
                 path="/o/:objectId"
                 render={(args) => <O id={args.match.params.objectId} />}
               />
-
+              <Route path="/me" component={Me} />
               <Route
                 path="/:appKey"
                 render={(args) => {
@@ -181,8 +185,25 @@ const Desktop: React.FC<{ utils: AppUtilsType }> = ({ utils }) => {
           vertical: "top",
           horizontal: "left",
         }}
+        elevation={0}
+        PaperProps={{ style: { backgroundColor: "transparent" } }}
       >
-        User menu
+        <Card title={`Hi, ${user.first_name}`} withoutPadding>
+          <List disablePadding>
+            <ListItem
+              button
+              onClick={() => {
+                setUserMenuElement(undefined);
+                history.push("/me");
+              }}
+            >
+              <ListItemIcon style={{ minWidth: 32 }}>
+                <Icon icon="user" />
+              </ListItemIcon>
+              <ListItemText>{user.full_name}</ListItemText>
+            </ListItem>
+          </List>
+        </Card>
       </Popover>
     </>
   );

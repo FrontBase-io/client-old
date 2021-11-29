@@ -3,7 +3,7 @@ import { useGlobal, useState } from "reactn";
 import "./App.css";
 import socket, { serverUrl } from "./Utils/Socket";
 import asyncComponent from "./AsyncComponent";
-import { ResponseType } from "./Utils/Types";
+import { ResponseType, UserObjectType } from "./Utils/Types";
 import Socket from "./Utils/Socket";
 import Hidden from "@mui/material/Hidden";
 import { Alert, createTheme, ThemeProvider } from "@mui/material";
@@ -11,7 +11,7 @@ import { SnackbarProvider } from "notistack";
 import chroma from "chroma-js";
 import FrontBaseLoader from "./Components/Loading/FrontBaseLoader";
 import { useHistory } from "react-router";
-
+import { getOne } from "./Components/Context/Data/Objects/index";
 const Onboard = asyncComponent(() => import("./Screens/Onboard"));
 const Login = asyncComponent(() => import("./Screens/LogIn"));
 const Desktop = asyncComponent(() => import("./Screens/Desktop"));
@@ -80,7 +80,15 @@ function App() {
             },
             (response: ResponseType) => {
               if (response.success) {
-                setUser(response.user);
+                getOne(
+                  "user",
+                  { username: response.user.username },
+                  //@ts-ignore
+                  (fetchedUser: UserObjectType) => {
+                    console.log(fetchedUser);
+                    setUser(fetchedUser);
+                  }
+                );
                 setMode("normal");
               } else {
                 setMode("logIn");

@@ -362,3 +362,13 @@ export interface InterfaceActionStepType {
     };
   };
 }
+
+export interface UserObjectType extends ObjectType {
+  first_name: string;
+  last_name: string;
+  full_name: string;
+  person: string;
+  teams: string[];
+  roles: string[];
+  image?: string;
+}

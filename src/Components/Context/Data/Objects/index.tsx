@@ -78,7 +78,7 @@ const getOnce = (
   });
 
 // Get one (convenience function to get a single object)
-const getOne = (
+export const getOne = (
   modelKey: string,
   filter: {},
   respond: (object: ObjectType) => void

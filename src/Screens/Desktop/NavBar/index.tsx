@@ -5,10 +5,14 @@ import Tooltip from "@mui/material/Tooltip";
 import Avatar from "@mui/material/Avatar";
 import { useHistory } from "react-router";
 import { useGlobal } from "reactn";
-import { AppObjectType, AppPageType } from "../../../Utils/Types";
+import {
+  AppObjectType,
+  AppPageType,
+  UserObjectType,
+} from "../../../Utils/Types";
 import NavBarAppIcon from "../AppIcon/AppIconNavBar";
 import { useEffect } from "react";
-import Socket from "../../../Utils/Socket";
+import Socket, { serverUrl } from "../../../Utils/Socket";
 import { ResponseType } from "../../../Utils/Types";
 import find from "lodash/find";
 import {
@@ -41,6 +45,7 @@ const NavBar: React.FC<{
   const [selectedMenuPages, setSelectedMenuPages] = useState<
     { [key: string]: any }[]
   >([]);
+  const [user] = useGlobal<UserObjectType>("user");
 
   //Lifecycle
   useEffect(() => {
@@ -75,6 +80,8 @@ const NavBar: React.FC<{
   }, [selectedMenuApp]);
 
   // UI
+  console.log(user);
+
   return (
     <div
       className={styles.navbar}
@@ -255,10 +262,15 @@ const NavBar: React.FC<{
             title={`Hi, Vic!`}
             placement="right"
             onClick={(event) => onOpenUserMenu(event)}
+            arrow
           >
-            <Avatar color="primary" style={{ cursor: "pointer" }}>
-              Vic
-            </Avatar>
+            {user.image ? (
+              <Avatar src={`${serverUrl}${user.image}`} />
+            ) : (
+              <Avatar color="primary" style={{ cursor: "pointer" }}>
+                Vic
+              </Avatar>
+            )}
           </Tooltip>
         </div>
       </div>
