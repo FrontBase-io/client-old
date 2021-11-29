@@ -10,7 +10,9 @@ export const clientUrl =
   "/" +
   window.location.pathname.split("/")[1];
 
-export default io(serverUrl, {
+const Server = io(serverUrl, {
   //@ts-ignore
   withCredentials: true,
 });
+
+export default Server;

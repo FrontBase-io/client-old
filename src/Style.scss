@@ -86,18 +86,19 @@ blockquote p {
   }
 }
 @media only screen and (min-width: 600px) {
-.scrollIndependently {
-  height: calc(100vh - 64px);
-  overflow: auto;
-  padding-bottom: 15px;
+  .scrollIndependently {
+    height: calc(100vh - 64px);
+    overflow: auto;
+    padding-bottom: 15px;
 
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
 
-  &::-webkit-scrollbar {
-    display: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
-}}
+}
 
 .scrollHorizontal {
   overflow-x: scroll;

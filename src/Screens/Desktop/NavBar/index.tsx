@@ -11,6 +11,18 @@ import { useEffect } from "react";
 import Socket from "../../../Utils/Socket";
 import { ResponseType } from "../../../Utils/Types";
 import find from "lodash/find";
+import {
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  ListSubheader,
+  Popover,
+} from "@mui/material";
+import Card from "../../../Components/Design/Card";
+import Icon from "../../../Components/Design/Icon";
+import Server from "../../../Utils/Socket";
+import { filter } from "lodash";
 
 const NavBar: React.FC<{
   onOpenAppMenu: (event: React.MouseEvent) => void;
@@ -22,6 +34,8 @@ const NavBar: React.FC<{
   const history = useHistory();
   const [colors] = useGlobal<any>("colors");
   const [favoriteList, setFavoriteList] = useState<string[]>([]);
+  const [menuElement, setMenuElement] = useState<HTMLDivElement | undefined>();
+  const [selectedMenuApp, setSelectedMenuApp] = useState<AppObjectType>();
 
   //Lifecycle
   useEffect(() => {
@@ -35,6 +49,86 @@ const NavBar: React.FC<{
       className={styles.navbar}
       style={{ backgroundColor: colors.primary.hex() }}
     >
+      <Popover
+        id="app-menu"
+        open={Boolean(menuElement)}
+        anchorEl={menuElement}
+        onClose={() => setMenuElement(undefined)}
+        anchorOrigin={{
+          vertical: "center",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "center",
+          horizontal: "left",
+        }}
+        elevation={0}
+        PaperProps={{ style: { backgroundColor: "transparent" } }}
+      >
+        <Card title={selectedMenuApp?.name} withoutPadding>
+          <List>
+            {favoriteList?.includes(selectedMenuApp?.key || "") ? (
+              <ListItem
+                button
+                onClick={() => {
+                  Server.emit(
+                    "setUserSetting",
+                    "favoriteApps",
+                    filter(favoriteList, (o) => o !== selectedMenuApp!.key),
+                    () => {
+                      console.log(
+                        filter(favoriteList, (o) => o !== selectedMenuApp!.key)
+                      );
+
+                      setFavoriteList(
+                        filter(favoriteList, (o) => o !== selectedMenuApp!.key)
+                      );
+                      setMenuElement(undefined);
+                    }
+                  );
+                }}
+              >
+                <ListItemIcon style={{ minWidth: 24 }}>
+                  <Icon icon="map-pin" />
+                </ListItemIcon>
+                <ListItemText>Unpin</ListItemText>
+              </ListItem>
+            ) : (
+              <ListItem
+                button
+                onClick={() => {
+                  Server.emit(
+                    "setUserSetting",
+                    "favoriteApps",
+                    [...(favoriteList || []), selectedMenuApp!.key],
+                    () => {
+                      setFavoriteList([
+                        ...(favoriteList || []),
+                        selectedMenuApp!.key,
+                      ]);
+                      setMenuElement(undefined);
+                    }
+                  );
+                }}
+              >
+                <ListItemIcon style={{ minWidth: 24 }}>
+                  <Icon icon="map-pin" />
+                </ListItemIcon>
+                <ListItemText>Pin to bar</ListItemText>
+              </ListItem>
+            )}
+            <ListSubheader>PIN</ListSubheader>
+            <ListItem button>
+              <ListItemText>Test</ListItemText>
+            </ListItem>
+            <ListSubheader>PIN</ListSubheader>
+            <ListItem button>
+              <ListItemText>Test</ListItemText>
+            </ListItem>
+          </List>
+        </Card>
+      </Popover>
+
       <div
         style={{
           display: "flex",
@@ -84,12 +178,29 @@ const NavBar: React.FC<{
           }}
         >
           {selectedApp && !favoriteList?.includes(selectedApp.key) && (
-            <NavBarAppIcon app={selectedApp} selected />
+            <NavBarAppIcon
+              app={selectedApp}
+              selected
+              onRightClick={(e, app) => {
+                setMenuElement(e.currentTarget);
+                e.stopPropagation();
+                e.preventDefault();
+                setSelectedMenuApp(app);
+                return false;
+              }}
+            />
           )}
           {favoriteList?.map((appKey) => (
             <NavBarAppIcon
               app={find(apps, (o) => o.key === appKey) as AppObjectType}
               selected={selectedApp?.key === appKey}
+              onRightClick={(e, app) => {
+                setMenuElement(e.currentTarget);
+                e.stopPropagation();
+                e.preventDefault();
+                setSelectedMenuApp(app);
+                return false;
+              }}
             />
           ))}
         </div>
