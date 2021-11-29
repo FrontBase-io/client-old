@@ -24,7 +24,7 @@ import { Link, Route, Switch, useHistory } from "react-router-dom";
 import { useGlobal } from "reactn";
 import Icon from "../../../Components/Design/Icon";
 import { AppContext } from "../../../Components/Context";
-import { find, groupBy, map } from "lodash";
+import { groupBy, map } from "lodash";
 import { AppUtilsType } from "../../../App";
 import { useSnackbar, VariantType } from "notistack";
 import Dialog from "@mui/material/Dialog";

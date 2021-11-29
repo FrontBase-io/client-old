@@ -32,6 +32,7 @@ const app = {
             component: B,
             group: model.app,
             props: { models },
+            model: model.key,
           })
         );
         resolve(pages);

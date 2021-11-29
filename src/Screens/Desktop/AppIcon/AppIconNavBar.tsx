@@ -17,7 +17,7 @@ const NavBarAppIcon: React.FC<{
   const history = useHistory();
 
   return (
-    <Tooltip title={app.name} placement="right">
+    <Tooltip title={app.name} placement="right" arrow>
       <div
         className={`${styles.navbarIconPlate} ${selected && styles.selected}`}
         onClick={(e) => {

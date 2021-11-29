@@ -149,6 +149,7 @@ export interface AppPageType {
   }>;
   altKeys?: string[];
   props?: { [key: string]: any };
+  model?: string;
 }
 export interface AppCodeType {
   handlers?: {

@@ -5,24 +5,26 @@ import Tooltip from "@mui/material/Tooltip";
 import Avatar from "@mui/material/Avatar";
 import { useHistory } from "react-router";
 import { useGlobal } from "reactn";
-import { AppObjectType } from "../../../Utils/Types";
+import { AppObjectType, AppPageType } from "../../../Utils/Types";
 import NavBarAppIcon from "../AppIcon/AppIconNavBar";
 import { useEffect } from "react";
 import Socket from "../../../Utils/Socket";
 import { ResponseType } from "../../../Utils/Types";
 import find from "lodash/find";
 import {
+  Divider,
   List,
   ListItem,
   ListItemIcon,
+  ListItemSecondaryAction,
   ListItemText,
-  ListSubheader,
   Popover,
 } from "@mui/material";
 import Card from "../../../Components/Design/Card";
 import Icon from "../../../Components/Design/Icon";
 import Server from "../../../Utils/Socket";
 import { filter } from "lodash";
+import { AppContext } from "../../../Components/Context";
 
 const NavBar: React.FC<{
   onOpenAppMenu: (event: React.MouseEvent) => void;
@@ -36,6 +38,9 @@ const NavBar: React.FC<{
   const [favoriteList, setFavoriteList] = useState<string[]>([]);
   const [menuElement, setMenuElement] = useState<HTMLDivElement | undefined>();
   const [selectedMenuApp, setSelectedMenuApp] = useState<AppObjectType>();
+  const [selectedMenuPages, setSelectedMenuPages] = useState<
+    { [key: string]: any }[]
+  >([]);
 
   //Lifecycle
   useEffect(() => {
@@ -43,6 +48,32 @@ const NavBar: React.FC<{
       setFavoriteList(response.value)
     );
   }, []);
+  useEffect(() => {
+    if (selectedMenuApp) {
+      if (selectedMenuApp?.type === "collection") {
+        setSelectedMenuPages(selectedMenuApp.pages);
+      } else {
+        let appCode: any = null;
+        if (selectedMenuApp.internal) {
+          appCode =
+            require(`../../../AppDev/${selectedMenuApp.key}/index.tsx`).default;
+        } else {
+          appCode =
+            require(`../../../../node_modules/@frontbase/${selectedMenuApp.key}-client/dist/index.js`).default;
+        }
+
+        appCode
+          //@ts-ignore
+          .getPages(new AppContext(selectedMenuApp, {}, null), selectedMenuApp)
+          .then((result: AppPageType[]) => {
+            setSelectedMenuPages(result.splice(0, 8));
+          });
+      }
+    } else {
+      setSelectedMenuPages([]);
+    }
+  }, [selectedMenuApp]);
+
   // UI
   return (
     <div
@@ -53,7 +84,10 @@ const NavBar: React.FC<{
         id="app-menu"
         open={Boolean(menuElement)}
         anchorEl={menuElement}
-        onClose={() => setMenuElement(undefined)}
+        onClose={() => {
+          setMenuElement(undefined);
+          setSelectedMenuApp(undefined);
+        }}
         anchorOrigin={{
           vertical: "center",
           horizontal: "right",
@@ -66,7 +100,8 @@ const NavBar: React.FC<{
         PaperProps={{ style: { backgroundColor: "transparent" } }}
       >
         <Card title={selectedMenuApp?.name} withoutPadding>
-          <List>
+          <List disablePadding>
+            <Divider />
             {favoriteList?.includes(selectedMenuApp?.key || "") ? (
               <ListItem
                 button
@@ -76,10 +111,6 @@ const NavBar: React.FC<{
                     "favoriteApps",
                     filter(favoriteList, (o) => o !== selectedMenuApp!.key),
                     () => {
-                      console.log(
-                        filter(favoriteList, (o) => o !== selectedMenuApp!.key)
-                      );
-
                       setFavoriteList(
                         filter(favoriteList, (o) => o !== selectedMenuApp!.key)
                       );
@@ -88,7 +119,7 @@ const NavBar: React.FC<{
                   );
                 }}
               >
-                <ListItemIcon style={{ minWidth: 24 }}>
+                <ListItemIcon style={{ minWidth: 34 }}>
                   <Icon icon="map-pin" />
                 </ListItemIcon>
                 <ListItemText>Unpin</ListItemText>
@@ -111,20 +142,34 @@ const NavBar: React.FC<{
                   );
                 }}
               >
-                <ListItemIcon style={{ minWidth: 24 }}>
+                <ListItemIcon style={{ minWidth: 34 }}>
                   <Icon icon="map-pin" />
                 </ListItemIcon>
                 <ListItemText>Pin to bar</ListItemText>
               </ListItem>
             )}
-            <ListSubheader>PIN</ListSubheader>
-            <ListItem button>
-              <ListItemText>Test</ListItemText>
-            </ListItem>
-            <ListSubheader>PIN</ListSubheader>
-            <ListItem button>
-              <ListItemText>Test</ListItemText>
-            </ListItem>
+            <Divider />
+            {selectedMenuPages.map((mp) => (
+              <ListItem
+                key={mp.key}
+                button
+                onClick={() => {
+                  history.push(`/${selectedMenuApp!.key}/${mp.key}`);
+                  setMenuElement(undefined);
+                  setSelectedMenuApp(undefined);
+                }}
+              >
+                <ListItemIcon style={{ minWidth: 34 }}>
+                  <Icon icon={mp.icon} />
+                </ListItemIcon>
+                <ListItemText>{mp.label}</ListItemText>
+                {(mp.content?.type === "model" || mp.model) && (
+                  <ListItemSecondaryAction>
+                    <Icon icon="caret-right" />
+                  </ListItemSecondaryAction>
+                )}
+              </ListItem>
+            ))}
           </List>
         </Card>
       </Popover>
@@ -160,6 +205,7 @@ const NavBar: React.FC<{
                 : "Go home"
             }
             placement="right"
+            arrow
           >
             <img
               alt="Frontbase Logo"
