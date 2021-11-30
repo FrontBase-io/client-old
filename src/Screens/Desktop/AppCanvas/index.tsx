@@ -161,6 +161,7 @@ const AppLayout: React.FC<{
     return () => {
       utils.setPrimaryColor();
     };
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appKey]);
   useEffect(() => {
@@ -189,7 +190,7 @@ const AppLayout: React.FC<{
             exit={{ opacity: 0, left: -200 }}
             key={app._id}
           >
-            <motion.div variants={item} key="header">
+            <motion.div variants={item} key={`header-${app.key}`}>
               <Link
                 to={`/${app.key}`}
                 className="no-link"
@@ -215,46 +216,22 @@ const AppLayout: React.FC<{
                 </Typography>
               </Link>
             </motion.div>
-            <List>
-              {Array.isArray(pageMenu) ? (
-                <>
-                  {pageMenu.map((page: AppPageType) => (
-                    <motion.li key={`${app._id}-${page.key}`} variants={item}>
-                      <ListItem
-                        button
-                        onClick={() => history.push(`/${app.key}/${page.key}`)}
-                        selected={page.key === selectedPage}
-                      >
-                        <ListItemIcon style={{ minWidth: 40 }}>
-                          <Icon
-                            icon={page.icon}
-                            className={styles.pageMenuIcon}
-                            color={
-                              window.matchMedia &&
-                              window.matchMedia("(prefers-color-scheme: dark)")
-                                .matches
-                                ? "white"
-                                : colors.primary.hex()
-                            }
-                          />
-                        </ListItemIcon>
-                        <ListItemText className={styles.pageMenuText}>
-                          {page.label}
-                        </ListItemText>
-                      </ListItem>
-                    </motion.li>
-                  ))}
-                </>
-              ) : (
-                map(pageMenu, (pages: AppPageType[], groupKey: string) => (
-                  <>
-                    <motion.li key={`group-${groupKey}`} variants={item}>
-                      <ListSubheader>{groupKey}</ListSubheader>
-                    </motion.li>
-
-                    {pages.map((page: AppPageType) => {
-                      return (
-                        <motion.li key={page.key} variants={item}>
+            <motion.div variants={item} key={`pages-${app.key}`}>
+              <List>
+                <motion.div
+                  variants={container}
+                  initial="hidden"
+                  animate="visible"
+                  exit={{ opacity: 0, left: -200 }}
+                  key={`pages-container-${app.key}`}
+                >
+                  {Array.isArray(pageMenu) ? (
+                    <>
+                      {pageMenu.map((page: AppPageType) => (
+                        <motion.li
+                          key={`${app._id}-${page.key}`}
+                          variants={item}
+                        >
                           <ListItem
                             button
                             onClick={() =>
@@ -281,12 +258,52 @@ const AppLayout: React.FC<{
                             </ListItemText>
                           </ListItem>
                         </motion.li>
-                      );
-                    })}
-                  </>
-                ))
-              )}
-            </List>
+                      ))}
+                    </>
+                  ) : (
+                    map(pageMenu, (pages: AppPageType[], groupKey: string) => (
+                      <>
+                        <motion.li key={`group-${groupKey}`} variants={item}>
+                          <ListSubheader>{groupKey}</ListSubheader>
+                        </motion.li>
+
+                        {pages.map((page: AppPageType) => {
+                          return (
+                            <motion.li key={page.key} variants={item}>
+                              <ListItem
+                                button
+                                onClick={() =>
+                                  history.push(`/${app.key}/${page.key}`)
+                                }
+                                selected={page.key === selectedPage}
+                              >
+                                <ListItemIcon style={{ minWidth: 40 }}>
+                                  <Icon
+                                    icon={page.icon}
+                                    className={styles.pageMenuIcon}
+                                    color={
+                                      window.matchMedia &&
+                                      window.matchMedia(
+                                        "(prefers-color-scheme: dark)"
+                                      ).matches
+                                        ? "white"
+                                        : colors.primary.hex()
+                                    }
+                                  />
+                                </ListItemIcon>
+                                <ListItemText className={styles.pageMenuText}>
+                                  {page.label}
+                                </ListItemText>
+                              </ListItem>
+                            </motion.li>
+                          );
+                        })}
+                      </>
+                    ))
+                  )}
+                </motion.div>
+              </List>
+            </motion.div>
           </motion.div>
         )}
         <div className={styles.appCanvas}>
