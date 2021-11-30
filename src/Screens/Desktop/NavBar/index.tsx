@@ -80,7 +80,6 @@ const NavBar: React.FC<{
   }, [selectedMenuApp]);
 
   // UI
-  console.log(user);
 
   return (
     <div

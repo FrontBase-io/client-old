@@ -1,9 +1,11 @@
 import {
+  Collapse,
   Divider,
   Grid,
   List,
   ListItem,
   ListItemIcon,
+  ListItemSecondaryAction,
   ListItemText,
 } from "@mui/material";
 import find from "lodash/find";
@@ -13,6 +15,17 @@ import { useGlobal } from "reactn";
 import { AppContext } from "../../..";
 import { ListItemType } from "../../../../../Utils/Types";
 import Icon from "../../../../Design/Icon";
+
+const flattenItems = (items: ListItemType[]) => {
+  const result: ListItemType[] = [];
+  items.map((item) => {
+    if (item.items) {
+      flattenItems(item.items).map((i) => result.push(i));
+    }
+    result.push(item);
+  });
+  return result;
+};
 
 const ListDetailLayout: React.FC<{
   context: AppContext;
@@ -47,8 +60,12 @@ const ListDetailLayout: React.FC<{
   if ((selectedItem || "").match("/"))
     selectedItem = selectedItem.split("/")[0];
   const [isMobile] = useGlobal<any>("isMobile");
+  const [flatItems, setFlatItems] = useState<ListItemType[]>([]);
 
   // Lifecycle
+  useEffect(() => {
+    setFlatItems(flattenItems(items || []));
+  }, [items]);
 
   // UI
   return (
@@ -61,35 +78,47 @@ const ListDetailLayout: React.FC<{
                 <context.UI.Design.Card title={title} withoutPadding>
                   <List disablePadding>
                     <context.UI.Design.Animation.Container>
-                      {(items || []).map((menuItem) => (
-                        <context.UI.Design.Animation.Item key={menuItem.key}>
-                          <ListItem
-                            button
-                            onClick={() =>
-                              history.push(`${baseUrl}/${menuItem.key}`)
-                            }
-                            selected={menuItem.key === selectedItem}
-                            style={{ paddingLeft: withoutPadding && 0 }}
-                          >
-                            {menuItem.icon && (
-                              <ListItemIcon style={{ minWidth: 48 }}>
-                                <Icon
-                                  icon={
-                                    transformIcon
-                                      ? transformIcon(menuItem.icon)
-                                      : menuItem.icon
-                                  }
-                                  size={18}
-                                />
-                              </ListItemIcon>
-                            )}
-                            <ListItemText
-                              primary={menuItem.label}
-                              secondary={menuItem.secondary}
-                            />
-                          </ListItem>
-                        </context.UI.Design.Animation.Item>
-                      ))}
+                      {(items || []).map((menuItem) =>
+                        (menuItem.items || []).length > 0 ? (
+                          <ListItemWithChildren
+                            context={context}
+                            menuItem={menuItem}
+                            baseUrl={baseUrl}
+                            withoutPadding={withoutPadding}
+                            transformIcon={transformIcon}
+                            selectedItem={selectedItem}
+                            level={1}
+                          />
+                        ) : (
+                          <context.UI.Design.Animation.Item key={menuItem.key}>
+                            <ListItem
+                              button
+                              onClick={() =>
+                                history.push(`${baseUrl}/${menuItem.key}`)
+                              }
+                              selected={menuItem.key === selectedItem}
+                              style={{ paddingLeft: withoutPadding && 0 }}
+                            >
+                              {menuItem.icon && (
+                                <ListItemIcon style={{ minWidth: 48 }}>
+                                  <Icon
+                                    icon={
+                                      transformIcon
+                                        ? transformIcon(menuItem.icon)
+                                        : menuItem.icon
+                                    }
+                                    size={18}
+                                  />
+                                </ListItemIcon>
+                              )}
+                              <ListItemText
+                                primary={menuItem.label}
+                                secondary={menuItem.secondary}
+                              />
+                            </ListItem>
+                          </context.UI.Design.Animation.Item>
+                        )
+                      )}
                       {create && (
                         <>
                           <Divider />
@@ -125,7 +154,7 @@ const ListDetailLayout: React.FC<{
                   selectedKey={args.match.params.selectedItem}
                   baseUrl={baseUrl}
                   title={title}
-                  items={items}
+                  items={flatItems}
                   detailComponentProps={detailComponentProps}
                 />
               )}
@@ -184,3 +213,99 @@ const DetailComponentWrapper: React.FC<{
 };
 
 export default ListDetailLayout;
+
+const ListItemWithChildren: React.FC<{
+  context: AppContext;
+  menuItem: ListItemType;
+  baseUrl: string;
+  selectedItem: string;
+  withoutPadding?: true;
+  transformIcon?: (val: string) => string;
+  level: number;
+}> = ({
+  context,
+  menuItem,
+  baseUrl,
+  selectedItem,
+  withoutPadding,
+  transformIcon,
+  level,
+}) => {
+  // Vars
+  const history = useHistory();
+  const [open, setOpen] = useState(true);
+
+  // Lifecycle
+  // UI
+  return (
+    <context.UI.Design.Animation.Item key={menuItem.key}>
+      <ListItem
+        button
+        onClick={() => history.push(`${baseUrl}/${menuItem.key}`)}
+        selected={menuItem.key === selectedItem}
+        style={{ paddingLeft: withoutPadding && 0 }}
+      >
+        {menuItem.icon && (
+          <ListItemIcon style={{ minWidth: 48 }}>
+            <Icon
+              icon={
+                transformIcon ? transformIcon(menuItem.icon) : menuItem.icon
+              }
+              size={18}
+            />
+          </ListItemIcon>
+        )}
+        <ListItemText primary={menuItem.label} secondary={menuItem.secondary} />
+        <ListItemSecondaryAction onClick={() => setOpen(!open)}>
+          <context.UI.Design.Icon
+            icon={open ? "chevron-up" : "chevron-down"}
+            size={12}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          {(menuItem.items || []).map((subMenuItem) =>
+            (subMenuItem.items || []).length > 0 ? (
+              <ListItemWithChildren
+                context={context}
+                menuItem={subMenuItem}
+                baseUrl={baseUrl}
+                withoutPadding={withoutPadding}
+                transformIcon={transformIcon}
+                selectedItem={selectedItem}
+                level={level + 1}
+              />
+            ) : (
+              <context.UI.Design.Animation.Item key={subMenuItem.key}>
+                <ListItem
+                  button
+                  onClick={() => history.push(`${baseUrl}/${subMenuItem.key}`)}
+                  selected={subMenuItem.key === selectedItem}
+                  style={{ paddingLeft: level * 32 }}
+                >
+                  {subMenuItem.icon && (
+                    <ListItemIcon style={{ minWidth: 48 }}>
+                      <Icon
+                        icon={
+                          transformIcon
+                            ? transformIcon(subMenuItem.icon)
+                            : subMenuItem.icon
+                        }
+                        size={18}
+                      />
+                    </ListItemIcon>
+                  )}
+                  <ListItemText
+                    primary={subMenuItem.label}
+                    secondary={subMenuItem.secondary}
+                  />
+                </ListItem>
+              </context.UI.Design.Animation.Item>
+            )
+          )}
+        </List>
+      </Collapse>
+    </context.UI.Design.Animation.Item>
+  );
+};

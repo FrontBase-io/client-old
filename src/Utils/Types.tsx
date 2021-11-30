@@ -191,6 +191,7 @@ export interface ListItemType {
   icon?: string;
   secondary?: string;
   object?: any;
+  items?: ListItemType[];
 }
 
 export interface DialogType {

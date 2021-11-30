@@ -85,7 +85,6 @@ function App() {
                   { username: response.user.username },
                   //@ts-ignore
                   (fetchedUser: UserObjectType) => {
-                    console.log(fetchedUser);
                     setUser(fetchedUser);
                   }
                 );

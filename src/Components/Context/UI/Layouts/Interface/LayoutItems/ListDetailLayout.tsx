@@ -1,4 +1,3 @@
-import { find } from "lodash";
 import { useEffect, useState } from "react";
 import InterfaceLayoutItem from ".";
 import { AppContext } from "../../../..";
@@ -9,6 +8,35 @@ import {
   ListItemType,
   ObjectType,
 } from "../../../../../../Utils/Types";
+
+const createParentHierarchy = (
+  data: [],
+  parentField: string,
+  labelField: string,
+  parentValue?: string
+) => {
+  const newItems: ListItemType[] = [];
+  data.map((o: ObjectType) => {
+    if (
+      (parentValue && o[parentField] === parentValue) || // Matches the given parent value
+      (!parentValue && !o[parentField]) // Has no parent value (root element)
+    ) {
+      const children = createParentHierarchy(
+        data,
+        parentField,
+        labelField,
+        o._id
+      );
+      newItems.push({
+        label: o[labelField],
+        key: o._id,
+        object: o,
+        items: children !== [] ? children : undefined,
+      });
+    }
+  });
+  return newItems;
+};
 
 const InterfaceListDetailLayout: React.FC<{
   context: AppContext;
@@ -33,11 +61,26 @@ const InterfaceListDetailLayout: React.FC<{
 
   // Lifecycle
   useEffect(() => {
-    setItems(
-      (variables[layoutItem.args?.listItems] || []).map((o: ObjectType) => {
-        return { label: o[layoutItem.args?.labelField], key: o._id, object: o };
-      })
-    );
+    if (layoutItem.args?.parentField) {
+      setItems(
+        createParentHierarchy(
+          variables[layoutItem.args?.listItems] || [],
+          layoutItem.args?.parentField,
+          layoutItem.args?.labelField
+        )
+      );
+    } else {
+      // No parent field, render everything
+      setItems(
+        (variables[layoutItem.args?.listItems] || []).map((o: ObjectType) => {
+          return {
+            label: o[layoutItem.args?.labelField],
+            key: o._id,
+            object: o,
+          };
+        })
+      );
+    }
   }, [layoutItem, variables]);
 
   // UI

@@ -7,7 +7,7 @@ import {
   Popover,
   Tooltip,
 } from "@mui/material";
-import { cloneDeep, find } from "lodash";
+import { cloneDeep, filter, find } from "lodash";
 import { useEffect, useState } from "react";
 import { AppContext } from "../../../../Components/Context";
 import { modifyRecursive } from "../../../../Utils/Functions";
@@ -99,40 +99,75 @@ const ComponentPreviewListDetailLayout: React.FC<{
             }}
           />
           {layoutItem.args?.listItems && (
-            <context.UI.Inputs.Select
-              label="Label field"
-              options={
-                layoutItem.args?.listItems
-                  ? context.utils.listifyObjectForSelect(
-                      find(
-                        modelList,
-                        (o) =>
-                          o.key === variables[layoutItem.args?.listItems].model
-                      )?.fields || {},
-                      "label"
-                    )
-                  : []
-              }
-              value={layoutItem.args?.labelField}
-              onChange={async (labelField) => {
-                const newLayout = cloneDeep(layout);
-                modifyRecursive(newLayout, layoutItem.key!, (item) => {
-                  const newItem = item;
-                  newItem!.args = {
-                    ...(item!.args || {}),
-                    labelField,
-                  };
-                  return newItem;
-                });
-                setLayout(newLayout);
-              }}
-            />
+            <>
+              <context.UI.Inputs.Select
+                label="Label field"
+                options={
+                  layoutItem.args?.listItems
+                    ? context.utils.listifyObjectForSelect(
+                        find(
+                          modelList,
+                          (o) =>
+                            o.key ===
+                            variables[layoutItem.args?.listItems].model
+                        )?.fields || {},
+                        "label"
+                      )
+                    : []
+                }
+                value={layoutItem.args?.labelField}
+                onChange={async (labelField) => {
+                  const newLayout = cloneDeep(layout);
+                  modifyRecursive(newLayout, layoutItem.key!, (item) => {
+                    const newItem = item;
+                    newItem!.args = {
+                      ...(item!.args || {}),
+                      labelField,
+                    };
+                    return newItem;
+                  });
+                  setLayout(newLayout);
+                }}
+              />
+              <context.UI.Inputs.Select
+                label="Parent field"
+                options={
+                  layoutItem.args?.listItems
+                    ? filter(
+                        context.utils.listifyObjectForSelect(
+                          find(
+                            modelList,
+                            (o) =>
+                              o.key ===
+                              variables[layoutItem.args?.listItems].model
+                          )?.fields || {},
+                          "label"
+                        ),
+                        (o) => o.object.type === "relationship"
+                      )
+                    : []
+                }
+                value={layoutItem.args?.parentField}
+                onChange={async (parentField) => {
+                  const newLayout = cloneDeep(layout);
+                  modifyRecursive(newLayout, layoutItem.key!, (item) => {
+                    const newItem = item;
+                    newItem!.args = {
+                      ...(item!.args || {}),
+                      parentField,
+                    };
+                    return newItem;
+                  });
+                  setLayout(newLayout);
+                }}
+              />
+            </>
           )}
         </div>
       </Popover>
       <context.UI.Design.Animation.Container>
         <Grid container>
-          <Grid item xs={4}>
+          <Grid item xs={2}>
             <context.UI.Design.Animation.Item key="left">
               <context.UI.Design.Card
                 withoutPadding
@@ -184,7 +219,7 @@ const ComponentPreviewListDetailLayout: React.FC<{
               </context.UI.Design.Card>
             </context.UI.Design.Animation.Item>
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={10}>
             <context.UI.Design.Animation.Item key="right">
               <context.UI.Design.Card title="Detail">
                 {layoutItem.args?.listItems && (
