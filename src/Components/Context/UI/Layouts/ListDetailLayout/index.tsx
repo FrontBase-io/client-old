@@ -87,7 +87,7 @@ const ListDetailLayout: React.FC<{
                             withoutPadding={withoutPadding}
                             transformIcon={transformIcon}
                             selectedItem={selectedItem}
-                            level={1}
+                            level={0}
                           />
                         ) : (
                           <context.UI.Design.Animation.Item key={menuItem.key}>
@@ -243,7 +243,7 @@ const ListItemWithChildren: React.FC<{
         button
         onClick={() => history.push(`${baseUrl}/${menuItem.key}`)}
         selected={menuItem.key === selectedItem}
-        style={{ paddingLeft: withoutPadding && 0 }}
+        style={{ ...(level > 0 ? { paddingLeft: level * 32 } : {}) }}
       >
         {menuItem.icon && (
           <ListItemIcon style={{ minWidth: 48 }}>
@@ -282,7 +282,7 @@ const ListItemWithChildren: React.FC<{
                   button
                   onClick={() => history.push(`${baseUrl}/${subMenuItem.key}`)}
                   selected={subMenuItem.key === selectedItem}
-                  style={{ paddingLeft: level * 32 }}
+                  style={{ paddingLeft: (level + 1) * 32 }}
                 >
                   {subMenuItem.icon && (
                     <ListItemIcon style={{ minWidth: 48 }}>
