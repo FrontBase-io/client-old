@@ -18,6 +18,7 @@ import Icon from "../../../../Design/Icon";
 
 const flattenItems = (items: ListItemType[]) => {
   const result: ListItemType[] = [];
+  // eslint-disable-next-line array-callback-return
   items.map((item) => {
     if (item.items) {
       flattenItems(item.items).map((i) => result.push(i));
@@ -198,7 +199,7 @@ const DetailComponentWrapper: React.FC<{
       context.canvas.navbar.up(undefined);
       context.canvas.navbar.name();
     };
-  }, [selectedKey, context.canvas.navbar, baseUrl, item]);
+  }, [selectedKey]);
 
   // UI
   const Component = component;

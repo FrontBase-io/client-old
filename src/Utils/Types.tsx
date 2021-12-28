@@ -169,6 +169,13 @@ export interface AppCodeType {
   };
   getPages: (context: AppContext) => Promise<AppPageType[]>;
 }
+
+export interface AppWidgetObjectType extends ObjectType {
+  name: string;
+  key: string;
+  app: string;
+}
+
 export interface LayoutItemType {
   key?: string;
   label: string;

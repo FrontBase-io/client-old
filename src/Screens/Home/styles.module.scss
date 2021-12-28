@@ -1,0 +1,11 @@
+.WidgetCard {
+  width: 100%;
+  height: calc(100% - 15px);
+  overflow: hidden;
+}
+
+.layout {
+  overflow-y: auto;
+  height: 100%;
+  transition: none;
+}
