@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@date-io/date-fns": "^2.11.0",
-    "@emotion/react": "^11.4.1",
+    "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.3.0",
     "@frontbase/publisher-client": "^0.0.6",
     "@frontbase/types": "^0.0.8",
