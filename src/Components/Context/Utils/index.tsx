@@ -40,7 +40,7 @@ const listifyObject = (
   return newArray;
 };
 
-const listifyForSelect = (
+export const listifyForSelect = (
   list: { [key: string]: any }[],
   label: string,
   key: string

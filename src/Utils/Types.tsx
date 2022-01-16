@@ -174,6 +174,12 @@ export interface AppWidgetObjectType extends ObjectType {
   name: string;
   key: string;
   app: string;
+  settings: { [key: string]: AppWidgetObjectSettingType };
+}
+export interface AppWidgetObjectSettingType {
+  label: string;
+  type: "dropdown";
+  dynamicOptions?: { model?: string };
 }
 
 export interface LayoutItemType {

@@ -19,6 +19,7 @@ const SelectInput: React.FC<{
   multi?: true;
   style?: CSSProperties;
   autoFocus?: boolean;
+  fullWidth?: true;
 }> = ({
   label,
   value,
@@ -29,6 +30,7 @@ const SelectInput: React.FC<{
   multi,
   style,
   autoFocus,
+  fullWidth,
 }) => {
   // Vars
   const [newValue, setNewValue] = useState<OptionType | OptionType[]>();
@@ -50,7 +52,14 @@ const SelectInput: React.FC<{
 
   // UI
   return (
-    <label style={{ fontSize: ".75rem", lineHeight: 2 }} id="aria-label">
+    <label
+      id="aria-label"
+      style={{
+        fontSize: ".75rem",
+        lineHeight: 2,
+        width: fullWidth ? "100%" : "auto",
+      }}
+    >
       {label}
       <Select
         placeholder={label}

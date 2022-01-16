@@ -6,7 +6,7 @@ import asyncComponent from "./AsyncComponent";
 import { ResponseType, UserObjectType } from "./Utils/Types";
 import Socket from "./Utils/Socket";
 import Hidden from "@mui/material/Hidden";
-import { Alert, createTheme, ThemeProvider } from "@mui/material";
+import { Alert, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import chroma from "chroma-js";
 import FrontBaseLoader from "./Components/Loading/FrontBaseLoader";
@@ -146,6 +146,7 @@ function App() {
         <Login />
       ) : (
         <ThemeProvider theme={createTheme(theme)}>
+          <CssBaseline />
           <SnackbarProvider maxSnack={3}>
             <Hidden smDown>
               <Desktop utils={{ setPrimaryColor }} />
