@@ -16,7 +16,7 @@
     "framer-motion": "^4.1.17",
     "frontbase-formulas": "^0.0.7",
     "lodash": "^4.17.21",
-    "node-sass": "^6.0.1",
+    "node-sass": "^7.0.0",
     "notistack": "^2.0.3",
     "rdndmb-html5-to-touch": "^7.0.0-alpha.1",
     "react": "^17.0.2",
