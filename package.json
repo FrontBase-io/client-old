@@ -46,7 +46,7 @@
     "@types/jest": "^27.0.3",
     "@types/lodash": "^4.14.178",
     "@types/node": "^16.11.9",
-    "@types/react": "^17.0.0",
+    "@types/react": "^17.0.43",
     "@types/react-color": "^3.0.6",
     "@types/react-dnd-touch-backend": "^0.5.0",
     "@types/react-dom": "^17.0.0",
